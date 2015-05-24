@@ -85,8 +85,8 @@ public class SimulationGui extends JFrame implements ActionListener, Constante{
 		this.add(jl);
 		
 		final int borderWidth = 1;
-		final int rows = 50;
-		final int cols = 50;
+		final int rows = Constante.GRID_H;
+		final int cols = Constante.GRID_W;
 		BackgroundPanelGrid panel = new BackgroundPanelGrid(new ImageIcon(map),new GridLayout(rows, cols));
 		panel.setOpaque(false);
 		panel.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
@@ -130,7 +130,7 @@ public class SimulationGui extends JFrame implements ActionListener, Constante{
 		}
 		this.add(panel);
 		
-		this.setSize(Constante.MAP_W,Constante.MAP_H);
+		this.setSize(Constante.MAP_W + 16,Constante.MAP_H + 38 );
 		this.setTitle("ShipSimulator");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
