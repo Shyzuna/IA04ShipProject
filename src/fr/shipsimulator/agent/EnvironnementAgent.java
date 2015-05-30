@@ -1,29 +1,43 @@
 package fr.shipsimulator.agent;
 
-import fr.shipsimulator.behaviour.EnvironnementBehaviour;
-import fr.shipsimulator.constantes.Constante;
-import fr.shipsimulator.gui.SimulationGui;
-import jade.core.Agent;
 import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
+import fr.shipsimulator.behaviour.EnvironnementBehaviour;
+import fr.shipsimulator.constantes.Constante;
+import fr.shipsimulator.gui.MainGui;
 
 public class EnvironnementAgent extends GuiAgent implements Constante{
 	
-	protected SimulationGui myGui; 
-	
-	@Override
-	protected void setup() {
-		
-		this.myGui = new SimulationGui(this);
-		this.myGui.setVisible(true);
-		
-		this.addBehaviour(new EnvironnementBehaviour());
+	protected MainGui mainGui;
+
+	public MainGui getMainGui() {
+		return mainGui;
+	}
+
+	public void setMainGui(MainGui mainGui) {
+		this.mainGui = mainGui;
+	}
+
+	public EnvironnementAgent() {
+
 	}
 
 	@Override
+	protected void setup() {
+		//create and launch interface
+		mainGui = new MainGui();
+		MainGui.setMyAgent(this);
+		new Thread(mainGui).start();
+		
+		this.addBehaviour(new EnvironnementBehaviour());
+	}
+	
+	@Override
 	protected void onGuiEvent(GuiEvent ev) {
+		//handle Event from gui
 		switch(ev.getType()){
-			case QUIT:
+			case 1:
+				System.out.println("nya");
 		}
 	}
 }
