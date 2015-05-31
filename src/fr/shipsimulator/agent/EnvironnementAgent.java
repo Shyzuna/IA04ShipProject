@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 
 import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
+import jade.wrapper.StaleProxyException;
 import fr.shipsimulator.behaviour.EnvironnementBehaviour;
 import fr.shipsimulator.constantes.Constante;
 import fr.shipsimulator.gui.MainGui;
@@ -99,5 +100,13 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 			System.out.println("");
 		}
 		
+	}
+	
+	public void stopAllAgent(){
+		try {
+			this.getContainerController().kill();
+		} catch (StaleProxyException e) {
+			e.printStackTrace();
+		}
 	}
 }
