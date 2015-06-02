@@ -250,8 +250,10 @@ public class MainGui extends Application implements Runnable{
 			    	Integer dif_factor = (int) Math.ceil(dif/(double)MainGui.cols);
 			    	
 			    	factor_grid_w += coef * dif_factor; 
-			    	factor_grid_w = factor_grid_w > Constante.MAX_FACTOR ? Constante.MAX_FACTOR : factor_grid_w < Constante.MIN_FACTOR ? Constante.MIN_FACTOR : factor_grid_w;
 			    	double new_width = factor_grid_w*MainGui.cols + statutPane.getPrefWidth() + logPane.getPrefWidth() + Constante.BORDER_W;
+			    	
+			    	new_width = factor_grid_w*MainGui.cols + statutPane.getPrefWidth() + logPane.getPrefWidth() + Constante.BORDER_W;
+			    	factor_grid_h = new_width > Constante.MAX_W ? factor_grid_w-1:new_width < Constante.MIN_W ? factor_grid_w+1:factor_grid_w;
 			    	primaryStage.setWidth(new_width);
 			    	
 			    	//remove constraints
@@ -281,8 +283,12 @@ public class MainGui extends Application implements Runnable{
 			    	Integer dif_factor = (int) Math.ceil(dif/(double)MainGui.rows);
 			    	
 			    	factor_grid_h += coef * dif_factor; 
-			    	factor_grid_h = factor_grid_h > Constante.MAX_FACTOR ? Constante.MAX_FACTOR : factor_grid_h < Constante.MIN_FACTOR ? Constante.MIN_FACTOR : factor_grid_h;
 			    	double new_height = factor_grid_h*MainGui.rows + tb_bot.getPrefHeight() + menu.getPrefHeight() + Constante.BORDER_H;
+			    	
+			    	factor_grid_h = new_height > Constante.MAX_H ? factor_grid_h-1:new_height < Constante.MIN_H ? factor_grid_h+1:factor_grid_h;
+			    	
+			    	new_height = factor_grid_h*MainGui.rows + tb_bot.getPrefHeight() + menu.getPrefHeight() + Constante.BORDER_H;
+			    	
 			    	primaryStage.setHeight(new_height);
 			    	
 			    	//remove constraints
@@ -316,8 +322,8 @@ public class MainGui extends Application implements Runnable{
 		bp.setCenter(root);
 		
 		//construct scene
-		primaryStage.setMinHeight(Constante.MIN_FACTOR*MainGui.rows+tb_bot.getPrefHeight()+menu.getPrefHeight());
-		primaryStage.setMinWidth(Constante.MIN_FACTOR*MainGui.cols+logPane.getPrefWidth()+statutPane.getPrefWidth());
+		primaryStage.setMinHeight(Constante.MIN_H);
+		primaryStage.setMinWidth(Constante.MIN_W);
         primaryStage.setTitle("Ship Simulator");
         primaryStage.getIcons().add(boat_icone);
         primaryStage.setScene(scene);

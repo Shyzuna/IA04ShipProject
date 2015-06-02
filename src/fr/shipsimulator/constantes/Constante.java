@@ -12,8 +12,10 @@ public interface Constante {
 	int BORDER_H = 38;
 	int BORDER_W = 12;
 	int DEFAULT_FACTOR = 15;
-	int MIN_FACTOR = 10;
-	int MAX_FACTOR = 20;
+	int MAX_W = 1920;
+	int MAX_H = 1080;
+	int MIN_W = 800;
+	int MIN_H = 600;
 	
 	//MAP GRAPHICS
 	int MAP_H = 600;
