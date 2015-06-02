@@ -8,7 +8,6 @@ public class EnvironnementBehaviour extends CyclicBehaviour {
 	@Override
 	public void action() {
 		EnvironnementAgent ea = (EnvironnementAgent) this.myAgent;
-		//ea.getMyGui().refreshDisplay();
 	}
 
 }

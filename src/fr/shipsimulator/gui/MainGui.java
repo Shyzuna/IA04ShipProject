@@ -1,6 +1,11 @@
 package fr.shipsimulator.gui;
 
+import jade.gui.GuiEvent;
+
 import java.io.FileInputStream;
+
+import javafx.scene.control.*;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -27,6 +32,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import fr.shipsimulator.agent.EnvironnementAgent;
 import fr.shipsimulator.constantes.Constante;
+import javafx.event.ActionEvent;
 
 /**
  * 
@@ -40,13 +46,35 @@ public class MainGui extends Application implements Runnable{
 	private static EnvironnementAgent myAgent;
 	private static Integer cols = Constante.DEFAULT_COLS;
 	private static Integer rows = Constante.DEFAULT_ROWS;
+	private static Integer boat = 0;
+	private static Integer city = 0;
+	
 	private StackPane root;
 	private BorderPane bp;
-	private ToolBar tb_bot, tb_top;
-	private TextArea logArea;
+	private ToolBar tb_bot;
+	private static TextArea logArea;
 	private ScrollPane logPane, statutPane;
 	private ImageView background;
 	private GridPane gp;
+	private MenuBar menu;
+	private Menu mv1;
+	private MenuItem mi1;
+	
+	public static Integer getBoat() {
+		return boat;
+	}
+
+	public static void setBoat(Integer boat) {
+		MainGui.boat = boat;
+	}
+
+	public static Integer getCity() {
+		return city;
+	}
+
+	public static void setCity(Integer city) {
+		MainGui.city = city;
+	}
 	
 	public static Integer getCols() {
 		return cols;
@@ -79,15 +107,68 @@ public class MainGui extends Application implements Runnable{
 		bp = new BorderPane();
 		Scene scene = new Scene(bp, Constante.MAP_W, Constante.MAP_H);
 		
-		//toolbars
+		//toolbar bot & buttons
+		//TODO METTRE IMAGE
+		Button lecture = new Button("Lecture");
+		
+		lecture.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            	MainGui.myAgent.postGuiEvent(new GuiEvent(this,Constante.START));
+            }
+        });
+		
+		Button pause = new Button("Pause");
+		
+		pause.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            	MainGui.myAgent.postGuiEvent(new GuiEvent(this,Constante.SUSPEND));
+            }
+        });
+		
+		Button stop = new Button("Stop");
+		
+		stop.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            	MainGui.myAgent.postGuiEvent(new GuiEvent(this,Constante.STOP));
+            }
+        });
+		
 		tb_bot = new ToolBar(
-				new Button("Lecture"),
-				new Button("Pause"));
+				lecture,
+				pause,
+				stop);
 		tb_bot.setPrefHeight(40); 
-		tb_top = new ToolBar(
-				new Button("smth"),
-				new Button("else"));
-		tb_top.setPrefHeight(40); 
+		
+		//menu
+		menu = new MenuBar();
+		mv1 = new Menu("Simulation");
+		mi1 = new MenuItem("Options");
+		mv1.getItems().add(mi1);
+		menu.setPrefHeight(20);
+		menu.getMenus().add(mv1);
+		mi1.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+            	OptionSimulation stage = new OptionSimulation(primaryStage);
+            	stage.setOnHiding(new EventHandler<WindowEvent>() {
+        			public void handle(WindowEvent we) {
+        				double center_size_w = primaryStage.getWidth() - statutPane.getPrefWidth() - logPane.getPrefWidth();
+        				double center_size_h = primaryStage.getHeight() - tb_bot.getPrefHeight() - menu.getPrefHeight();
+        				
+        				gp.getColumnConstraints().clear();
+        				gp.getRowConstraints().clear();
+        				
+        				for(int i = 0; i < MainGui.cols ; i++){
+        			    	gp.getColumnConstraints().add(new ColumnConstraints(Math.round(center_size_w/(double)MainGui.cols)));
+        					gp.getRowConstraints().add(new RowConstraints(Math.round(center_size_h/(double)MainGui.rows)));
+        				}
+                  	}
+        		});
+            	stage.show(); 
+            }
+        });
 		
 		//log side
 		logArea = new TextArea();
@@ -108,7 +189,7 @@ public class MainGui extends Application implements Runnable{
         
         //center size
 		double center_size_w = Constante.MAP_W - statutPane.getPrefWidth() - logPane.getPrefWidth();
-		double center_size_h = Constante.MAP_H - tb_bot.getPrefHeight() - tb_top.getPrefHeight();
+		double center_size_h = Constante.MAP_H - tb_bot.getPrefHeight() - menu.getPrefHeight();
 		
 		//background
 		Image map = new Image(new FileInputStream(Constante.MAP_PATH));
@@ -148,9 +229,7 @@ public class MainGui extends Application implements Runnable{
 		    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
 		    	double center_size_w = newSceneWidth.doubleValue() - statutPane.getPrefWidth() - logPane.getPrefWidth();
 		    	//remove constraints
-		    	for(int i = gp.getColumnConstraints().size()-1; i >= 0 ; i--){
-		    		gp.getColumnConstraints().remove(i);
-		    	}
+		    	gp.getColumnConstraints().clear();
 		    	//add new
 		    	for(int i = 0; i < MainGui.cols ; i++){
 			    	gp.getColumnConstraints().add(new ColumnConstraints(Math.round(center_size_w/(double)MainGui.cols)));
@@ -161,11 +240,9 @@ public class MainGui extends Application implements Runnable{
 		});
 		scene.heightProperty().addListener(new ChangeListener<Number>() {
 		    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+		    	double center_size_h = newSceneHeight.doubleValue() - tb_bot.getPrefHeight() - menu.getPrefHeight();
 		    	//remove constraints
-				System.out.println(" h :" + center_size_h);
-		    	for(int i = gp.getRowConstraints().size()-1; i >= 0 ; i--){
-		    		gp.getRowConstraints().remove(i);
-		    	}
+				gp.getRowConstraints().clear();
 		    	//add new
 		    	for(int i = 0; i < MainGui.rows ; i++){
 			    	gp.getRowConstraints().add(new RowConstraints(Math.round(center_size_h/(double)MainGui.rows)));
@@ -177,7 +254,7 @@ public class MainGui extends Application implements Runnable{
 		//closing event
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			public void handle(WindowEvent we) {
-				MainGui.myAgent.stopAllAgent();
+				MainGui.myAgent.postGuiEvent(new GuiEvent(this,Constante.QUIT));
           	}
 		});       
 
@@ -187,7 +264,7 @@ public class MainGui extends Application implements Runnable{
 		
 		bp.setBottom(tb_bot);
 		bp.setLeft(logPane);
-		bp.setTop(tb_top);
+		bp.setTop(menu);
 		bp.setRight(statutPane);
 		bp.setCenter(root);
 		
@@ -207,14 +284,23 @@ public class MainGui extends Application implements Runnable{
         		Platform.runLater(new Runnable(){
 					@Override
 					public void run() {
-						logArea.setText(logArea.getText() + "\nSystem>Refresh");
+						//DO SMTH
 					}
         		});
         	}
         }, 0, 1000);
         
 	}
-
+	
+	public static void writeLog (String author, String content){
+		Platform.runLater(new Runnable(){
+			@Override
+			public void run() {
+				logArea.setText(logArea.getText() + "\n"+author+">"+content);
+			}
+		});
+	}
+	
 	@Override
 	public void run() {
 		launch();

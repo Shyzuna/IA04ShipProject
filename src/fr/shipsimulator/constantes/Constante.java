@@ -3,7 +3,10 @@ package fr.shipsimulator.constantes;
 public interface Constante {
 	
 	//ACTION
-	int QUIT = 5;
+	int QUIT = 0;
+	int START = 1;
+	int STOP = 2;
+	int SUSPEND = 3;
 	
 	//MAP GRAPHICS
 	int MAP_H = 600;

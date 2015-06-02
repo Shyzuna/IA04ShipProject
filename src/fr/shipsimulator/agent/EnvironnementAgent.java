@@ -40,7 +40,7 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 		new Thread(mainGui).start();
 		
 		fillMapData(Constante.MAP_PATH);
-		
+
 		this.addBehaviour(new EnvironnementBehaviour());
 	}
 	
@@ -48,8 +48,22 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 	protected void onGuiEvent(GuiEvent ev) {
 		//handle Event from gui
 		switch(ev.getType()){
-			case 1:
-				System.out.println("nya");
+			case QUIT:
+				try {
+					this.getContainerController().kill();
+				} catch (StaleProxyException e) {
+					e.printStackTrace();
+				}
+				break;
+			case START:
+				MainGui.writeLog("Env", "Start Simulation");
+				break;
+			case STOP:
+				MainGui.writeLog("Env", "Stop Simulation");
+				break;
+			case SUSPEND:
+				MainGui.writeLog("Env", "Suspend Simulation");
+				break;
 		}
 	}
 	
@@ -100,13 +114,5 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 			System.out.println("");
 		}
 		
-	}
-	
-	public void stopAllAgent(){
-		try {
-			this.getContainerController().kill();
-		} catch (StaleProxyException e) {
-			e.printStackTrace();
-		}
 	}
 }
