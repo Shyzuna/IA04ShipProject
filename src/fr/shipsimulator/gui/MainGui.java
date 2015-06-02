@@ -29,6 +29,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import fr.shipsimulator.agent.EnvironnementAgent;
 import fr.shipsimulator.constantes.Constante;
@@ -59,6 +60,13 @@ public class MainGui extends Application implements Runnable{
 	private MenuBar menu;
 	private Menu mv1;
 	private MenuItem mi1;
+	
+	private Integer factor_grid_w;
+	private Integer factor_grid_h;
+	
+	//Event used
+	private boolean EatOneEventW = false;
+	private boolean EatOneEventH = false;
 	
 	public static Integer getBoat() {
 		return boat;
@@ -105,7 +113,9 @@ public class MainGui extends Application implements Runnable{
 		
 		root = new StackPane();
 		bp = new BorderPane();
-		Scene scene = new Scene(bp, Constante.MAP_W, Constante.MAP_H);
+		
+		factor_grid_w = Constante.DEFAULT_FACTOR;
+		factor_grid_h = Constante.DEFAULT_FACTOR;
 		
 		//toolbar bot & buttons
 		//TODO METTRE IMAGE
@@ -156,7 +166,6 @@ public class MainGui extends Application implements Runnable{
         			public void handle(WindowEvent we) {
         				double center_size_w = primaryStage.getWidth() - Constante.BORDER_W - statutPane.getPrefWidth() - logPane.getPrefWidth();
         				double center_size_h = primaryStage.getHeight() - Constante.BORDER_H - tb_bot.getPrefHeight() - menu.getPrefHeight();
-        				System.out.println(primaryStage.getHeight());
         				gp.getColumnConstraints().clear();
         				gp.getRowConstraints().clear();
         				
@@ -190,8 +199,8 @@ public class MainGui extends Application implements Runnable{
         statutPane.setContent(new Label("Statut"));
         
         //center size
-		double center_size_w = Constante.MAP_W - statutPane.getPrefWidth() - logPane.getPrefWidth();
-		double center_size_h = Constante.MAP_H - tb_bot.getPrefHeight() - menu.getPrefHeight();
+		double center_size_w = Constante.DEFAULT_FACTOR*MainGui.cols;
+		double center_size_h = Constante.DEFAULT_FACTOR*MainGui.rows;
 		
 		//background
 		Image map = new Image(new FileInputStream(Constante.MAP_PATH));
@@ -225,32 +234,68 @@ public class MainGui extends Application implements Runnable{
 		    }
 		}*/
 		
-		
+		Scene scene = new Scene(bp, Constante.DEFAULT_FACTOR*MainGui.cols+logPane.getPrefWidth()+statutPane.getPrefWidth(), Constante.DEFAULT_FACTOR*MainGui.rows+tb_bot.getPrefHeight()+menu.getPrefHeight());
 		//Event resize scene
 		scene.widthProperty().addListener(new ChangeListener<Number>() {
 		    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
-		    	double center_size_w = newSceneWidth.doubleValue() - statutPane.getPrefWidth() - logPane.getPrefWidth();
-		    	//remove constraints
-		    	gp.getColumnConstraints().clear();
-		    	//add new
-		    	for(int i = 0; i < MainGui.cols ; i++){
-			    	gp.getColumnConstraints().add(new ColumnConstraints(Math.round(center_size_w/(double)MainGui.cols)));
-				}
-		    	//resize background
-		    	background.setFitWidth(center_size_w);
+		    	if(!EatOneEventW){
+		    		EatOneEventW = true;
+			    	Double dif = newSceneWidth.doubleValue()-oldSceneWidth.doubleValue();
+			    	Integer coef = 1;
+			    	if(dif < 0){
+			    		coef = -1;
+			    		dif = Math.abs(dif);
+			    	}
+			    	
+			    	Integer dif_factor = (int) Math.ceil(dif/(double)MainGui.cols);
+			    	
+			    	factor_grid_w += coef * dif_factor; 
+			    	factor_grid_w = factor_grid_w > Constante.MAX_FACTOR ? Constante.MAX_FACTOR : factor_grid_w < Constante.MIN_FACTOR ? Constante.MIN_FACTOR : factor_grid_w;
+			    	double new_width = factor_grid_w*MainGui.cols + statutPane.getPrefWidth() + logPane.getPrefWidth() + Constante.BORDER_W;
+			    	primaryStage.setWidth(new_width);
+			    	
+			    	//remove constraints
+			    	gp.getColumnConstraints().clear();
+			    	//add new
+			    	for(int i = 0; i < MainGui.cols ; i++){
+				    	gp.getColumnConstraints().add(new ColumnConstraints(factor_grid_w));
+					}
+			    	//resize background
+			    	background.setFitWidth(factor_grid_w*MainGui.cols);
+		    	} else {
+		    		EatOneEventW = false;
+			    }
 		    }
 		});
 		scene.heightProperty().addListener(new ChangeListener<Number>() {
 		    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
-		    	double center_size_h = newSceneHeight.doubleValue() - tb_bot.getPrefHeight() - menu.getPrefHeight();
-		    	//remove constraints
-				gp.getRowConstraints().clear();
-		    	//add new
-		    	for(int i = 0; i < MainGui.rows ; i++){
-			    	gp.getRowConstraints().add(new RowConstraints(Math.round(center_size_h/(double)MainGui.rows)));
-				}
-		    	//resize background
-		    	background.setFitHeight(center_size_h);
+		    	if(!EatOneEventH){
+		    		EatOneEventH = true;
+		    		Double dif = newSceneHeight.doubleValue()-oldSceneHeight.doubleValue();
+			    	Integer coef = 1;
+			    	if(dif < 0){
+			    		coef = -1;
+			    		dif = Math.abs(dif);
+			    	}
+			    	
+			    	Integer dif_factor = (int) Math.ceil(dif/(double)MainGui.rows);
+			    	
+			    	factor_grid_h += coef * dif_factor; 
+			    	factor_grid_h = factor_grid_h > Constante.MAX_FACTOR ? Constante.MAX_FACTOR : factor_grid_h < Constante.MIN_FACTOR ? Constante.MIN_FACTOR : factor_grid_h;
+			    	double new_height = factor_grid_h*MainGui.rows + tb_bot.getPrefHeight() + menu.getPrefHeight() + Constante.BORDER_H;
+			    	primaryStage.setHeight(new_height);
+			    	
+			    	//remove constraints
+					gp.getRowConstraints().clear();
+			    	//add new
+			    	for(int i = 0; i < MainGui.rows ; i++){
+				    	gp.getRowConstraints().add(new RowConstraints(factor_grid_h));
+					}
+			    	//resize background
+			    	background.setFitHeight(factor_grid_h*MainGui.rows);
+		    	}else{
+		    		EatOneEventH = false;
+		    	}
 		    }
 		});
 		//closing event
@@ -271,11 +316,12 @@ public class MainGui extends Application implements Runnable{
 		bp.setCenter(root);
 		
 		//construct scene
-		primaryStage.setMinHeight(Constante.MAP_H);
-		primaryStage.setMinWidth(Constante.MAP_W);
+		primaryStage.setMinHeight(Constante.MIN_FACTOR*MainGui.rows+tb_bot.getPrefHeight()+menu.getPrefHeight());
+		primaryStage.setMinWidth(Constante.MIN_FACTOR*MainGui.cols+logPane.getPrefWidth()+statutPane.getPrefWidth());
         primaryStage.setTitle("Ship Simulator");
         primaryStage.getIcons().add(boat_icone);
         primaryStage.setScene(scene);
+        primaryStage.initStyle(StageStyle.UTILITY);
         primaryStage.show();
         
         //define refresh Timertask
