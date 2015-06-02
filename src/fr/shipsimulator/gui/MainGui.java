@@ -154,17 +154,19 @@ public class MainGui extends Application implements Runnable{
             	OptionSimulation stage = new OptionSimulation(primaryStage);
             	stage.setOnHiding(new EventHandler<WindowEvent>() {
         			public void handle(WindowEvent we) {
-        				double center_size_w = primaryStage.getWidth() - statutPane.getPrefWidth() - logPane.getPrefWidth();
-        				double center_size_h = primaryStage.getHeight() - tb_bot.getPrefHeight() - menu.getPrefHeight();
-        				
+        				double center_size_w = primaryStage.getWidth() - Constante.BORDER_W - statutPane.getPrefWidth() - logPane.getPrefWidth();
+        				double center_size_h = primaryStage.getHeight() - Constante.BORDER_H - tb_bot.getPrefHeight() - menu.getPrefHeight();
+        				System.out.println(primaryStage.getHeight());
         				gp.getColumnConstraints().clear();
         				gp.getRowConstraints().clear();
         				
         				for(int i = 0; i < MainGui.cols ; i++){
         			    	gp.getColumnConstraints().add(new ColumnConstraints(Math.round(center_size_w/(double)MainGui.cols)));
+        				}
+        				for(int i = 0; i < MainGui.rows ; i++){
         					gp.getRowConstraints().add(new RowConstraints(Math.round(center_size_h/(double)MainGui.rows)));
         				}
-                  	}
+        			}
         		});
             	stage.show(); 
             }

@@ -8,10 +8,14 @@ public interface Constante {
 	int STOP = 2;
 	int SUSPEND = 3;
 	
+	//INTERFACE
+	int BORDER_H = 38;
+	int BORDER_W = 12;
+	
 	//MAP GRAPHICS
 	int MAP_H = 600;
 	int MAP_W = 800;
-
+	
 	String MAP_PATH = "./ressource/carte.png";
 	String BATEAU_PATH = "./ressource/bateau_icone.png";
 
