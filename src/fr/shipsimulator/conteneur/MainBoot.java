@@ -12,7 +12,7 @@ public class MainBoot {
 		// TODO Auto-generated method stub
 		Runtime rt = Runtime.instance();
 		Profile p = null;
-		try{
+		try {
 			p = new ProfileImpl(MAIN_PROPERTIES_FILE);
 			AgentContainer mc = rt.createMainContainer(p);
 		}
