@@ -3,9 +3,6 @@ package fr.shipsimulator.gui;
 import jade.gui.GuiEvent;
 
 import java.io.FileInputStream;
-
-import javafx.scene.control.*;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -13,11 +10,15 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToolBar;
@@ -29,12 +30,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import fr.shipsimulator.agent.BoatAgent;
 import fr.shipsimulator.agent.EnvironnementAgent;
 import fr.shipsimulator.constantes.Constante;
-import javafx.event.ActionEvent;
 
 /**
  * 

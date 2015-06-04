@@ -1,25 +1,19 @@
 package fr.shipsimulator.agent;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Random;
-
-import javax.imageio.ImageIO;
-
-import jade.domain.DFService;
-import jade.domain.FIPAException;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import javax.imageio.ImageIO;
+
 import fr.shipsimulator.behaviour.EnvironnementBehaviour;
 import fr.shipsimulator.constantes.Constante;
 import fr.shipsimulator.gui.MainGui;
@@ -27,6 +21,7 @@ import fr.shipsimulator.gui.MainGui;
  * TODO : CHANGE DEFAULT COL/ROW to current and location of mapData init
  */
 public class EnvironnementAgent extends GuiAgent implements Constante{
+	private static final long serialVersionUID = 1L;
 	
 	private MainGui mainGui;
 	private List<BoatAgent> listBoat;
@@ -133,7 +128,7 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 		}
 		this.mapData = data;
 		
-		//affichage pour vérification
+		//affichage pour vï¿½rification
 		for(int i = 0; i < MainGui.getRows(); i++){
 			for(int j = 0; j < MainGui.getCols(); j++){
 				if(data[j][i] == LAND)
@@ -194,7 +189,6 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 					this.listBoat.add(ba);
 					agBoat.start();
 				} catch (StaleProxyException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

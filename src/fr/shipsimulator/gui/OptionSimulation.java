@@ -1,20 +1,19 @@
 package fr.shipsimulator.gui;
 
-import javafx.scene.control.Button;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-import fr.shipsimulator.constantes.Constante;
-import fr.shipsimulator.gui.component.Selector;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import fr.shipsimulator.constantes.Constante;
+import fr.shipsimulator.gui.component.Selector;
 
 public class OptionSimulation extends Stage{
 	public OptionSimulation(Stage parent, Integer simulationState){

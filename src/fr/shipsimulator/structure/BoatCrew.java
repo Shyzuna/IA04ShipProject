@@ -1,21 +1,21 @@
 package fr.shipsimulator.structure;
 
 public class BoatCrew {
-	public enum CrewType {
-		OBSERVER,
-		CAPTAIN,
-		GUNNER
-	}
+	public enum CrewType {OBSERVER, CAPTAIN, GUNNER}
 	
-	private CrewType type;
+	private CrewType crewType;
 	private Boolean alive;
+	
+	public BoatCrew(CrewType type) {
+		this.crewType = type;
+	}	
 
 	public CrewType getType() {
-		return type;
+		return crewType;
 	}
 
 	public void setType(CrewType type) {
-		this.type = type;
+		this.crewType = type;
 	}
 
 	public Boolean isAlive() {

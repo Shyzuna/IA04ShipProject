@@ -361,6 +361,7 @@ public class Boat implements Constante {
 			return false;
 		}
 		int index = (int)(Math.random() * crewMembers.size());
+		crewMembers.get(index).kill();
 		crewMembers.removeElementAt(index);
 		return true;
 	}
@@ -368,6 +369,7 @@ public class Boat implements Constante {
 	public Boolean killAGunner() {
 		for (int i = 0; i < crewMembers.size(); ++i) {
 			if (crewMembers.get(i).getType() == BoatCrew.CrewType.GUNNER) {
+				crewMembers.get(i).kill();
 				crewMembers.removeElementAt(i);
 				break;
 			}
@@ -376,6 +378,13 @@ public class Boat implements Constante {
 			return false;
 		}
 		return true;
+	}
+	
+	public void killAllCrewMembers() {
+		for (int i = 0; i < crewMembers.size(); ++i) {
+			crewMembers.get(i).kill();
+		}
+		crewMembers.clear();
 	}
 	
 	public Vector<Resource> getResources() {
