@@ -22,7 +22,7 @@ public class BoatDestructionBehaviour extends TickerBehaviour {
 			request.setPerformative(ACLMessage.INFORM);
 			request.addReceiver(new AID("Environnement", AID.ISLOCALNAME));
 			request.setContent("BoatDestroyed");
-			myAgent.send(request);			
+			myAgent.send(request);
 			boat.killAllCrewMembers();
 			myAgent.doDelete();
 		}

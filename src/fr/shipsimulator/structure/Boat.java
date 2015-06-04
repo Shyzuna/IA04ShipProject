@@ -1,14 +1,14 @@
 package fr.shipsimulator.structure;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import fr.shipsimulator.agent.boatCrew.BoatCrewAgent;
 import fr.shipsimulator.constantes.Constante;
 
 public class Boat implements Constante {
 	private Player boatOwner;
-	private Vector<BoatCrewAgent> crewMembers;
-	private Vector<Resource> resources;
+	private ArrayList<BoatCrewAgent> crewMembers;
+	private ArrayList<Resource> resources;
 	private int posX;
 	private int posY;
 	private Boolean destroyed;
@@ -341,11 +341,11 @@ public class Boat implements Constante {
 		this.actualCannonNb = actualCannonNb;
 	}
 	
-	public Vector<BoatCrewAgent> getCrewMembers() {
+	public ArrayList<BoatCrewAgent> getCrewMembers() {
 		return crewMembers;
 	}
 
-	public void setCrewMembers(Vector<BoatCrewAgent> crewMembers) {
+	public void setCrewMembers(ArrayList<BoatCrewAgent> crewMembers) {
 		this.crewMembers = crewMembers;
 	}
 	
@@ -353,7 +353,7 @@ public class Boat implements Constante {
 		if (crewMembers.size() >= actualDeckCrewNb * crewCapaciyPerDeck) {
 			return false;
 		}
-		crewMembers.addElement(member);
+		crewMembers.add(member);
 		return true;
 	}
 	
@@ -364,7 +364,7 @@ public class Boat implements Constante {
 		int index = (int)(Math.random() * crewMembers.size());
 		// TODO
 		//crewMembers.get(index).kill();
-		crewMembers.removeElementAt(index);
+		crewMembers.remove(index);
 		return true;
 	}
 	
@@ -385,24 +385,24 @@ public class Boat implements Constante {
 	
 	public void killAllCrewMembers() {
 		for (int i = 0; i < crewMembers.size(); ++i) {
-			// Todo
+			// TODO
 			//crewMembers.get(i).kill();
 		}
 		crewMembers.clear();
 	}
 	
-	public Vector<Resource> getResources() {
+	public ArrayList<Resource> getResources() {
 		return resources;
 	}
 
-	public void setResources(Vector<Resource> resources) {
+	public void setResources(ArrayList<Resource> resources) {
 		this.resources = resources;
 	}
 	
 	public void destroyAResource() {
 		if (resources.size() > 0) {
 			int index = (int)(Math.random() * resources.size());
-			resources.removeElementAt(index);
+			resources.remove(index);
 		}
 	}
 	
@@ -414,7 +414,7 @@ public class Boat implements Constante {
 		if (resources.size() >= getMaxStorage()) {
 			return false;
 		}
-		resources.addElement(resource);
+		resources.add(resource);
 		return true;
 	}
 	
