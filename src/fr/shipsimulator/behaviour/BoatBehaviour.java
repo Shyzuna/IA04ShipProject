@@ -5,11 +5,8 @@ import fr.shipsimulator.structure.Player;
 import jade.core.behaviours.CyclicBehaviour;
 
 public class BoatBehaviour extends CyclicBehaviour {
-
-	private Boat boat;
 	
 	public BoatBehaviour() {
-		this.boat = new Boat(new Player(), 0, 0);
 		// Creer des agents membre d'équipage et les ajouter au bateau
 	}
 	

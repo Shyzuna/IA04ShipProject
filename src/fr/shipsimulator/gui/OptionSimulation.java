@@ -17,7 +17,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class OptionSimulation extends Stage{
-	public OptionSimulation(Stage parent){
+	public OptionSimulation(Stage parent, Integer simulationState){
 		
 		OptionSimulation me = this;
 		
@@ -31,12 +31,14 @@ public class OptionSimulation extends Stage{
     	Label label_grid_col = new Label("Taille Grille Col : ");
     	Label label_grid_row = new Label("Taille Grille Row : ");
     	
-    	Selector select_boat = new Selector(0);
-    	Selector select_city = new Selector(0);
+    	Selector select_boat = new Selector(MainGui.getBoat());
+    	Selector select_city = new Selector(MainGui.getCity());
     	Selector select_col = new Selector(MainGui.getCols());
     	Selector select_row = new Selector(MainGui.getRows());
     	
     	Button valid = new Button("Valider");
+    	if(simulationState == Constante.RUNNING)
+    		valid.setDisable(true);
     	valid.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {

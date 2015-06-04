@@ -31,6 +31,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
+import fr.shipsimulator.agent.BoatAgent;
 import fr.shipsimulator.agent.EnvironnementAgent;
 import fr.shipsimulator.constantes.Constante;
 import javafx.event.ActionEvent;
@@ -38,8 +39,7 @@ import javafx.event.ActionEvent;
 /**
  * 
  * @author Benoit
- * TODO : upgrade resize to perfect size : size/rows or cols  
- * snap or defined sizes
+ * TODO : /
  */
 
 public class MainGui extends Application implements Runnable{
@@ -161,7 +161,7 @@ public class MainGui extends Application implements Runnable{
 		menu.getMenus().add(mv1);
 		mi1.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-            	OptionSimulation stage = new OptionSimulation(primaryStage);
+            	OptionSimulation stage = new OptionSimulation(primaryStage,myAgent.getStateSimulation());
             	stage.setOnHiding(new EventHandler<WindowEvent>() {
         			public void handle(WindowEvent we) {
         				double center_size_w = primaryStage.getWidth() - Constante.BORDER_W - statutPane.getPrefWidth() - logPane.getPrefWidth();
@@ -221,20 +221,8 @@ public class MainGui extends Application implements Runnable{
 		}
 		
 		Image boat_icone = new Image(new FileInputStream(Constante.BATEAU_PATH));
-		
-		/*test
-		ImageView iv2;
-		for (int row = 0; row < 30; row++) {
-		    for (int col = 0; col < 30; col++) {
-		    	iv2 = new ImageView();
-		    	iv2.setImage(boat_icone);
-		    	GridPane.setRowIndex(iv2, row);
-		    	GridPane.setColumnIndex(iv2, col);
-		    	gp.getChildren().add(iv2);
-		    }
-		}*/
-		
-		Scene scene = new Scene(bp, Constante.DEFAULT_FACTOR*MainGui.cols+logPane.getPrefWidth()+statutPane.getPrefWidth(), Constante.DEFAULT_FACTOR*MainGui.rows+tb_bot.getPrefHeight()+menu.getPrefHeight());
+
+		Scene scene = new Scene(bp, Constante.DEFAULT_FACTOR*MainGui.cols+logPane.getPrefWidth()+statutPane.getPrefWidth()+Constante.BORDER_W, Constante.DEFAULT_FACTOR*MainGui.rows+tb_bot.getPrefHeight()+menu.getPrefHeight()+Constante.BORDER_H);
 		//Event resize scene
 		scene.widthProperty().addListener(new ChangeListener<Number>() {
 		    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
@@ -327,7 +315,7 @@ public class MainGui extends Application implements Runnable{
         primaryStage.setTitle("Ship Simulator");
         primaryStage.getIcons().add(boat_icone);
         primaryStage.setScene(scene);
-        primaryStage.initStyle(StageStyle.UTILITY);
+        //primaryStage.initStyle(StageStyle.UTILITY);
         primaryStage.show();
         
         //define refresh Timertask
@@ -338,7 +326,18 @@ public class MainGui extends Application implements Runnable{
         		Platform.runLater(new Runnable(){
 					@Override
 					public void run() {
-						//DO SMTH
+						if(myAgent.getStateSimulation() == Constante.RUNNING){
+							ImageView iv;
+							gp.getChildren().clear();
+							gp.setGridLinesVisible(true);
+							for(BoatAgent ba : myAgent.getListBoat()){
+								iv = new ImageView();
+						    	iv.setImage(boat_icone);
+						    	GridPane.setRowIndex(iv, ba.getBoat().getPosY());
+						    	GridPane.setColumnIndex(iv, ba.getBoat().getPosX());
+						    	gp.getChildren().add(iv);
+							}
+						}
 					}
         		});
         	}

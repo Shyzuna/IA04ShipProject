@@ -7,6 +7,7 @@ public interface Constante {
 	int START = 1;
 	int STOP = 2;
 	int SUSPEND = 3;
+	int RUNNING = 4;
 	
 	//INTERFACE
 	int BORDER_H = 38;
