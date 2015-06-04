@@ -3,7 +3,8 @@ package fr.shipsimulator.behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 
 public class BoatBehaviour extends CyclicBehaviour {
-	
+	private static final long serialVersionUID = 1L;
+
 	public BoatBehaviour() {
 		// Creer des agents membre d'équipage et les ajouter au bateau
 	}
