@@ -1,6 +1,7 @@
 package fr.shipsimulator.behaviour;
 
 import jade.core.behaviours.CyclicBehaviour;
+import jade.lang.acl.ACLMessage;
 import fr.shipsimulator.agent.EnvironnementAgent;
 
 public class EnvironnementBehaviour extends CyclicBehaviour {

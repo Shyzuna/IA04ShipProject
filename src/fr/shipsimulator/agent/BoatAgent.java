@@ -10,6 +10,9 @@ import fr.shipsimulator.structure.Player;
 
 public class BoatAgent extends Agent implements Constante {
 	private static final long serialVersionUID = 1L;	
+	
+	public enum CrewType {OBSERVER, CAPTAIN, GUNNER}
+
 	private Boat boat;
 	
 	public Boat getBoat() {

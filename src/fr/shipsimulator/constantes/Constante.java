@@ -31,6 +31,9 @@ public interface Constante {
 	int DEFAULT_ROWS = 30;
 	int SEA = '0';
 	int LAND = '1';
+	int SHIP = '2';
+	int CITY = '3';
+	int SELF = '4';
 	
 	//BOAT DEFAULT DATA
 	int BOAT_LIFE = 300;

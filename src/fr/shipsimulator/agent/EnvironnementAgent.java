@@ -44,6 +44,14 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 		this.listBoat = listBoat;
 	}
 
+	public int[][] getMapData() {
+		return mapData;
+	}
+
+	public void setMapData(int[][] mapData) {
+		this.mapData = mapData;
+	}
+
 	public MainGui getMainGui() {
 		return mainGui;
 	}
