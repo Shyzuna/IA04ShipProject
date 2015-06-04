@@ -12,7 +12,7 @@ public class BoatCrewAgent extends Agent{
 		super.setup();
 		
 		MainGui.writeLog("BoatCrew Agent", "New Equipage Member : "+ this.getLocalName());
-		this.addBehaviour(new BoatCrewBehaviour());
+		this.addBehaviour(new BoatCrewBehaviour(null));
 	}
 	
 	
