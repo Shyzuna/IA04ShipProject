@@ -2,11 +2,12 @@ package fr.shipsimulator.structure;
 
 import java.util.Vector;
 
+import fr.shipsimulator.agent.boatCrew.BoatCrewAgent;
 import fr.shipsimulator.constantes.Constante;
 
 public class Boat implements Constante {
 	private Player boatOwner;
-	private Vector<BoatCrew> crewMembers;
+	private Vector<BoatCrewAgent> crewMembers;
 	private Vector<Resource> resources;
 	private int posX;
 	private int posY;
@@ -340,15 +341,15 @@ public class Boat implements Constante {
 		this.actualCannonNb = actualCannonNb;
 	}
 	
-	public Vector<BoatCrew> getCrewMembers() {
+	public Vector<BoatCrewAgent> getCrewMembers() {
 		return crewMembers;
 	}
 
-	public void setCrewMembers(Vector<BoatCrew> crewMembers) {
+	public void setCrewMembers(Vector<BoatCrewAgent> crewMembers) {
 		this.crewMembers = crewMembers;
 	}
 	
-	public Boolean addCrewMember(BoatCrew member) {
+	public Boolean addCrewMember(BoatCrewAgent member) {
 		if (crewMembers.size() >= actualDeckCrewNb * crewCapaciyPerDeck) {
 			return false;
 		}
@@ -366,12 +367,12 @@ public class Boat implements Constante {
 	}
 	
 	public Boolean killAGunner() {
-//		for (int i = 0; i < crewMembers.size(); ++i) {
+		for (int i = 0; i < crewMembers.size(); ++i) {
 //			if (crewMembers.get(i).getType() == BoatCrew.CrewType.GUNNER) {
 //				crewMembers.removeElementAt(i);
 //				break;
 //			}
-//		}
+		}
 		if (crewMembers.size() == 0) {
 			return false;
 		}
