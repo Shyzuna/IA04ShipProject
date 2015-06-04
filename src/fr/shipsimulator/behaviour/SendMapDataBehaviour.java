@@ -19,7 +19,7 @@ public class SendMapDataBehaviour extends CyclicBehaviour {
 	
 	@Override
 	public void action(){
-		MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
+		/*MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
 		ACLMessage msg = receive(mt);
 		if (msg != null) {
 			ACLMessage reply = msg.createReply();
@@ -42,7 +42,7 @@ public class SendMapDataBehaviour extends CyclicBehaviour {
 			//sérialiser vision et l'envoyer
 			reply.setContent("");
 			send(reply);
-		}
+		}*/
 		block();	
 	}
 	
