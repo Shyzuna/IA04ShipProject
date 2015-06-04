@@ -8,6 +8,7 @@ public class BoatCrew {
 	}
 	
 	private CrewType type;
+	private Boolean alive;
 
 	public CrewType getType() {
 		return type;
@@ -15,6 +16,14 @@ public class BoatCrew {
 
 	public void setType(CrewType type) {
 		this.type = type;
+	}
+
+	public Boolean isAlive() {
+		return alive;
+	}
+
+	public void kill() {
+		alive = false;
 	}
 	
 	// Stats, etc

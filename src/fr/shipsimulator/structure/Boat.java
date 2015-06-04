@@ -14,7 +14,7 @@ public class Boat implements Constante {
 	
 	// Boat "static" stats (but upgradable)
 	private int maxLife;
-	private int speed;
+	/*private int speed;*/
 	private int deckCrewNb;
 	private int deckStorageNb;
 	private int crewCapaciyPerDeck;
@@ -194,9 +194,9 @@ public class Boat implements Constante {
 		cannonPower = newValue;
 	}
 	
-	public void upgradeSpeed(int newSpeed) {
+	/*public void upgradeSpeed(int newSpeed) {
 		speed = newSpeed;
-	}
+	}*/
 	
 	// Accessors
 
@@ -409,19 +409,19 @@ public class Boat implements Constante {
 		return destroyed;
 	}
 	
-	public int getSpeed() {
+	/*public int getSpeed() {
 		return speed;
 	}
 
 	public void setSpeed(int speed) {
 		this.speed = speed;
-	}
+	}*/
 	
 	// Init functions
 	
 	private void initStats() {
 		maxLife = BOAT_LIFE;
-		speed = BOAT_SPEED;
+		/*speed = BOAT_SPEED;*/
 		deckCrewNb = DECK_CREW_NB;
 		deckStorageNb = CREW_CAPACITY_PER_DECK;
 		crewCapaciyPerDeck = DECK_STORAGE_NB;
