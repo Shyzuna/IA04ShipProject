@@ -139,7 +139,7 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 		}
 		this.mapData = data;
 		
-		//affichage pour vérification
+		//affichage pour vï¿½rification
 		for(int i = 0; i < MainGui.getRows(); i++){
 			for(int j = 0; j < MainGui.getCols(); j++){
 				if(data[j][i] == LAND)
