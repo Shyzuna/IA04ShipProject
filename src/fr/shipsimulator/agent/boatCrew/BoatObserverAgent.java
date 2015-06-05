@@ -1,5 +1,7 @@
 package fr.shipsimulator.agent.boatCrew;
 
+import fr.shipsimulator.behaviour.ObserverObservBehaviour;
+import fr.shipsimulator.behaviour.ObserverVoteBehaviour;
 import fr.shipsimulator.gui.MainGui;
 
 public class BoatObserverAgent extends BoatCrewAgent{

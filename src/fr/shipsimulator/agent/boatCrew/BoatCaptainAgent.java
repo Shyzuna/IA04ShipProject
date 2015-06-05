@@ -1,5 +1,7 @@
 package fr.shipsimulator.agent.boatCrew;
 
+import fr.shipsimulator.behaviour.CaptainDirectionBehaviour;
+import fr.shipsimulator.behaviour.CaptainMissionBehaviour;
 import fr.shipsimulator.gui.MainGui;
 
 public class BoatCaptainAgent extends BoatCrewAgent{
