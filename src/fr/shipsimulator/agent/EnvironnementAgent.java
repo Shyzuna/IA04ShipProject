@@ -103,10 +103,8 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 	protected void fillMapData(String path){
 		int[][] data = new int[MainGui.getCols()][MainGui.getRows()];
 		BufferedImage map = null;
-		int caseHeight = MAP_H / MainGui.getRows();
-		int caseWidth = MAP_W / DEFAULT_COLS;
-		int startingAtHeight = (MAP_H % MainGui.getRows()) / 2;
-		int startingAtWidth = (MAP_W % MainGui.getCols()) / 2;
+		int caseHeight = MainGui.getFactorGridH() ;
+		int caseWidth = MainGui.getFactorGridW();
 		try{
 			map = ImageIO.read(new File(Constante.MAP_PATH));
 		}catch(IOException ex){
@@ -117,8 +115,8 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 			for(int col = 0; col < MainGui.getCols(); col++){
 				//checker dans la case correspondante qu'un max de pixels est bleu
 				int bluePixels = 0;
-				for(int i = startingAtHeight + row * caseHeight; i < startingAtHeight + (row + 1) * caseHeight; i++){
-					for(int j = startingAtWidth + col * caseWidth; j < startingAtWidth + (col + 1) * caseWidth; j++){
+				for(int i = row * caseHeight; i < (row + 1) * caseHeight; i++){
+					for(int j = col * caseWidth; j < (col + 1) * caseWidth; j++){
 						int rgb = map.getRGB(j,i);
 						int red = (rgb >> 16) & 0xFF;
 						int green = (rgb >> 8) & 0xFF;

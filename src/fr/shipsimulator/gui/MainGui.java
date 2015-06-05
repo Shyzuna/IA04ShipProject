@@ -60,8 +60,8 @@ public class MainGui extends Application implements Runnable{
 	private Menu mv1;
 	private MenuItem mi1;
 	
-	private Integer factor_grid_w;
-	private Integer factor_grid_h;
+	private static Integer factor_grid_w;
+	private static Integer factor_grid_h;
 	
 	//Event used
 	private boolean EatOneEventW = false;
@@ -99,6 +99,14 @@ public class MainGui extends Application implements Runnable{
 		MainGui.rows = rows;
 	}
 
+	public static int getFactorGridW(){
+		return factor_grid_w;
+	}
+	
+	public static int getFactorGridH(){
+		return factor_grid_h;
+	}
+	
 	public static EnvironnementAgent getMyAgent() {
 		return myAgent;
 	}
