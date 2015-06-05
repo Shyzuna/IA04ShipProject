@@ -64,7 +64,7 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 	@Override
 	protected void setup() {
 		//create and launch interface
-		mainGui = new MainGui();
+		this.mainGui = new MainGui();
 		MainGui.setMyAgent(this);
 		new Thread(mainGui).start();
 		
@@ -100,8 +100,9 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 	protected void fillMapData(String path){
 		int[][] data = new int[MainGui.getCols()][MainGui.getRows()];
 		BufferedImage map = null;
-		int caseHeight = MAP_H / MainGui.getRows();
-		int caseWidth = MAP_W / DEFAULT_COLS;
+		System.out.println(this.mainGui);
+		int caseHeight = MainGui.getFactor_grid_h();
+		int caseWidth = MainGui.getFactor_grid_w();
 		int startingAtHeight = (MAP_H % MainGui.getRows()) / 2;
 		int startingAtWidth = (MAP_W % MainGui.getCols()) / 2;
 		try{

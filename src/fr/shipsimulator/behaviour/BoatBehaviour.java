@@ -31,7 +31,6 @@ public class BoatBehaviour extends CyclicBehaviour {
 		
 		// 6. Informer l'agent environnement en cas de destruction
 			// verifier si boat.isDestroyed() et inform env
-		
 	}
 
 }

@@ -49,6 +49,8 @@ public class MainGui extends Application implements Runnable{
 	private static Integer rows = Constante.DEFAULT_ROWS;
 	private static Integer boat = 0;
 	private static Integer city = 0;
+	private static Integer factor_grid_w = Constante.DEFAULT_FACTOR;
+	private static Integer factor_grid_h = Constante.DEFAULT_FACTOR;
 	
 	private StackPane root;
 	private BorderPane bp;
@@ -60,14 +62,19 @@ public class MainGui extends Application implements Runnable{
 	private MenuBar menu;
 	private Menu mv1;
 	private MenuItem mi1;
-	
-	private Integer factor_grid_w;
-	private Integer factor_grid_h;
-	
+
 	//Event used
 	private boolean EatOneEventW = false;
 	private boolean EatOneEventH = false;
 	
+	public static Integer getFactor_grid_w() {
+		return factor_grid_w;
+	}
+	
+	public static Integer getFactor_grid_h() {
+		return factor_grid_h;
+	}
+
 	public static Integer getBoat() {
 		return boat;
 	}
@@ -113,9 +120,6 @@ public class MainGui extends Application implements Runnable{
 		
 		root = new StackPane();
 		bp = new BorderPane();
-		
-		factor_grid_w = Constante.DEFAULT_FACTOR;
-		factor_grid_h = Constante.DEFAULT_FACTOR;
 		
 		//toolbar bot & buttons
 		//TODO METTRE IMAGE
@@ -237,11 +241,11 @@ public class MainGui extends Application implements Runnable{
 			    	
 			    	Integer dif_factor = (int) Math.ceil(dif/(double)MainGui.cols);
 			    	
-			    	factor_grid_w += coef * dif_factor; 
-			    	double new_width = factor_grid_w*MainGui.cols + statutPane.getPrefWidth() + logPane.getPrefWidth() + Constante.BORDER_W;
+			    	MainGui.factor_grid_w += coef * dif_factor; 
+			    	double new_width = MainGui.factor_grid_w*MainGui.cols + statutPane.getPrefWidth() + logPane.getPrefWidth() + Constante.BORDER_W;
 			    	
-			    	new_width = factor_grid_w*MainGui.cols + statutPane.getPrefWidth() + logPane.getPrefWidth() + Constante.BORDER_W;
-			    	factor_grid_h = new_width > Constante.MAX_W ? factor_grid_w-1:new_width < Constante.MIN_W ? factor_grid_w+1:factor_grid_w;
+			    	new_width = MainGui.factor_grid_w*MainGui.cols + statutPane.getPrefWidth() + logPane.getPrefWidth() + Constante.BORDER_W;
+			    	MainGui.factor_grid_h = new_width > Constante.MAX_W ? MainGui.factor_grid_w-1:new_width < Constante.MIN_W ? MainGui.factor_grid_w+1:MainGui.factor_grid_w;
 			    	primaryStage.setWidth(new_width);
 			    	
 			    	//remove constraints
@@ -251,7 +255,7 @@ public class MainGui extends Application implements Runnable{
 				    	gp.getColumnConstraints().add(new ColumnConstraints(factor_grid_w));
 					}
 			    	//resize background
-			    	background.setFitWidth(factor_grid_w*MainGui.cols);
+			    	background.setFitWidth(MainGui.factor_grid_w*MainGui.cols);
 		    	} else {
 		    		EatOneEventW = false;
 			    }
@@ -270,12 +274,12 @@ public class MainGui extends Application implements Runnable{
 			    	
 			    	Integer dif_factor = (int) Math.ceil(dif/(double)MainGui.rows);
 			    	
-			    	factor_grid_h += coef * dif_factor; 
-			    	double new_height = factor_grid_h*MainGui.rows + tb_bot.getPrefHeight() + menu.getPrefHeight() + Constante.BORDER_H;
+			    	MainGui.factor_grid_h += coef * dif_factor; 
+			    	double new_height = MainGui.factor_grid_h*MainGui.rows + tb_bot.getPrefHeight() + menu.getPrefHeight() + Constante.BORDER_H;
 			    	
-			    	factor_grid_h = new_height > Constante.MAX_H ? factor_grid_h-1:new_height < Constante.MIN_H ? factor_grid_h+1:factor_grid_h;
+			    	MainGui.factor_grid_h = new_height > Constante.MAX_H ? MainGui.factor_grid_h-1:new_height < Constante.MIN_H ? MainGui.factor_grid_h+1:MainGui.factor_grid_h;
 			    	
-			    	new_height = factor_grid_h*MainGui.rows + tb_bot.getPrefHeight() + menu.getPrefHeight() + Constante.BORDER_H;
+			    	new_height = MainGui.factor_grid_h*MainGui.rows + tb_bot.getPrefHeight() + menu.getPrefHeight() + Constante.BORDER_H;
 			    	
 			    	primaryStage.setHeight(new_height);
 			    	
@@ -286,7 +290,7 @@ public class MainGui extends Application implements Runnable{
 				    	gp.getRowConstraints().add(new RowConstraints(factor_grid_h));
 					}
 			    	//resize background
-			    	background.setFitHeight(factor_grid_h*MainGui.rows);
+			    	background.setFitHeight(MainGui.factor_grid_h*MainGui.rows);
 		    	}else{
 		    		EatOneEventH = false;
 		    	}
