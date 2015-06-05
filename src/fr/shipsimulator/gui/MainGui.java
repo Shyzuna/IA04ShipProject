@@ -48,7 +48,7 @@ public class MainGui extends Application implements Runnable{
 	private static EnvironnementAgent myAgent;
 	private static Integer cols = Constante.DEFAULT_COLS;
 	private static Integer rows = Constante.DEFAULT_ROWS;
-	private static Integer boat = 0;
+	private static Integer boat = 4;
 	private static Integer city = 0;
 	private static Integer factor_grid_w = Constante.DEFAULT_FACTOR;
 	private static Integer factor_grid_h = Constante.DEFAULT_FACTOR;
