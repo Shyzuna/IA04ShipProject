@@ -8,6 +8,7 @@ public interface Constante {
 	int STOP = 2;
 	int SUSPEND = 3;
 	int RUNNING = 4;
+	long SIMULATION_TICK = 1000;
 	
 	//INTERFACE
 	int BORDER_H = 38;
@@ -30,10 +31,13 @@ public interface Constante {
 	int DEFAULT_ROWS = 30;
 	int SEA = '0';
 	int LAND = '1';
+	int SHIP = '2';
+	int CITY = '3';
+	int SELF = '4';
 	
 	//BOAT DEFAULT DATA
 	int BOAT_LIFE = 300;
-	int BOAT_SPEED = 1;
+	/*int BOAT_SPEED = 1; // la vitesse complique les choses */
 	int DECK_CREW_NB = 1;
 	int CREW_CAPACITY_PER_DECK = 5;
 	int DECK_STORAGE_NB = 20;

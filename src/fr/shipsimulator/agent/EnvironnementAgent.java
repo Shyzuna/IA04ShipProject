@@ -1,25 +1,23 @@
 package fr.shipsimulator.agent;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Random;
-
-import javax.imageio.ImageIO;
-
-import jade.domain.DFService;
-import jade.domain.FIPAException;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
+import javafx.scene.paint.Color;
+
+import javax.imageio.ImageIO;
+
 import fr.shipsimulator.behaviour.EnvironnementBehaviour;
 import fr.shipsimulator.constantes.Constante;
 import fr.shipsimulator.gui.MainGui;
@@ -27,6 +25,7 @@ import fr.shipsimulator.gui.MainGui;
  * TODO : CHANGE DEFAULT COL/ROW to current and location of mapData init
  */
 public class EnvironnementAgent extends GuiAgent implements Constante{
+	private static final long serialVersionUID = 1L;
 	
 	private MainGui mainGui;
 	private List<BoatAgent> listBoat;
@@ -47,6 +46,14 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 
 	public void setListBoat(List<BoatAgent> listBoat) {
 		this.listBoat = listBoat;
+	}
+
+	public int[][] getMapData() {
+		return mapData;
+	}
+
+	public void setMapData(int[][] mapData) {
+		this.mapData = mapData;
 	}
 
 	public MainGui getMainGui() {
@@ -99,25 +106,23 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 	
 	protected void fillMapData(String path){
 		int[][] data = new int[MainGui.getCols()][MainGui.getRows()];
-		BufferedImage map = null;
+		Image map = null;
+
 		System.out.println(this.mainGui);
 		int caseHeight = MainGui.getFactor_grid_h();
 		int caseWidth = MainGui.getFactor_grid_w();
-		int startingAtHeight = (MAP_H % MainGui.getRows()) / 2;
-		int startingAtWidth = (MAP_W % MainGui.getCols()) / 2;
-		try{
-			map = ImageIO.read(new File(Constante.MAP_PATH));
-		}catch(IOException ex){
-			System.out.println("Cannot load Map !");
-		}
+
+		map = new Image(new File(MAP_PATH).toURI().toString(),caseWidth*MainGui.getCols(),caseHeight*MainGui.getRows(),false,false);
+		PixelReader pr = map.getPixelReader();
 		
 		for(int row = 0; row < MainGui.getRows(); row++){
 			for(int col = 0; col < MainGui.getCols(); col++){
 				//checker dans la case correspondante qu'un max de pixels est bleu
 				int bluePixels = 0;
-				for(int i = startingAtHeight + row * caseHeight; i < startingAtHeight + (row + 1) * caseHeight; i++){
-					for(int j = startingAtWidth + col * caseWidth; j < startingAtWidth + (col + 1) * caseWidth; j++){
-						int rgb = map.getRGB(j,i);
+				
+				for(int i = row * caseHeight; i < (row + 1) * caseHeight; i++){
+					for(int j = col * caseWidth; j < (col + 1) * caseWidth; j++){
+						int rgb = pr.getArgb(j, i);
 						int red = (rgb >> 16) & 0xFF;
 						int green = (rgb >> 8) & 0xFF;
 						int blue = rgb & 0xFF;
@@ -195,7 +200,6 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 					this.listBoat.add(ba);
 					agBoat.start();
 				} catch (StaleProxyException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

@@ -1,1 +1,0 @@
-( ap-description  :name "ShipSimulator" :ap-services (set ( ap-service  :name fipa.mts.mtp.http.std :type fipa.mts.mtp.http.std :addresses (sequence http://Benoit-PC.home:7778/acc))))

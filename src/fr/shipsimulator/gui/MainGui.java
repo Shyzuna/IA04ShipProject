@@ -2,10 +2,9 @@ package fr.shipsimulator.gui;
 
 import jade.gui.GuiEvent;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
-
-import javafx.scene.control.*;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -13,11 +12,15 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToolBar;
@@ -29,12 +32,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import fr.shipsimulator.agent.BoatAgent;
 import fr.shipsimulator.agent.EnvironnementAgent;
 import fr.shipsimulator.constantes.Constante;
-import javafx.event.ActionEvent;
 
 /**
  * 
@@ -57,7 +58,7 @@ public class MainGui extends Application implements Runnable{
 	private ToolBar tb_bot;
 	private static TextArea logArea;
 	private ScrollPane logPane, statutPane;
-	private ImageView background;
+	private static ImageView background;
 	private GridPane gp;
 	private MenuBar menu;
 	private Menu mv1;
@@ -66,6 +67,11 @@ public class MainGui extends Application implements Runnable{
 	//Event used
 	private boolean EatOneEventW = false;
 	private boolean EatOneEventH = false;
+	
+	
+	public static ImageView getBackground() {
+		return background;
+	}
 	
 	public static Integer getFactor_grid_w() {
 		return factor_grid_w;
@@ -107,6 +113,14 @@ public class MainGui extends Application implements Runnable{
 		MainGui.rows = rows;
 	}
 
+	public static int getFactorGridW(){
+		return factor_grid_w;
+	}
+	
+	public static int getFactorGridH(){
+		return factor_grid_h;
+	}
+	
 	public static EnvironnementAgent getMyAgent() {
 		return myAgent;
 	}

@@ -1,20 +1,21 @@
 package fr.shipsimulator.structure;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
+import fr.shipsimulator.agent.boatCrew.BoatCrewAgent;
 import fr.shipsimulator.constantes.Constante;
 
 public class Boat implements Constante {
 	private Player boatOwner;
-	private Vector<BoatCrew> crewMembers;
-	private Vector<Resource> resources;
+	private ArrayList<BoatCrewAgent> crewMembers;
+	private ArrayList<Resource> resources;
 	private int posX;
 	private int posY;
 	private Boolean destroyed;
 	
 	// Boat "static" stats (but upgradable)
 	private int maxLife;
-	private int speed;
+	/*private int speed;*/
 	private int deckCrewNb;
 	private int deckStorageNb;
 	private int crewCapaciyPerDeck;
@@ -194,9 +195,9 @@ public class Boat implements Constante {
 		cannonPower = newValue;
 	}
 	
-	public void upgradeSpeed(int newSpeed) {
+	/*public void upgradeSpeed(int newSpeed) {
 		speed = newSpeed;
-	}
+	}*/
 	
 	// Accessors
 
@@ -340,19 +341,19 @@ public class Boat implements Constante {
 		this.actualCannonNb = actualCannonNb;
 	}
 	
-	public Vector<BoatCrew> getCrewMembers() {
+	public ArrayList<BoatCrewAgent> getCrewMembers() {
 		return crewMembers;
 	}
 
-	public void setCrewMembers(Vector<BoatCrew> crewMembers) {
+	public void setCrewMembers(ArrayList<BoatCrewAgent> crewMembers) {
 		this.crewMembers = crewMembers;
 	}
 	
-	public Boolean addCrewMember(BoatCrew member) {
+	public Boolean addCrewMember(BoatCrewAgent member) {
 		if (crewMembers.size() >= actualDeckCrewNb * crewCapaciyPerDeck) {
 			return false;
 		}
-		crewMembers.addElement(member);
+		crewMembers.add(member);
 		return true;
 	}
 	
@@ -361,16 +362,20 @@ public class Boat implements Constante {
 			return false;
 		}
 		int index = (int)(Math.random() * crewMembers.size());
-		crewMembers.removeElementAt(index);
+		// TODO
+		//crewMembers.get(index).kill();
+		crewMembers.remove(index);
 		return true;
 	}
 	
 	public Boolean killAGunner() {
 		for (int i = 0; i < crewMembers.size(); ++i) {
-			if (crewMembers.get(i).getType() == BoatCrew.CrewType.GUNNER) {
+			// TODO
+			/*if (crewMembers.get(i).getType() == BoatCrew.CrewType.GUNNER) {
+				crewMembers.get(i).kill();
 				crewMembers.removeElementAt(i);
 				break;
-			}
+			}*/
 		}
 		if (crewMembers.size() == 0) {
 			return false;
@@ -378,18 +383,26 @@ public class Boat implements Constante {
 		return true;
 	}
 	
-	public Vector<Resource> getResources() {
+	public void killAllCrewMembers() {
+		for (int i = 0; i < crewMembers.size(); ++i) {
+			// TODO
+			//crewMembers.get(i).kill();
+		}
+		crewMembers.clear();
+	}
+	
+	public ArrayList<Resource> getResources() {
 		return resources;
 	}
 
-	public void setResources(Vector<Resource> resources) {
+	public void setResources(ArrayList<Resource> resources) {
 		this.resources = resources;
 	}
 	
 	public void destroyAResource() {
 		if (resources.size() > 0) {
 			int index = (int)(Math.random() * resources.size());
-			resources.removeElementAt(index);
+			resources.remove(index);
 		}
 	}
 	
@@ -401,7 +414,7 @@ public class Boat implements Constante {
 		if (resources.size() >= getMaxStorage()) {
 			return false;
 		}
-		resources.addElement(resource);
+		resources.add(resource);
 		return true;
 	}
 	
@@ -409,19 +422,19 @@ public class Boat implements Constante {
 		return destroyed;
 	}
 	
-	public int getSpeed() {
+	/*public int getSpeed() {
 		return speed;
 	}
 
 	public void setSpeed(int speed) {
 		this.speed = speed;
-	}
+	}*/
 	
 	// Init functions
 	
 	private void initStats() {
 		maxLife = BOAT_LIFE;
-		speed = BOAT_SPEED;
+		/*speed = BOAT_SPEED;*/
 		deckCrewNb = DECK_CREW_NB;
 		deckStorageNb = CREW_CAPACITY_PER_DECK;
 		crewCapaciyPerDeck = DECK_STORAGE_NB;
