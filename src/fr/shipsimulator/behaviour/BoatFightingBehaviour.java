@@ -8,7 +8,7 @@ public class BoatFightingBehaviour extends CyclicBehaviour {
 	public void action() {
 		//CYCLIC// 4. Engager un combat sur demande d'environnement (subir des dégats)
 		// -> recevoir d'env le nombre d'impacts et les degats
-
+		// aussi calculer dégats infligés ennemie
 		// TODO
 
 	}
