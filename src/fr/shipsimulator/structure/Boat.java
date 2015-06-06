@@ -363,6 +363,7 @@ public class Boat implements Constante {
 		}
 		int index = (int)(Math.random() * crewMembers.size());
 		// TODO
+		//crewMembers.get(index).addBehaviour(HandleKill);
 		//crewMembers.get(index).kill();
 		crewMembers.remove(index);
 		return true;

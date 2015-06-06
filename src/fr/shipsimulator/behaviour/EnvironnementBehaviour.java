@@ -11,8 +11,7 @@ public class EnvironnementBehaviour extends CyclicBehaviour {
 	public EnvironnementBehaviour() {
 		ea = (EnvironnementAgent) this.myAgent;
 	}
-		
-	@Override
+
 	public void action() {
 		// Pour ne pas faire monter le cpu en dev
 		block();
