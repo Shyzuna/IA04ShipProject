@@ -6,7 +6,10 @@ public class BoatFightingBehaviour extends CyclicBehaviour {
 
 	@Override
 	public void action() {
-		// TODO Auto-generated method stub
+		//CYCLIC// 4. Engager un combat sur demande d'environnement (subir des dégats)
+		// -> recevoir d'env le nombre d'impacts et les degats
+
+		// TODO
 
 	}
 
