@@ -12,6 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
+import javafx.scene.paint.Color;
+
 import javax.imageio.ImageIO;
 
 import fr.shipsimulator.behaviour.EnvironnementBehaviour;
@@ -67,7 +71,7 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 	@Override
 	protected void setup() {
 		//create and launch interface
-		mainGui = new MainGui();
+		this.mainGui = new MainGui();
 		MainGui.setMyAgent(this);
 		new Thread(mainGui).start();
 		
@@ -102,24 +106,23 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 	
 	protected void fillMapData(String path){
 		int[][] data = new int[MainGui.getCols()][MainGui.getRows()];
-		BufferedImage map = null;
-		int caseHeight = MAP_H / MainGui.getRows();
-		int caseWidth = MAP_W / DEFAULT_COLS;
-		int startingAtHeight = (MAP_H % MainGui.getRows()) / 2;
-		int startingAtWidth = (MAP_W % MainGui.getCols()) / 2;
-		try{
-			map = ImageIO.read(new File(Constante.MAP_PATH));
-		}catch(IOException ex){
-			System.out.println("Cannot load Map !");
-		}
+		Image map = null;
+
+		System.out.println(this.mainGui);
+		int caseHeight = MainGui.getFactor_grid_h();
+		int caseWidth = MainGui.getFactor_grid_w();
+
+		map = new Image(new File(MAP_PATH).toURI().toString(),caseWidth*MainGui.getCols(),caseHeight*MainGui.getRows(),false,false);
+		PixelReader pr = map.getPixelReader();
 		
 		for(int row = 0; row < MainGui.getRows(); row++){
 			for(int col = 0; col < MainGui.getCols(); col++){
 				//checker dans la case correspondante qu'un max de pixels est bleu
 				int bluePixels = 0;
-				for(int i = startingAtHeight + row * caseHeight; i < startingAtHeight + (row + 1) * caseHeight; i++){
-					for(int j = startingAtWidth + col * caseWidth; j < startingAtWidth + (col + 1) * caseWidth; j++){
-						int rgb = map.getRGB(j,i);
+				
+				for(int i = row * caseHeight; i < (row + 1) * caseHeight; i++){
+					for(int j = col * caseWidth; j < (col + 1) * caseWidth; j++){
+						int rgb = pr.getArgb(j, i);
 						int red = (rgb >> 16) & 0xFF;
 						int green = (rgb >> 8) & 0xFF;
 						int blue = rgb & 0xFF;

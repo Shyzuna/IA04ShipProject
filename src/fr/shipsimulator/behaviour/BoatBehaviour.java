@@ -29,14 +29,15 @@ public class BoatBehaviour extends TickerBehaviour {
 			// Eventuellement aussi avoir un behaviour rien que pour ça, parce qu'en fait ça pourrait rester cyclic ça !
 		
 		// Ordre mouvement (Position communiquée) -> Demander à env si possible
-		//
-		//
-		
-		
+
+		// 6. Informer l'agent environnement en cas de destruction
+			// verifier si boat.isDestroyed() et inform env
+
 		// Echanger avec une ville (+ agent mission ?), sur demande
 			// TODO quand ville et mission seront écrits
 		
 		block();
+
 	}
 
 }
