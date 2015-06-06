@@ -28,9 +28,6 @@ public class BoatBehaviour extends TickerBehaviour {
 			// Il faudrait synchroniser ça avec un DFAgentDescription à voir, voir ne garder que ça
 			// Eventuellement aussi avoir un behaviour rien que pour ça, parce qu'en fait ça pourrait rester cyclic ça !
 		
-		// 3. Informer l'agent environnement de sa position, à chaque mouvement
-			// -> inform vers env
-		
 		// Ordre mouvement (Position communiquée) -> Demander à env si possible
 		//
 		//
