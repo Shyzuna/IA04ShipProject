@@ -78,7 +78,7 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 		this.stateSimulation = Constante.STOP;
 		this.listBoat = new ArrayList<>();
 
-		this.addBehaviour(new EnvironnementBehaviour());
+		this.addBehaviour(new EnvironnementBehaviour(this));
 	}
 	
 	@Override

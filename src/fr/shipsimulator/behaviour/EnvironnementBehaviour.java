@@ -18,8 +18,8 @@ public class EnvironnementBehaviour extends Behaviour {
 	private static final long serialVersionUID = 1L;
 	private EnvironnementAgent ea;
 	
-	public EnvironnementBehaviour() {
-		ea = (EnvironnementAgent) this.myAgent;
+	public EnvironnementBehaviour(EnvironnementAgent env) {
+		ea = env;
 	}
 
 	public void action() {
