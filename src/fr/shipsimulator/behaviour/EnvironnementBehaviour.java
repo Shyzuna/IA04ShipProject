@@ -7,11 +7,9 @@ import jade.lang.acl.ACLMessage;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import fr.shipsimulator.agent.EnvironnementAgent;
 import fr.shipsimulator.constantes.Constante;
+import fr.shipsimulator.structure.MessageContent;
 
 public class EnvironnementBehaviour extends Behaviour {
 
@@ -55,31 +53,21 @@ public class EnvironnementBehaviour extends Behaviour {
 						}
 					}
 					
-					List<List<Integer>> visionList = new ArrayList<List<Integer>>();
-					//chaque liste est une ligne du tableau et contient donc 2 * portee + 1 valeurs
+					MessageContent messageContent = new MessageContent();
+					//le message contient les ligne du tableau à la suite
 					for(int i = 0; i < 2 * portee + 1; i++){
-						visionList.add(new ArrayList<Integer>());
 						for(int j = 0; j < 2 * portee + 1; j++){
-							visionList.get(i).add(vision[j][i]);
+							messageContent.content.add(vision[j][i]);
 						}
 					}
 					
-					ObjectMapper mapper = new ObjectMapper();
-					String serialized = "";
-					try {
-						serialized = mapper.writeValueAsString(visionList);
-					} catch (JsonProcessingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 					ACLMessage reply = msg.createReply();
-					reply.setContent(serialized);
+					reply.setContent(messageContent.serialize());
 					ea.send(reply);
 				}
 			}
 			//else if matches pour les autres agents...
 			
-			//ea.getMainGui().update();
 		}	
 	}
 	
