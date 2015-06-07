@@ -25,11 +25,11 @@ public class EnvironnementBehaviour extends Behaviour {
 		if(msg != null) {
 			AID sender = msg.getSender();
 			if(sender.getName().matches("Observer(\\d)*")){
-				if(msg.getPerformative() == ACLMessage.REQUEST){
-					//recu message du type posX posY portee
-					int posX = 0;
-					int posY = 0;
-					int portee = 1;
+				if(msg.getPerformative() == ACLMessage.REQUEST && msg.getContent() != null){
+					List<Integer> recu = MessageContent.deserialize(msg.getContent());
+					int posX = recu.get(0);
+					int posY = recu.get(1);
+					int portee = recu.get(2);
 					int[][] vision = new int[2 * portee + 1][2 * portee + 1];
 					for(int i = 0; i <= portee ; i++){
 						for(int j = 0; j <= portee ; j++){
