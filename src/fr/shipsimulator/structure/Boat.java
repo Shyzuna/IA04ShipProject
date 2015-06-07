@@ -46,6 +46,7 @@ public class Boat implements Constante {
 	public int fire(double powerBoostPercentage, double accuracyBoostPercentage, int impactCount) {
 		// This function must be called each turns for each enemy present boat
 		// TODO ? This function should be moved to EnvironmentAgent !
+		// voir le nombre de crew gunner pour savoir le nb de canons utilisables
 		double probabilityOneCanonTouch = TOUCH_FIRE_PROBABILITY + TOUCH_FIRE_PROBABILITY * accuracyBoostPercentage;
 		impactCount = 0;
 		for (int i = 0; i < cannonNb; ++i) {
