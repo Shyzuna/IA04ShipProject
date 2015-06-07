@@ -160,6 +160,19 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 		return false;
 	}
 	
+	private boolean cityCanBeAt(int x, int y){
+		if(mapData[x][y] != Constante.LAND)
+			return false;
+		for(int i = -1; i <= 1; i++){
+			for(int j = -1; j <= 1; j++){
+				if(x + i >= 0 && y + j >= 0 && x + i < MainGui.getCols() && y + j < MainGui.getRows())
+					if(mapData[x + i][y + j] == Constante.SEA)
+						return true;
+			}
+		}
+		return false;
+	}
+	
 	private void suspendSimulation(){
 		if(this.stateSimulation == RUNNING){
 			MainGui.writeLog("Env", "Suspend Simulation");
@@ -203,6 +216,24 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 				} catch (StaleProxyException e) {
 					e.printStackTrace();
 				}
+			}
+			
+			for(int i = 0; i < MainGui.getCity(); i++){
+				do{
+					x = rand.nextInt(MainGui.getCols()-1);
+					y = rand.nextInt(MainGui.getRows()-1);
+				}while(!cityCanBeAt(x, y));
+				AgentController agCity;
+				mapData[x][y] = Constante.CITY;
+				//à décommenter quand l'agent city sera fait
+				/*CityAgent ca = new CityAgent(x,y);
+				try {
+					agCity = this.getContainerController().acceptNewAgent("City"+i, ca);
+					this.listBoat.add(ca);
+					agCity.start();
+				} catch (StaleProxyException e) {
+					e.printStackTrace();
+				}*/
 			}
 			
 		} else if(this.stateSimulation == SUSPEND){

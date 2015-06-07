@@ -25,6 +25,7 @@ public interface Constante {
 	
 	String MAP_PATH = "./ressource/carte.png";
 	String BATEAU_PATH = "./ressource/bateau_icone.png";
+	String VILLE_PATH = "./ressource/ville_icone.png";
 
 	//MAP DATA
 	int DEFAULT_COLS = 30;
