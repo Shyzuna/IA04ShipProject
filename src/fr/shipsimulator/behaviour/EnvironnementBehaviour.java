@@ -62,12 +62,31 @@ public class EnvironnementBehaviour extends Behaviour {
 					}
 					
 					ACLMessage reply = msg.createReply();
+					reply.setPerformative(ACLMessage.INFORM);
 					reply.setContent(messageContent.serialize());
 					ea.send(reply);
 				}
 			}
-			//else if matches pour les autres agents...
-			
+			else if(sender.getName().matches("Boat(\\d)*")){
+				if(msg.getPerformative() == ACLMessage.REQUEST && msg.getContent() != null){
+					List<Integer> recu = MessageContent.deserialize(msg.getContent());
+					int oldPosX = recu.get(0);
+					int oldPosY = recu.get(1);
+					int newPosX = recu.get(2);
+					int newPosY = recu.get(3);
+					ACLMessage reply = msg.createReply();
+					if(ea.getMapData()[newPosX][newPosY] != Constante.SEA){
+						reply.setPerformative(ACLMessage.REFUSE);
+						ea.send(reply);
+					}
+					else {
+						reply.setPerformative(ACLMessage.AGREE);
+						ea.send(reply);
+						ea.setMapData(oldPosX, oldPosY, Constante.SEA);
+						ea.setMapData(newPosX, newPosY, Constante.SHIP);
+					}
+				}
+			}
 		}	
 	}
 	

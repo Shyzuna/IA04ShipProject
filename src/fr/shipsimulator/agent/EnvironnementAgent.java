@@ -52,8 +52,8 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 		return mapData;
 	}
 
-	public void setMapData(int[][] mapData) {
-		this.mapData = mapData;
+	public void setMapData(int col, int row, int data) {
+		mapData[col][row] = data;
 	}
 
 	public MainGui getMainGui() {
@@ -195,6 +195,7 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 				}while(this.mapData[x][y] != Constante.SEA && !isBoatAt(x,y));
 				AgentController agBoat;
 				BoatAgent ba = new BoatAgent(x,y);
+				mapData[x][y] = Constante.SHIP;
 				try {
 					agBoat = this.getContainerController().acceptNewAgent("Boat"+i, ba);
 					this.listBoat.add(ba);
