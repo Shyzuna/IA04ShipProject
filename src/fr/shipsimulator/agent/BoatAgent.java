@@ -12,7 +12,7 @@ import fr.shipsimulator.structure.Boat;
 import fr.shipsimulator.structure.Player;
 
 public class BoatAgent extends Agent implements Constante {
-	private static final long serialVersionUID = 1L;	
+	private static final long serialVersionUID = 1L;
 	
 	public enum CrewType {OBSERVER, CAPTAIN, GUNNER}
 
@@ -34,8 +34,8 @@ public class BoatAgent extends Agent implements Constante {
 		MainGui.writeLog("Boat Agent", "New boat : "+ this.getLocalName());
 		this.addBehaviour(new BoatBehaviour(this, SIMULATION_TICK));
 		this.addBehaviour(new BoatDestructionBehaviour(this, SIMULATION_TICK));
-		this.addBehaviour(new BoatCrewListBehaviour());
-		this.addBehaviour(new BoatFightingBehaviour());
+		this.addBehaviour(new BoatCrewListBehaviour(this));
+		this.addBehaviour(new BoatFightingBehaviour(this));
 		this.addBehaviour(new BoatExchangeBehaviour(this, SIMULATION_TICK));
 	}
 

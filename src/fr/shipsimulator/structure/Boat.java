@@ -427,9 +427,12 @@ public class Boat implements Constante {
 	}
 	
 	public AID[] getCrewAIDs() {
-		AID aidList[] = new AID[crewMembers.size()];
-		for (int i = 0; i < crewMembers.size(); ++i) {
-			aidList[i] = crewMembers.get(i).getAID();
+		if (!crewMembers.isEmpty()) {
+			AID aidList[] = new AID[crewMembers.size()];
+			for (int i = 0; i < crewMembers.size(); ++i) {
+				aidList[i] = crewMembers.get(i).getAID();
+			}
+			return aidList;
 		}
 		return null;
 	}

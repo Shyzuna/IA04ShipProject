@@ -14,10 +14,10 @@ public class BoatBehaviour extends TickerBehaviour {
 	
 	public BoatBehaviour(Agent a, long period) {
 		super(a, period);
+		boat = ((BoatAgent)this.myAgent).getBoat();
 	}
 	
 	public void onTick() {
-		Boat boat = ((BoatAgent)this.myAgent).getBoat();
 		
 		// Attendre des ordres de l'équipe sur demande
 			// 1.1 Attendre un ordre de combat -> simuler attaque, communiquer à env le bateau concerné, nombre impacts et dégats
@@ -28,7 +28,7 @@ public class BoatBehaviour extends TickerBehaviour {
 		// Ordre mouvement (Position communiquée) -> Demander à env si possible
 
 		// Request move
-		ACLMessage request = new ACLMessage();
+		/*ACLMessage request = new ACLMessage();
 		request.setPerformative(ACLMessage.REQUEST);
 		request.addReceiver(new AID("Environnement", AID.ISLOCALNAME));
 		request.setContent("BoatMove:" + boat.getPosX() + ":" + boat.getPosY());
@@ -40,7 +40,7 @@ public class BoatBehaviour extends TickerBehaviour {
 		if (splited.length == 3 && splited[0].equals("BoatMove")) {
 			boat.setPosX(Integer.valueOf(splited[1]));
 			boat.setPosY(Integer.valueOf(splited[2]));
-		}
+		}*/
 		
 		block();
 	}
