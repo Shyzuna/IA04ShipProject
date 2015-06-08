@@ -445,6 +445,15 @@ public class Boat implements Constante {
 		this.speed = speed;
 	}*/
 	
+	public AID getCaptainAID() {
+		for (int i = 0; i < crewMembers.size(); ++i) {
+			if (crewMembers.get(i).getName().matches("(.*)BoatCaptainAgent(.*)")) {
+				return crewMembers.get(i).getAID();
+			}		
+		}
+		return null;
+	}
+	
 	// Init functions
 	
 	private void initStats() {
