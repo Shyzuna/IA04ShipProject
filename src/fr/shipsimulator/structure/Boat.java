@@ -1,5 +1,7 @@
 package fr.shipsimulator.structure;
 
+import jade.core.AID;
+
 import java.util.ArrayList;
 
 import fr.shipsimulator.agent.boatCrew.BoatCrewAgent;
@@ -422,6 +424,14 @@ public class Boat implements Constante {
 	
 	public Boolean isDestroyed() {
 		return destroyed;
+	}
+	
+	public AID[] getCrewAIDs() {
+		AID aidList[] = new AID[crewMembers.size()];
+		for (int i = 0; i < crewMembers.size(); ++i) {
+			aidList[i] = crewMembers.get(i).getAID();
+		}
+		return null;
 	}
 	
 	/*public int getSpeed() {
