@@ -28,7 +28,7 @@ public class BoatCrewListBehaviour extends CyclicBehaviour {
 			for (AID aid : boat.getCrewAIDs()) {
 				mc.content.add(aid);
 			}
-			reply.setContent("CrewListResponse:" + mc.serialize());
+			reply.setContent("CrewListResponse$:!" + mc.serialize());
 			myAgent.send(reply);
 		}
 		block();

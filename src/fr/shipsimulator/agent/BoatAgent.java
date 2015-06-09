@@ -1,7 +1,7 @@
 package fr.shipsimulator.agent;
 
 import jade.core.Agent;
-import fr.shipsimulator.behaviour.BoatBehaviour;
+import fr.shipsimulator.behaviour.BoatMovingBehaviour;
 import fr.shipsimulator.behaviour.BoatCrewListBehaviour;
 import fr.shipsimulator.behaviour.BoatDestructionBehaviour;
 import fr.shipsimulator.behaviour.BoatExchangeBehaviour;
@@ -32,7 +32,7 @@ public class BoatAgent extends Agent implements Constante {
 	
 	public void setup() {
 		MainGui.writeLog("Boat Agent", "New boat : "+ this.getLocalName());
-		this.addBehaviour(new BoatBehaviour(this, SIMULATION_TICK));
+		this.addBehaviour(new BoatMovingBehaviour(this, SIMULATION_TICK));
 		this.addBehaviour(new BoatDestructionBehaviour(this, SIMULATION_TICK));
 		this.addBehaviour(new BoatCrewListBehaviour(this));
 		this.addBehaviour(new BoatFightingBehaviour(this));

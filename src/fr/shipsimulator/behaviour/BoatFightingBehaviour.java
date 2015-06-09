@@ -19,6 +19,9 @@ public class BoatFightingBehaviour extends CyclicBehaviour {
 		// -> recevoir d'env le nombre d'impacts et les degats
 		// aussi calculer dégats infligés ennemie
 		// TODO
+		// Attendre des ordres de l'équipe sur demande
+			// 1.1 Attendre un ordre de combat -> simuler attaque, communiquer à env le bateau concerné, nombre impacts et dégats
+				
 		block();
 	}
 

@@ -11,11 +11,11 @@ import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-public class BoatBehaviour extends TickerBehaviour {
+public class BoatMovingBehaviour extends TickerBehaviour {
 	private static final long serialVersionUID = 1L;
 	private Boat boat;
 	
-	public BoatBehaviour(Agent a, long period) {
+	public BoatMovingBehaviour(Agent a, long period) {
 		super(a, period);
 		boat = ((BoatAgent)this.myAgent).getBoat();
 	}
@@ -24,7 +24,7 @@ public class BoatBehaviour extends TickerBehaviour {
 		MessageTemplate mt = new MessageTemplate(new MovingRequest());
 		ACLMessage request = myAgent.receive(mt);
 		if (request != null) {
-			String [] split = request.getContent().split(":");
+			String [] split = request.getContent().split("$:!");
 			Boolean correctReq = false;
 			if (split[1] != null) {
 				List<Integer> reqPosition = new GenericMessageContent<Integer>().deserialize(split[1]);
@@ -34,7 +34,7 @@ public class BoatBehaviour extends TickerBehaviour {
 					envRequest.addReceiver(new AID("Environnement", AID.ISLOCALNAME));
 					GenericMessageContent<Integer> mc = new GenericMessageContent<Integer>();
 					mc.content = reqPosition;
-					envRequest.setContent("BoatMove:" + mc.serialize());
+					envRequest.setContent("BoatMove$:!" + mc.serialize());
 					myAgent.send(envRequest);
 					correctReq = true;
 				}
@@ -47,12 +47,12 @@ public class BoatBehaviour extends TickerBehaviour {
 			}
 		}
 		MessageTemplate mtRep = new MessageTemplate(new MovingResponse());
-		ACLMessage response = myAgent.receive(mt);
+		ACLMessage response = myAgent.receive(mtRep);
 		if (response != null) {
 			AID captainAID = boat.getCaptainAID();
 			if (captainAID == null) {
 				try {
-					throw new Exception("error");
+					throw new Exception("Boat has no captain !");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -65,31 +65,36 @@ public class BoatBehaviour extends TickerBehaviour {
 				myAgent.send(refuseReq);
 			} else {
 				String [] split = response.getContent().split(":");
+				Boolean correctReq = false;
 				if (split[1] != null) {
 					List<Integer> reqPosition = new GenericMessageContent<Integer>().deserialize(split[1]);
 					if (reqPosition.size() == 2) {
 						boat.setPosX(reqPosition.get(0));
 						boat.setPosY(reqPosition.get(1));
+						correctReq = true;
 					}
 				}
-				ACLMessage acceptReq = new ACLMessage();
-				acceptReq.addReceiver(captainAID);
-				acceptReq.setPerformative(ACLMessage.AGREE);
-				acceptReq.setContent("BoatMoveAccepted");
-				myAgent.send(acceptReq);
+				if (correctReq == true) {
+					ACLMessage acceptReq = new ACLMessage();
+					acceptReq.addReceiver(captainAID);
+					acceptReq.setPerformative(ACLMessage.AGREE);
+					acceptReq.setContent("BoatMoveAccepted$:!" + split[1]);
+					myAgent.send(acceptReq);
+				} else {
+					ACLMessage refuseReq = request.createReply();
+					refuseReq.setPerformative(ACLMessage.REFUSE);
+					refuseReq.setContent("BoatMoveRefused");
+					myAgent.send(refuseReq);
+				}
 			}
 		}
-		
-		// Attendre des ordres de l'équipe sur demande
-			// 1.1 Attendre un ordre de combat -> simuler attaque, communiquer à env le bateau concerné, nombre impacts et dégats
-		
 		block();
 	}
 	
 	private class MovingRequest implements MessageTemplate.MatchExpression {
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
-	    	return msg.getContent().matches("MovingRequest:(.*)") && msg.getPerformative() == ACLMessage.REQUEST;
+	    	return msg.getContent().matches("MovingRequest$:!(.*)") && msg.getPerformative() == ACLMessage.REQUEST;
 	    }
 	}
 	
