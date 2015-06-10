@@ -429,7 +429,7 @@ public class MainGui extends Application implements Runnable{
 				Image icone;
 				ImageView iv = new ImageView();
 				try {
-					icone = new Image(new FileInputStream(Constante.BATEAU_PATH));
+					icone = new Image(new FileInputStream(Constante.VILLE_PATH));
 					iv.setImage(icone);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block

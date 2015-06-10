@@ -55,4 +55,10 @@ public interface Constante {
 	double CREW_DEATH_DECK_DESTRUCTION_PROBABILITY = 0.4;
 	double CHAIN_EXPLOSION_PROBABILITY = 0.1;
 	
+	//RESOURCES
+	int WOOD = 0;
+	int ROCK = 1;
+	int IRON = 2;
+	int FOOD = 3;
+	
 }
