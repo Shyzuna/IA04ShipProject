@@ -190,6 +190,9 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 			for(BoatAgent ba : listBoat){
 				ba.doSuspend();
 			}
+			for(CityAgent ca : listCity){
+				ca.doSuspend();
+			}
 		}
 	}
 	
@@ -201,6 +204,10 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 				ba.doDelete();
 			}
 			this.listBoat.clear();
+			for(CityAgent ca : listCity){
+				ca.doDelete();
+			}
+			this.listCity.clear();
 		}
 	}
 	
@@ -250,6 +257,9 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 			this.stateSimulation = RUNNING;
 			for(BoatAgent ba : listBoat){
 				ba.doActivate();
+			}
+			for(CityAgent ca : listCity){
+				ca.doActivate();
 			}
 		}
 	}

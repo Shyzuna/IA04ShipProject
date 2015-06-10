@@ -26,6 +26,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -37,6 +38,7 @@ import fr.shipsimulator.agent.BoatAgent;
 import fr.shipsimulator.agent.CityAgent;
 import fr.shipsimulator.agent.EnvironnementAgent;
 import fr.shipsimulator.constantes.Constante;
+import fr.shipsimulator.gui.component.TileClicked;
 
 /**
  * 
@@ -49,8 +51,8 @@ public class MainGui extends Application implements Runnable{
 	private static EnvironnementAgent myAgent;
 	private static Integer cols = Constante.DEFAULT_COLS;
 	private static Integer rows = Constante.DEFAULT_ROWS;
-	private static Integer boat = 4;
-	private static Integer city = 0;
+	private static Integer boat = Constante.DEFAULT_BOAT;
+	private static Integer city = Constante.DEFAULT_CITY;
 	private static Integer factor_grid_w = Constante.DEFAULT_FACTOR;
 	private static Integer factor_grid_h = Constante.DEFAULT_FACTOR;
 	
@@ -352,6 +354,7 @@ public class MainGui extends Application implements Runnable{
 							gp.setGridLinesVisible(true);
 							for(BoatAgent ba : myAgent.getListBoat()){
 								iv = new ImageView();
+								iv.addEventHandler(MouseEvent.MOUSE_CLICKED, new TileClicked(ba));
 						    	iv.setImage(boat_icone);
 						    	GridPane.setRowIndex(iv, ba.getBoat().getPosY());
 						    	GridPane.setColumnIndex(iv, ba.getBoat().getPosX());
@@ -359,6 +362,7 @@ public class MainGui extends Application implements Runnable{
 							}
 							for(CityAgent ca : myAgent.getListCity()){
 								iv = new ImageView();
+								iv.addEventHandler(MouseEvent.MOUSE_CLICKED, new TileClicked(ca));
 						    	iv.setImage(city_icone);
 						    	GridPane.setRowIndex(iv, ca.getCity().getPosY());
 						    	GridPane.setColumnIndex(iv, ca.getCity().getPosX());
