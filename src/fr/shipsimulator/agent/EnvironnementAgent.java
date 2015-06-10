@@ -29,9 +29,18 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 	
 	private MainGui mainGui;
 	private List<BoatAgent> listBoat;
+	private List<CityAgent> listCity;
 	private Integer stateSimulation;
 	private int[][] mapData;
 	
+	public List<CityAgent> getListCity() {
+		return listCity;
+	}
+
+	public void setListCity(List<CityAgent> listCity) {
+		this.listCity = listCity;
+	}
+
 	public Integer getStateSimulation() {
 		return stateSimulation;
 	}
@@ -77,6 +86,7 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 		
 		this.stateSimulation = Constante.STOP;
 		this.listBoat = new ArrayList<>();
+		this.listCity = new ArrayList<>();
 
 		this.addBehaviour(new EnvironnementBehaviour(this));
 	}
@@ -225,15 +235,14 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 				}while(!cityCanBeAt(x, y));
 				AgentController agCity;
 				mapData[x][y] = Constante.CITY;
-				//à décommenter quand l'agent city sera fait
-				/*CityAgent ca = new CityAgent(x,y);
+				CityAgent ca = new CityAgent(x,y);
 				try {
 					agCity = this.getContainerController().acceptNewAgent("City"+i, ca);
-					this.listBoat.add(ca);
+					this.listCity.add(ca);
 					agCity.start();
 				} catch (StaleProxyException e) {
 					e.printStackTrace();
-				}*/
+				}
 			}
 			
 		} else if(this.stateSimulation == SUSPEND){
