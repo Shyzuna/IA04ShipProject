@@ -1,10 +1,10 @@
 package fr.shipsimulator.gui;
 
+import jade.core.Agent;
 import jade.gui.GuiEvent;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -30,8 +30,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import fr.shipsimulator.agent.BoatAgent;
@@ -63,6 +65,7 @@ public class MainGui extends Application implements Runnable{
 	private ScrollPane logPane, statutPane;
 	private static ImageView background;
 	private GridPane gp;
+	private static GridPane statutGrid;
 	private MenuBar menu;
 	private Menu mv1;
 	private MenuItem mi1;
@@ -213,11 +216,13 @@ public class MainGui extends Application implements Runnable{
         logPane.setFitToHeight(true);
 		
         //statut side
+        statutGrid = new GridPane();
+        
         statutPane = new ScrollPane();
         statutPane.setFitToWidth(true);
         statutPane.setPrefWidth(150);
         statutPane.setFitToHeight(true);
-        statutPane.setContent(new Label("Statut"));
+        statutPane.setContent(statutGrid);
         
         //center size
 		double center_size_w = Constante.DEFAULT_FACTOR*MainGui.cols;
@@ -381,6 +386,61 @@ public class MainGui extends Application implements Runnable{
 			@Override
 			public void run() {
 				logArea.setText(logArea.getText() + "\n"+author+">"+content);
+			}
+		});
+	}
+	
+	public static void writeBoatStatus (BoatAgent agent){
+		Platform.runLater(new Runnable(){
+			@Override
+			public void run() {				
+				statutGrid.getChildren().clear();
+				int rowIndex = 0;
+				//HBox hbox_img_name = new HBox();
+				Image icone;
+				ImageView iv = new ImageView();
+				try {
+					icone = new Image(new FileInputStream(Constante.BATEAU_PATH));
+					iv.setImage(icone);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}					
+				statutGrid.addRow(rowIndex++, iv, new Label(agent.getLocalName()));
+				statutGrid.addRow(rowIndex++, new Label(""));
+				statutGrid.addRow(rowIndex++, new Label("Position : "), new Label(agent.getBoat().getPosX() + ", " + agent.getBoat().getPosY()));
+				statutGrid.addRow(rowIndex++, new Label(""));
+				statutGrid.addRow(rowIndex++, new Label("Cargaison :"));
+				//ajouter map de la cargaison
+				statutGrid.addRow(rowIndex++, new Label(""));
+				statutGrid.addRow(rowIndex++, new Label("Equipage :"));
+				//ajouter liste de l'équipage
+			}
+		});
+	}
+	
+	public static void writeCityStatus (CityAgent agent){
+		Platform.runLater(new Runnable(){
+			@Override
+			public void run() {		
+				int rowIndex = 0;
+				statutGrid.getChildren().clear();
+				//HBox hbox_img_name = new HBox();
+				Image icone;
+				ImageView iv = new ImageView();
+				try {
+					icone = new Image(new FileInputStream(Constante.BATEAU_PATH));
+					iv.setImage(icone);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}				
+				statutGrid.addRow(rowIndex++, iv, new Label(agent.getLocalName()));
+				statutGrid.addRow(rowIndex++, new Label(""));
+				statutGrid.addRow(rowIndex++, new Label("Position : "), new Label(agent.getCity().getPosX() + ", " + agent.getCity().getPosY()));
+				statutGrid.addRow(rowIndex++, new Label(""));
+				statutGrid.addRow(rowIndex++, new Label("Stocks :"));
+				//ajouter map des stocks de la ville
 			}
 		});
 	}
