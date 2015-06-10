@@ -34,6 +34,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import fr.shipsimulator.agent.BoatAgent;
+import fr.shipsimulator.agent.CityAgent;
 import fr.shipsimulator.agent.EnvironnementAgent;
 import fr.shipsimulator.constantes.Constante;
 
@@ -239,6 +240,7 @@ public class MainGui extends Application implements Runnable{
 		}
 		
 		Image boat_icone = new Image(new FileInputStream(Constante.BATEAU_PATH));
+		Image city_icone = new Image(new FileInputStream(Constante.VILLE_PATH));
 
 		Scene scene = new Scene(bp, Constante.DEFAULT_FACTOR*MainGui.cols+logPane.getPrefWidth()+statutPane.getPrefWidth()+Constante.BORDER_W, Constante.DEFAULT_FACTOR*MainGui.rows+tb_bot.getPrefHeight()+menu.getPrefHeight()+Constante.BORDER_H);
 		//Event resize scene
@@ -353,6 +355,13 @@ public class MainGui extends Application implements Runnable{
 						    	iv.setImage(boat_icone);
 						    	GridPane.setRowIndex(iv, ba.getBoat().getPosY());
 						    	GridPane.setColumnIndex(iv, ba.getBoat().getPosX());
+						    	gp.getChildren().add(iv);
+							}
+							for(CityAgent ca : myAgent.getListCity()){
+								iv = new ImageView();
+						    	iv.setImage(city_icone);
+						    	GridPane.setRowIndex(iv, ca.getCity().getPosY());
+						    	GridPane.setColumnIndex(iv, ca.getCity().getPosX());
 						    	gp.getChildren().add(iv);
 							}
 						}
