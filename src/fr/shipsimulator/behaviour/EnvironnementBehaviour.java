@@ -9,6 +9,7 @@ import java.util.List;
 
 import fr.shipsimulator.agent.EnvironnementAgent;
 import fr.shipsimulator.constantes.Constante;
+import fr.shipsimulator.structure.GenericMessageContent;
 import fr.shipsimulator.structure.MessageContent;
 
 public class EnvironnementBehaviour extends Behaviour {
@@ -69,7 +70,8 @@ public class EnvironnementBehaviour extends Behaviour {
 			}
 			else if(sender.getName().matches("Boat(\\d)*")){
 				if(msg.getPerformative() == ACLMessage.REQUEST && msg.getContent() != null){
-					List<Integer> recu = MessageContent.deserialize(msg.getContent());
+					GenericMessageContent gmc = new GenericMessageContent();
+					List<Integer> recu = gmc.deserialize(msg.getContent().split("$:!")[1]);
 					int oldPosX = recu.get(0);
 					int oldPosY = recu.get(1);
 					int newPosX = recu.get(2);
@@ -77,10 +79,15 @@ public class EnvironnementBehaviour extends Behaviour {
 					ACLMessage reply = msg.createReply();
 					if(ea.getMapData()[newPosX][newPosY] != Constante.SEA){
 						reply.setPerformative(ACLMessage.REFUSE);
+						reply.setContent("MovingResponse");
 						ea.send(reply);
 					}
 					else {
+						gmc.content = new ArrayList<Integer>();
+						gmc.content.add(newPosX);
+						gmc.content.add(newPosY);
 						reply.setPerformative(ACLMessage.AGREE);
+						reply.setContent("MovingResponse$:!"+gmc.serialize());
 						ea.send(reply);
 						ea.setMapData(oldPosX, oldPosY, Constante.SEA);
 						ea.setMapData(newPosX, newPosY, Constante.SHIP);

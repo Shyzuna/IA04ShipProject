@@ -29,8 +29,7 @@ public class BoatMovingBehaviour extends TickerBehaviour {
 			if (split[1] != null) {
 				List<Integer> reqPosition = new GenericMessageContent<Integer>().deserialize(split[1]);
 				if (reqPosition.size() == 2) {
-					ACLMessage envRequest = new ACLMessage();
-					envRequest.setPerformative(ACLMessage.REQUEST);
+					ACLMessage envRequest = new ACLMessage(ACLMessage.REQUEST);
 					envRequest.addReceiver(new AID("Environnement", AID.ISLOCALNAME));
 					GenericMessageContent<Integer> mc = new GenericMessageContent<Integer>();
 					mc.content = reqPosition;
@@ -58,9 +57,8 @@ public class BoatMovingBehaviour extends TickerBehaviour {
 				}
 			}
 			if (response.getPerformative() == ACLMessage.REFUSE) {
-				ACLMessage refuseReq = new ACLMessage();
+				ACLMessage refuseReq = new ACLMessage(ACLMessage.REFUSE);
 				refuseReq.addReceiver(captainAID);
-				refuseReq.setPerformative(ACLMessage.REFUSE);
 				refuseReq.setContent("BoatMoveRefused");
 				myAgent.send(refuseReq);
 			} else {
@@ -75,9 +73,8 @@ public class BoatMovingBehaviour extends TickerBehaviour {
 					}
 				}
 				if (correctReq == true) {
-					ACLMessage acceptReq = new ACLMessage();
+					ACLMessage acceptReq = new ACLMessage(ACLMessage.AGREE);
 					acceptReq.addReceiver(captainAID);
-					acceptReq.setPerformative(ACLMessage.AGREE);
 					acceptReq.setContent("BoatMoveAccepted$:!" + split[1]);
 					myAgent.send(acceptReq);
 				} else {
