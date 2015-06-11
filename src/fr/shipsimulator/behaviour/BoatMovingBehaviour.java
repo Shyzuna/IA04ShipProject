@@ -7,20 +7,20 @@ import fr.shipsimulator.structure.Boat;
 import fr.shipsimulator.structure.GenericMessageContent;
 import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.TickerBehaviour;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-public class BoatMovingBehaviour extends TickerBehaviour {
+public class BoatMovingBehaviour extends CyclicBehaviour {
 	private static final long serialVersionUID = 1L;
 	private Boat boat;
 	
-	public BoatMovingBehaviour(Agent a, long period) {
-		super(a, period);
+	public BoatMovingBehaviour(Agent a) {
+		super(a);
 		boat = ((BoatAgent)this.myAgent).getBoat();
 	}
 	
-	public void onTick() {
+	public void action() {
 		MessageTemplate mt = new MessageTemplate(new MovingRequest());
 		ACLMessage request = myAgent.receive(mt);
 		if (request != null) {
@@ -32,7 +32,10 @@ public class BoatMovingBehaviour extends TickerBehaviour {
 					ACLMessage envRequest = new ACLMessage(ACLMessage.REQUEST);
 					envRequest.addReceiver(new AID("Environnement", AID.ISLOCALNAME));
 					GenericMessageContent<Integer> mc = new GenericMessageContent<Integer>();
-					mc.content = reqPosition;
+					mc.content.add(boat.getPosX());
+					mc.content.add(boat.getPosY());
+					mc.content.add(reqPosition.get(0));
+					mc.content.add(reqPosition.get(1));
 					envRequest.setContent("BoatMove$:!" + mc.serialize());
 					myAgent.send(envRequest);
 					correctReq = true;
@@ -91,14 +94,14 @@ public class BoatMovingBehaviour extends TickerBehaviour {
 	private class MovingRequest implements MessageTemplate.MatchExpression {
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
-	    	return msg.getContent().matches("MovingRequest$:!(.*)") && msg.getPerformative() == ACLMessage.REQUEST;
+	    	return msg.getSender().getName().matches("(.*)BoatCaptainAgent(.*)") && msg.getContent().matches("MovingRequest$:!(.*)") && msg.getPerformative() == ACLMessage.REQUEST;
 	    }
 	}
 	
 	private class MovingResponse implements MessageTemplate.MatchExpression {
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
-	    	return msg.getContent().matches("MovingResponse(.*)") && (msg.getPerformative() == ACLMessage.AGREE || msg.getPerformative() == ACLMessage.REFUSE);
+	    	return msg.getSender().getName().matches("(.*)EnvironnementAgent(.*)") && msg.getContent().matches("MovingResponse(.*)") && (msg.getPerformative() == ACLMessage.AGREE || msg.getPerformative() == ACLMessage.REFUSE);
 	    }
 	}
 

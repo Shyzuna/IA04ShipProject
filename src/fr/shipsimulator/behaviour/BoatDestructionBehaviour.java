@@ -1,6 +1,7 @@
 package fr.shipsimulator.behaviour;
 
 import fr.shipsimulator.agent.BoatAgent;
+import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.Boat;
 import jade.core.AID;
 import jade.core.Agent;
@@ -8,7 +9,7 @@ import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 
 public class BoatDestructionBehaviour extends TickerBehaviour {
-
+	private static final long serialVersionUID = 1L;
 	private Boat boat;
 	
 	public BoatDestructionBehaviour (Agent a, long period) {
@@ -24,6 +25,7 @@ public class BoatDestructionBehaviour extends TickerBehaviour {
 			request.setContent("BoatDestroyed");
 			myAgent.send(request);
 			boat.killAllCrewMembers();
+			MainGui.writeLog("BoatAgent", "Boat Destroyed !");
 			myAgent.doDelete();
 		}
 	}
