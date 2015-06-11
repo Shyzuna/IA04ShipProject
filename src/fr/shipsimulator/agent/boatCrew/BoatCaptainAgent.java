@@ -8,8 +8,9 @@ public class BoatCaptainAgent extends BoatCrewAgent{
 	private static final long serialVersionUID = 1L;
 	
 	public void setup(){
-		this.addBehaviour(new CaptainDirectionBehaviour());
 		this.addBehaviour(new CaptainMissionBehaviour());
+		
+		this.addBehaviour(new CaptainDirectionBehaviour());
 		MainGui.writeLog("BoatCaptainAgent", this.getLocalName() + " prend les commandes");
 	}
 }
