@@ -41,7 +41,6 @@ public interface Constante {
 	
 	//BOAT DEFAULT DATA
 	int BOAT_LIFE = 300;
-	/*int BOAT_SPEED = 1; // la vitesse complique les choses */
 	int DECK_CREW_NB = 1;
 	int CREW_CAPACITY_PER_DECK = 5;
 	int DECK_STORAGE_NB = 20;
@@ -50,15 +49,10 @@ public interface Constante {
 	int CANNON_CAPACITY_PER_DECK = 10;
 	int CANNON_NB = 0;
 	int CANNON_POWER = 50;
+	int USABLECANNON_PER_GUNNER = 10;
 	double TOUCH_FIRE_PROBABILITY = 0.1;
 	double DECK_DESTRUCTION_PROBABILITY = 0.05;
 	double CREW_DEATH_DECK_DESTRUCTION_PROBABILITY = 0.4;
 	double CHAIN_EXPLOSION_PROBABILITY = 0.1;
-	
-	//RESOURCES
-	int WOOD = 0;
-	int ROCK = 1;
-	int IRON = 2;
-	int FOOD = 3;
 	
 }

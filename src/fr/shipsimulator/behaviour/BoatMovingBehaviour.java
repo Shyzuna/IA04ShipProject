@@ -32,7 +32,10 @@ public class BoatMovingBehaviour extends TickerBehaviour {
 					ACLMessage envRequest = new ACLMessage(ACLMessage.REQUEST);
 					envRequest.addReceiver(new AID("Environnement", AID.ISLOCALNAME));
 					GenericMessageContent<Integer> mc = new GenericMessageContent<Integer>();
-					mc.content = reqPosition;
+					mc.content.add(boat.getPosX());
+					mc.content.add(boat.getPosY());
+					mc.content.add(reqPosition.get(0));
+					mc.content.add(reqPosition.get(1));
 					envRequest.setContent("BoatMove$:!" + mc.serialize());
 					myAgent.send(envRequest);
 					correctReq = true;

@@ -15,7 +15,7 @@ public class BoatExchangeBehaviour extends TickerBehaviour {
 	}
 	
 	protected void onTick() {
-		//// Echanger avec une ville (+ agent mission ?), sur demande
+		//// Echanger avec une ville, sur demande
 		// TODO quand ville et mission seront écrits
 
 	}

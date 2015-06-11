@@ -3,21 +3,22 @@ package fr.shipsimulator.structure;
 import jade.core.AID;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import fr.shipsimulator.agent.boatCrew.BoatCrewAgent;
+import fr.shipsimulator.behaviour.CrewMemberDeathBehaviour;
 import fr.shipsimulator.constantes.Constante;
 
 public class Boat implements Constante {
 	private Player boatOwner;
 	private ArrayList<BoatCrewAgent> crewMembers;
-	private ArrayList<Resource> resources;
+	private Map<Integer, Integer> resources;
 	private int posX;
 	private int posY;
 	private Boolean destroyed;
 	
 	// Boat "static" stats (but upgradable)
 	private int maxLife;
-	/*private int speed;*/
 	private int deckCrewNb;
 	private int deckStorageNb;
 	private int crewCapaciyPerDeck;
@@ -47,11 +48,11 @@ public class Boat implements Constante {
 	
 	public int fire(double powerBoostPercentage, double accuracyBoostPercentage, int impactCount) {
 		// This function must be called each turns for each enemy present boat
-		// TODO ? This function should be moved to EnvironmentAgent !
-		// voir le nombre de crew gunner pour savoir le nb de canons utilisables
 		double probabilityOneCanonTouch = TOUCH_FIRE_PROBABILITY + TOUCH_FIRE_PROBABILITY * accuracyBoostPercentage;
 		impactCount = 0;
-		for (int i = 0; i < cannonNb; ++i) {
+		Integer usableCannonGunner = USABLECANNON_PER_GUNNER * getGunnerSize();
+		Integer usableCannon = cannonNb < usableCannonGunner ? cannonNb : usableCannonGunner;
+		for (int i = 0; i < usableCannon; ++i) {
 			if (eventHappend(probabilityOneCanonTouch)) {
 				++impactCount;
 			}
@@ -197,10 +198,6 @@ public class Boat implements Constante {
 	public void upgradeCannonPower(int newValue) {
 		cannonPower = newValue;
 	}
-	
-	/*public void upgradeSpeed(int newSpeed) {
-		speed = newSpeed;
-	}*/
 	
 	// Accessors
 
@@ -365,21 +362,18 @@ public class Boat implements Constante {
 			return false;
 		}
 		int index = (int)(Math.random() * crewMembers.size());
-		// TODO
-		//crewMembers.get(index).addBehaviour(HandleKill);
-		//crewMembers.get(index).kill();
+		crewMembers.get(index).addBehaviour(new CrewMemberDeathBehaviour(crewMembers.get(index)));
 		crewMembers.remove(index);
 		return true;
 	}
 	
 	public Boolean killAGunner() {
 		for (int i = 0; i < crewMembers.size(); ++i) {
-			// TODO
-			/*if (crewMembers.get(i).getType() == BoatCrew.CrewType.GUNNER) {
-				crewMembers.get(i).kill();
-				crewMembers.removeElementAt(i);
+			if (crewMembers.get(i).getName().matches("(.*)BoatGunnerAgent(.*)")) {
+				crewMembers.get(i).addBehaviour(new CrewMemberDeathBehaviour(crewMembers.get(i)));
+				crewMembers.remove(i);
 				break;
-			}*/
+			}
 		}
 		if (crewMembers.size() == 0) {
 			return false;
@@ -387,19 +381,28 @@ public class Boat implements Constante {
 		return true;
 	}
 	
+	public Integer getGunnerSize() {
+		Integer gunnerSize = 0;
+		for (int i = 0; i < crewMembers.size(); ++i) {
+			if (crewMembers.get(i).getName().matches("(.*)BoatGunnerAgent(.*)")) {
+				++gunnerSize;
+			}
+		}
+		return gunnerSize;
+	}
+	
 	public void killAllCrewMembers() {
 		for (int i = 0; i < crewMembers.size(); ++i) {
-			// TODO
-			//crewMembers.get(i).kill();
+			crewMembers.get(i).addBehaviour(new CrewMemberDeathBehaviour(crewMembers.get(i)));
 		}
 		crewMembers.clear();
 	}
 	
-	public ArrayList<Resource> getResources() {
+	public Map<Integer, Integer> getResources() {
 		return resources;
 	}
 
-	public void setResources(ArrayList<Resource> resources) {
+	public void setResources(Map<Integer, Integer> resources) {
 		this.resources = resources;
 	}
 	
@@ -414,11 +417,12 @@ public class Boat implements Constante {
 		return actualDeckStorageNb * storageCapacityPerDeck;
 	}
 	
-	public Boolean addResource(Resource resource) {
-		if (resources.size() >= getMaxStorage()) {
+	public Boolean addResource(Integer quantity, Integer type) {
+		if (resources.size() >= getMaxStorage() || type >= Resource.values().length) {
 			return false;
 		}
-		resources.add(resource);
+		Integer actualQuant = resources.get(type);
+		resources.put(type, actualQuant + quantity);
 		return true;
 	}
 	
