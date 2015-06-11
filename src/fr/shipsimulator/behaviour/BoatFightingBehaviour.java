@@ -71,10 +71,10 @@ public class BoatFightingBehaviour extends CyclicBehaviour {
 			}
 			ACLMessage response = request.createReply();
 			if (!correctInf) {
-				response.setPerformative(ACLMessage.REFUSE);
+				response.setPerformative(ACLMessage.FAILURE);
 				response.setContent("FightResponse");
 			} else {
-				response.setPerformative(ACLMessage.AGREE);
+				response.setPerformative(ACLMessage.CONFIRM);
 				GenericMessageContent<Integer> mcDam = new GenericMessageContent<Integer>();
 				mcDam.content.add(damageGiven);
 				mcDam.content.add(impactCount);
