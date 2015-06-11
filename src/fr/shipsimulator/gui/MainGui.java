@@ -441,6 +441,9 @@ public class MainGui extends Application implements Runnable{
 				statutGrid.addRow(rowIndex++, new Label(""));
 				statutGrid.addRow(rowIndex++, new Label("Stocks :"));
 				//ajouter map des stocks de la ville
+				statutGrid.addRow(rowIndex++, new Label(""));
+				statutGrid.addRow(rowIndex++, new Label("Missions :"));
+				//ajouter listes des noms de mission dispo dans la ville
 			}
 		});
 	}
