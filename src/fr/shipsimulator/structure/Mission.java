@@ -1,6 +1,7 @@
 package fr.shipsimulator.structure;
 
 public class Mission {
+	private Integer id;
 	private City departure;
 	private City arrival;
 	
@@ -38,5 +39,4 @@ public class Mission {
 			return false;
 		return (ressource == other.getRessource() && resourceAmount == other.getResourceAmount());
 	}
-	
 }
