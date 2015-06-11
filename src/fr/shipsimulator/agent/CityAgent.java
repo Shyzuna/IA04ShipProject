@@ -5,6 +5,7 @@ import fr.shipsimulator.structure.City;
 import jade.core.Agent;
 
 public class CityAgent extends Agent {
+	private static final long serialVersionUID = 1L;
 	
 	private City city;
 	

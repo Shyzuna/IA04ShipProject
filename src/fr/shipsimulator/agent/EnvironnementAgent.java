@@ -32,6 +32,7 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 	private List<CityAgent> listCity;
 	private Integer stateSimulation;
 	private int[][] mapData;
+	private MissionAgent missionAgent;
 	
 	public List<CityAgent> getListCity() {
 		return listCity;
@@ -83,6 +84,15 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 		this.mainGui = new MainGui();
 		MainGui.setMyAgent(this);
 		new Thread(mainGui).start();
+		
+		AgentController agMission;
+		missionAgent = new MissionAgent(this);
+		try {
+			agMission = this.getContainerController().acceptNewAgent("Mission", missionAgent);
+			agMission.start();
+		} catch (StaleProxyException e) {
+			e.printStackTrace();
+		}
 		
 		this.stateSimulation = Constante.STOP;
 		this.listBoat = new ArrayList<>();
@@ -215,6 +225,7 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 		if(this.stateSimulation == STOP){
 			this.stateSimulation = RUNNING;
 			MainGui.writeLog("Env", "Start Simulation");
+			missionAgent.resetMissions();
 			fillMapData(MAP_PATH);
 			int x,y;
 			Random rand = new Random();
