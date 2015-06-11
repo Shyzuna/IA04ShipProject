@@ -30,7 +30,7 @@ public class MissionBehaviour extends Behaviour {
 					List<Integer> recu = MessageContent.deserialize(msg.getContent());
 					/*Random rand = new Random();
 					List<CityAgent> cities = ma.getEnvironnementAgent().getListCity();
-					City arrival =  sender.getCity();
+					City arrival =  sender.getCity(); //comment trouver cette info ?
 					City departure = cities.get(rand.nextInt(cities.size())).getCity();
 					Mission m = new Mission(departure, arrival, recu.get(0), recu.get(1));
 					ma.addMission(m);*/
@@ -41,17 +41,34 @@ public class MissionBehaviour extends Behaviour {
 				}
 			}
 			else if (sender.getName().matches("BoatCaptain(\\d)*")){
-				//le message contient le nom de la ville dont on veut les missions
 				List<Mission> missions = ma.getMissions();
 				GenericMessageContent gmc= new GenericMessageContent();
-				for(int i = 0; i < missions.size(); i++){
-					//si missions.get(i).getDeparture() est la même ville alors :
-					gmc.content.add(missions.get(i));
+				if(msg.getPerformative() == ACLMessage.REQUEST && msg.getContent() != null){
+					//le message contient le nom de la ville dont on veut les missions
+					for(int i = 0; i < missions.size(); i++){
+						//si missions.get(i).getDeparture() est la même ville alors :
+						gmc.content.add(missions.get(i));
+					}
+					ACLMessage reply = msg.createReply();
+					reply.setPerformative(ACLMessage.INFORM);
+					reply.setContent(gmc.serialize());
+					ma.send(reply);
 				}
-				ACLMessage reply = msg.createReply();
-				reply.setPerformative(ACLMessage.INFORM);
-				reply.setContent(gmc.serialize());
-				ma.send(reply);
+				else if(msg.getPerformative() == ACLMessage.INFORM && msg.getContent() != null){
+					//le message contient la mission choisie
+					Mission chosen = (Mission)gmc.deserialize(msg.getContent()).get(0);
+					boolean stillAvailable = false;
+					for(int i = 0; i < missions.size(); i++){
+						if(missions.get(i).equals(chosen)){
+							stillAvailable = true;
+							break;
+						}
+					}
+					ACLMessage reply = msg.createReply();
+					reply.setPerformative(stillAvailable ? ACLMessage.AGREE : ACLMessage.REFUSE);
+					reply.setContent(gmc.serialize());
+					ma.send(reply);
+				}
 			}
 		}
 	}
