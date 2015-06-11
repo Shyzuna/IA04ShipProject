@@ -37,8 +37,7 @@ public class BoatCrewListBehaviour extends CyclicBehaviour {
 	private class MatchCrewListRequest implements MessageTemplate.MatchExpression {
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
-	    	return msg.getContent().matches("CrewListRequest(.*)") && msg.getPerformative() == ACLMessage.REQUEST;
+	    	return msg.getSender().getName().matches("(.*)Boat[COG](.*)Agent(.*)") && msg.getContent().matches("CrewListRequest(.*)") && msg.getPerformative() == ACLMessage.REQUEST;
 	    }
 	}
-
 }

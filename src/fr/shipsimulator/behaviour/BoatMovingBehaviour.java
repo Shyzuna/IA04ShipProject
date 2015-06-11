@@ -94,14 +94,14 @@ public class BoatMovingBehaviour extends TickerBehaviour {
 	private class MovingRequest implements MessageTemplate.MatchExpression {
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
-	    	return msg.getContent().matches("MovingRequest$:!(.*)") && msg.getPerformative() == ACLMessage.REQUEST;
+	    	return msg.getSender().getName().matches("(.*)BoatCaptainAgent(.*)") && msg.getContent().matches("MovingRequest$:!(.*)") && msg.getPerformative() == ACLMessage.REQUEST;
 	    }
 	}
 	
 	private class MovingResponse implements MessageTemplate.MatchExpression {
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
-	    	return msg.getContent().matches("MovingResponse(.*)") && (msg.getPerformative() == ACLMessage.AGREE || msg.getPerformative() == ACLMessage.REFUSE);
+	    	return msg.getSender().getName().matches("(.*)EnvironnementAgent(.*)") && msg.getContent().matches("MovingResponse(.*)") && (msg.getPerformative() == ACLMessage.AGREE || msg.getPerformative() == ACLMessage.REFUSE);
 	    }
 	}
 

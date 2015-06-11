@@ -422,6 +422,9 @@ public class Boat implements Constante {
 			return false;
 		}
 		Integer actualQuant = resources.get(type);
+		if (actualQuant + quantity < 0) {
+			return false;
+		}
 		resources.put(type, actualQuant + quantity);
 		return true;
 	}
@@ -441,14 +444,6 @@ public class Boat implements Constante {
 		return null;
 	}
 	
-	/*public int getSpeed() {
-		return speed;
-	}
-
-	public void setSpeed(int speed) {
-		this.speed = speed;
-	}*/
-	
 	public AID getCaptainAID() {
 		for (int i = 0; i < crewMembers.size(); ++i) {
 			if (crewMembers.get(i).getName().matches("(.*)BoatCaptainAgent(.*)")) {
@@ -462,7 +457,6 @@ public class Boat implements Constante {
 	
 	private void initStats() {
 		maxLife = BOAT_LIFE;
-		/*speed = BOAT_SPEED;*/
 		deckCrewNb = DECK_CREW_NB;
 		deckStorageNb = CREW_CAPACITY_PER_DECK;
 		crewCapaciyPerDeck = DECK_STORAGE_NB;
