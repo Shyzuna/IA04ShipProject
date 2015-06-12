@@ -5,22 +5,19 @@ import jade.gui.GuiEvent;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
-import javafx.scene.paint.Color;
-
-import javax.imageio.ImageIO;
-
 import fr.shipsimulator.behaviour.EnvironnementBehaviour;
 import fr.shipsimulator.constantes.Constante;
 import fr.shipsimulator.gui.MainGui;
+import fr.shipsimulator.structure.City;
+import fr.shipsimulator.structure.Mission;
+import fr.shipsimulator.structure.Ressource;
 /*
  * TODO : CHANGE DEFAULT COL/ROW to current and location of mapData init
  */
@@ -191,6 +188,14 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 			}
 		}
 		return false;
+	}
+	
+	public CityAgent getCityAgentByName(String name){
+		for(int i = 0; i < listCity.size(); i++){
+			if(listCity.get(i).getLocalName().equals(name))
+				return listCity.get(i);
+		}
+		return null;
 	}
 	
 	private void suspendSimulation(){

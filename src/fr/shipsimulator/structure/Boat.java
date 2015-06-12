@@ -60,7 +60,7 @@ public class Boat implements Constante {
 		return (int)(impactCount * (cannonPower + cannonPower * powerBoostPercentage));
 	}
 	
-	// Mettre des messages là dedans pour dire ce qui se passe aux joueurs ?
+	// Mettre des messages lï¿½ dedans pour dire ce qui se passe aux joueurs ?
 	public Boolean damage(int damageValue, int impactCount) {
 		actualLife -= damageValue;
 		if (actualLife < 0) {
@@ -418,7 +418,7 @@ public class Boat implements Constante {
 	}
 	
 	public Boolean addResource(Integer quantity, Integer type) {
-		if (resources.size() >= getMaxStorage() || type >= Resource.values().length) {
+		if (resources.size() >= getMaxStorage() || type >= Ressource.values().length) {
 			return false;
 		}
 		Integer actualQuant = resources.get(type);

@@ -1,6 +1,6 @@
 package fr.shipsimulator.structure;
 
-public enum Resource { 
+public enum Ressource { 
 	WOOD,
 	ROCK,
 	IRON,

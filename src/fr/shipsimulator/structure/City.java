@@ -26,4 +26,8 @@ public class City {
 		this.posX = x;
 		this.posY = y;
 	}
+
+	public boolean equals(City other) {
+		return (posX == other.getPosX() && posY == other.getPosY());
+	}
 }

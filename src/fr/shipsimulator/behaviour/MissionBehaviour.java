@@ -5,11 +5,15 @@ import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 
 import java.util.List;
+import java.util.Random;
 
+import fr.shipsimulator.agent.CityAgent;
 import fr.shipsimulator.agent.MissionAgent;
+import fr.shipsimulator.structure.City;
 import fr.shipsimulator.structure.GenericMessageContent;
 import fr.shipsimulator.structure.MessageContent;
 import fr.shipsimulator.structure.Mission;
+import fr.shipsimulator.structure.Ressource;
 
 public class MissionBehaviour extends Behaviour {
 	
@@ -28,15 +32,26 @@ public class MissionBehaviour extends Behaviour {
 			if(sender.getName().matches("City(\\d)*")){
 				if(msg.getPerformative() == ACLMessage.PROPOSE && msg.getContent() != null){
 					List<Integer> recu = MessageContent.deserialize(msg.getContent());
-					/*Random rand = new Random();
-					List<CityAgent> cities = ma.getEnvironnementAgent().getListCity();
-					City arrival =  sender.getCity(); //comment trouver cette info ?
-					City departure = cities.get(rand.nextInt(cities.size())).getCity();
-					Mission m = new Mission(departure, arrival, recu.get(0), recu.get(1));
-					ma.addMission(m);*/
-					
 					ACLMessage reply = msg.createReply();
-					reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+					Random rand = new Random();
+					List<CityAgent> cities = ma.getEnvironnementAgent().getListCity();
+					City arrival =  ma.getEnvironnementAgent().getCityAgentByName("City" + recu.get(0)).getCity(); //comment trouver cette info ?
+					if (arrival != null) {
+						City departure = cities.get(rand.nextInt(cities.size())).getCity();
+						Ressource res = Ressource.WOOD;
+						for (Ressource r : Ressource.values()) {
+							if(r.ordinal() == recu.get(1)){
+								res = r;
+								break;
+							}
+						}
+						Mission m = new Mission(departure, arrival, res, recu.get(2));
+						ma.addMission(m);
+						reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+					}
+					else {
+						reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
+					}
 					ma.send(reply);
 				}
 			}
@@ -45,9 +60,11 @@ public class MissionBehaviour extends Behaviour {
 				GenericMessageContent gmc= new GenericMessageContent();
 				if(msg.getPerformative() == ACLMessage.REQUEST && msg.getContent() != null){
 					//le message contient le nom de la ville dont on veut les missions
+					City nextTo = ma.getEnvironnementAgent().getCityAgentByName(msg.getContent()).getCity();
 					for(int i = 0; i < missions.size(); i++){
-						//si missions.get(i).getDeparture() est la même ville alors :
-						gmc.content.add(missions.get(i));
+						if(missions.get(i).getDeparture().equals(nextTo)){
+							gmc.content.add(missions.get(i));
+						}
 					}
 					ACLMessage reply = msg.createReply();
 					reply.setPerformative(ACLMessage.INFORM);
