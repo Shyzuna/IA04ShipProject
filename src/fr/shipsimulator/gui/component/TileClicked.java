@@ -21,7 +21,6 @@ public class TileClicked implements EventHandler<MouseEvent>{
 			MainGui.writeBoatStatus((BoatAgent)agent);
 		else
 			MainGui.writeCityStatus((CityAgent)agent);
-		//System.out.println("Tile pressed : " + agent.getLocalName());
         event.consume();
 	}
 

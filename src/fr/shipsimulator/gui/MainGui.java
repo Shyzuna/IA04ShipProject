@@ -8,11 +8,14 @@ import java.io.FileNotFoundException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.event.ChangeEvent;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -207,8 +210,7 @@ public class MainGui extends Application implements Runnable{
 		
 		//log side
 		logArea = new TextArea();
-		logArea.prefWidth(150);
-	         
+	    logArea.setEditable(false);  
         logPane = new ScrollPane();
         logPane.setContent(logArea);
         logPane.setFitToWidth(true);
@@ -217,7 +219,6 @@ public class MainGui extends Application implements Runnable{
 		
         //statut side
         statutGrid = new GridPane();
-        
         statutPane = new ScrollPane();
         statutPane.setFitToWidth(true);
         statutPane.setPrefWidth(150);
@@ -242,8 +243,8 @@ public class MainGui extends Application implements Runnable{
 		gp.setAlignment(Pos.CENTER);
 		gp.setGridLinesVisible(true); // grid visible
 		for(int i = 0; i < MainGui.cols ; i++){
-	    	gp.getColumnConstraints().add(new ColumnConstraints(Math.round(center_size_w/(double)MainGui.cols)));
-			gp.getRowConstraints().add(new RowConstraints(Math.round(center_size_h/(double)MainGui.rows)));
+	    	gp.getColumnConstraints().add(new ColumnConstraints(Constante.DEFAULT_FACTOR));
+			gp.getRowConstraints().add(new RowConstraints(Constante.DEFAULT_FACTOR));
 		}
 		
 		Image boat_icone = new Image(new FileInputStream(Constante.BATEAU_PATH));
@@ -342,7 +343,6 @@ public class MainGui extends Application implements Runnable{
         primaryStage.setTitle("Ship Simulator");
         primaryStage.getIcons().add(boat_icone);
         primaryStage.setScene(scene);
-        //primaryStage.initStyle(StageStyle.UTILITY);
         primaryStage.show();
         
         //define refresh Timertask
