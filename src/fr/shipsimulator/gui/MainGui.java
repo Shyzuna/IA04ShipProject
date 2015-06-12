@@ -1,10 +1,11 @@
 package fr.shipsimulator.gui;
 
-import jade.core.Agent;
 import jade.gui.GuiEvent;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -33,15 +34,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import fr.shipsimulator.agent.BoatAgent;
 import fr.shipsimulator.agent.CityAgent;
 import fr.shipsimulator.agent.EnvironnementAgent;
+import fr.shipsimulator.agent.boatCrew.BoatCrewAgent;
 import fr.shipsimulator.constantes.Constante;
 import fr.shipsimulator.gui.component.TileClicked;
 
@@ -412,9 +412,21 @@ public class MainGui extends Application implements Runnable{
 				statutGrid.addRow(rowIndex++, new Label(""));
 				statutGrid.addRow(rowIndex++, new Label("Cargaison :"));
 				//ajouter map de la cargaison
+				Map<Integer, Integer> boatResources = agent.getBoat().getResources();
+				if(boatResources != null){
+					for(Map.Entry<Integer,Integer> entry : boatResources.entrySet()) {
+						statutGrid.addRow(rowIndex++, new Label(""+entry.getKey()), new Label("" + entry.getValue()));
+					}
+				}
 				statutGrid.addRow(rowIndex++, new Label(""));
 				statutGrid.addRow(rowIndex++, new Label("Equipage :"));
 				//ajouter liste de l'équipage
+				List<BoatCrewAgent> boatCrew = agent.getBoat().getCrewMembers();
+				if(boatCrew != null) {
+					for(int i = 0; i < boatCrew.size(); i++){
+						statutGrid.addRow(rowIndex++, new Label(boatCrew.get(i).getLocalName()));
+					}
+				}
 			}
 		});
 	}
@@ -441,6 +453,9 @@ public class MainGui extends Application implements Runnable{
 				statutGrid.addRow(rowIndex++, new Label(""));
 				statutGrid.addRow(rowIndex++, new Label("Stocks :"));
 				//ajouter map des stocks de la ville
+				statutGrid.addRow(rowIndex++, new Label(""));
+				statutGrid.addRow(rowIndex++, new Label("Missions :"));
+				//ajouter listes des noms de mission dispo dans la ville
 			}
 		});
 	}

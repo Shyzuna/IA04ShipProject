@@ -6,20 +6,20 @@ import fr.shipsimulator.agent.BoatAgent;
 import fr.shipsimulator.structure.Boat;
 import fr.shipsimulator.structure.GenericMessageContent;
 import jade.core.Agent;
-import jade.core.behaviours.TickerBehaviour;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-public class BoatExchangeBehaviour extends TickerBehaviour {
+public class BoatExchangeBehaviour extends CyclicBehaviour {
 	private static final long serialVersionUID = 1L;
 	private Boat boat;
 	
-	public BoatExchangeBehaviour (Agent a, long period) {
-		super(a, period);
+	public BoatExchangeBehaviour (Agent a) {
+		super(a);
 		boat = ((BoatAgent)this.myAgent).getBoat();
 	}
 	
-	protected void onTick() {
+	public void action() {
 		// Après l'échange le capitaine informe le bateau des changements effectués dans la cargaison
 		// Le capitaine envoie ExchangeInform séparateur deux integer (type + quantité), quantité peut être négatif
 		// On met ici à jour l'objet boat avec les changements de cargaison

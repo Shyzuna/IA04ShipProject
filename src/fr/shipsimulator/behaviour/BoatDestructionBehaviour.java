@@ -9,7 +9,7 @@ import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 
 public class BoatDestructionBehaviour extends TickerBehaviour {
-
+	private static final long serialVersionUID = 1L;
 	private Boat boat;
 	
 	public BoatDestructionBehaviour (Agent a, long period) {

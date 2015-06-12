@@ -32,11 +32,11 @@ public class BoatAgent extends Agent implements Constante {
 	
 	public void setup() {
 		MainGui.writeLog("Boat Agent", "New boat : "+ this.getLocalName());
-		this.addBehaviour(new BoatMovingBehaviour(this, SIMULATION_TICK));
+		this.addBehaviour(new BoatMovingBehaviour(this));
 		this.addBehaviour(new BoatDestructionBehaviour(this, SIMULATION_TICK));
 		this.addBehaviour(new BoatCrewListBehaviour(this));
 		this.addBehaviour(new BoatFightingBehaviour(this));
-		this.addBehaviour(new BoatExchangeBehaviour(this, SIMULATION_TICK));
+		this.addBehaviour(new BoatExchangeBehaviour(this));
 	}
 
 }

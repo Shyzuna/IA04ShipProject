@@ -7,20 +7,20 @@ import fr.shipsimulator.structure.Boat;
 import fr.shipsimulator.structure.GenericMessageContent;
 import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.TickerBehaviour;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-public class BoatMovingBehaviour extends TickerBehaviour {
+public class BoatMovingBehaviour extends CyclicBehaviour {
 	private static final long serialVersionUID = 1L;
 	private Boat boat;
 	
-	public BoatMovingBehaviour(Agent a, long period) {
-		super(a, period);
+	public BoatMovingBehaviour(Agent a) {
+		super(a);
 		boat = ((BoatAgent)this.myAgent).getBoat();
 	}
 	
-	public void onTick() {
+	public void action() {
 		MessageTemplate mt = new MessageTemplate(new MovingRequest());
 		ACLMessage request = myAgent.receive(mt);
 		if (request != null) {

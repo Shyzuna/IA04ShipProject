@@ -70,8 +70,7 @@ public class EnvironnementBehaviour extends Behaviour {
 			}
 			else if(sender.getName().matches("Boat(\\d)*")){
 				if(msg.getPerformative() == ACLMessage.REQUEST && msg.getContent() != null){
-					GenericMessageContent gmc = new GenericMessageContent();
-					List<Integer> recu = gmc.deserialize(msg.getContent().split("$:!")[1]);
+					List<Integer> recu = MessageContent.deserialize(msg.getContent().split("$:!")[1]);
 					int oldPosX = recu.get(0);
 					int oldPosY = recu.get(1);
 					int newPosX = recu.get(2);
@@ -83,11 +82,12 @@ public class EnvironnementBehaviour extends Behaviour {
 						ea.send(reply);
 					}
 					else {
-						gmc.content = new ArrayList<Integer>();
-						gmc.content.add(newPosX);
-						gmc.content.add(newPosY);
+						MessageContent mc = new MessageContent();
+						mc.content = new ArrayList<Integer>();
+						mc.content.add(newPosX);
+						mc.content.add(newPosY);
 						reply.setPerformative(ACLMessage.AGREE);
-						reply.setContent("MovingResponse$:!"+gmc.serialize());
+						reply.setContent("MovingResponse$:!"+mc.serialize());
 						ea.send(reply);
 						ea.setMapData(oldPosX, oldPosY, Constante.SEA);
 						ea.setMapData(newPosX, newPosY, Constante.SHIP);
