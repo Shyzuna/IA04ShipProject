@@ -18,15 +18,16 @@ import fr.shipsimulator.structure.Mission;
 public class CaptainMissionBehaviour extends Behaviour{
 	private static final long serialVersionUID = 1L;
 	
-	private enum State {NO_MISSION, MISSION_LIST_ASKED, OBS_LIST_ASKED, WAITTING_FOR_VOTE, MISSION_OK};
-	
-	private Mission	mission;
+	private enum State {NO_MISSION, MISSION_LIST_ASKED, OBS_LIST_ASKED, WAIT_FOR_VOTE, WAIT_FOR_CONFIRM, MISSION_OK};
+
 	private State state;
 	
+	private Mission chosenMission;
 	private HashMap<Mission, Integer> missionVote;
 	private Integer nbElecteur, nbVotant;
 	
 	public CaptainMissionBehaviour() {
+		MainGui.writeLog("CaptainMissionBehaviour", "New Behaviour");
 		state = State.NO_MISSION;
 		
 		MainGui.writeLog("CaptainMissionBehaviour", "Demande des missions disponibles");
@@ -66,10 +67,10 @@ public class CaptainMissionBehaviour extends Behaviour{
 				
 				MainGui.writeLog("CaptainMissionBehaviour", "Vote pour choisir une mission");
 				askVoteToCrew(crewMembers);
-				state = State.WAITTING_FOR_VOTE;
+				state = State.WAIT_FOR_VOTE;
 			}
 		}
-		else if(state == State.WAITTING_FOR_VOTE){
+		else if(state == State.WAIT_FOR_VOTE){
 			mt = new MessageTemplate(new MissionCrewResponse());
 			request = myAgent.receive(mt);
 			if (request != null) {
@@ -81,8 +82,31 @@ public class CaptainMissionBehaviour extends Behaviour{
 				    }
 				}
 				if(nbVotant >= nbElecteur){
+					deduceChosenMission();
+					confirmMission();
+					state = State.WAIT_FOR_CONFIRM;
+				}
+			}
+		}
+		else if(state == State.WAIT_FOR_CONFIRM){
+			mt = new MessageTemplate(new MissionConfirmeResponse());
+			request = myAgent.receive(mt);
+			if (request != null) {
+				String rsp = request.getContent().split("MissionConfirmeResponse")[0];
+				
+				
+				if(rsp == "ok"){
+					MainGui.writeLog("CaptainMissionBehaviour", "Mission choisie !");			
+					((BoatCaptainAgent) myAgent).setCurrentMission(chosenMission);
+					myAgent.addBehaviour(new CaptainDirectionBehaviour(myAgent));
 					state = State.MISSION_OK;
-					myAgent.addBehaviour(new CaptainDirectionBehaviour());
+				}
+				else{
+					state = State.NO_MISSION;
+					
+					MainGui.writeLog("CaptainMissionBehaviour", "La mission n'est plus dispo, on recommence");
+					askAvailableMission(new City(0, 0));
+					state = State.MISSION_LIST_ASKED;
 				}
 			}
 		}
@@ -125,6 +149,28 @@ public class CaptainMissionBehaviour extends Behaviour{
 		crewRequest.setContent("MissionVote:" + missions.serialize());
 		myAgent.send(crewRequest);
 	}
+	
+	private void deduceChosenMission(){
+		Entry<Mission, Integer> maxEntry = null;
+
+		for (Entry<Mission, Integer> entry : missionVote.entrySet()){
+		    if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0) maxEntry = entry;
+		}
+		
+		chosenMission = maxEntry.getKey();
+	}
+	
+	private void confirmMission(){
+		ACLMessage missionRequest = new ACLMessage(ACLMessage.CONFIRM);
+
+		missionRequest.addReceiver(new AID("Mission", AID.ISLOCALNAME));
+		
+		GenericMessageContent<Mission> mission = new GenericMessageContent<Mission>();
+		mission.content.add(chosenMission);
+
+		missionRequest.setContent("ConfirMission:" + mission.serialize());
+		myAgent.send(missionRequest);
+	}
 		
 	private class MissionResponse implements MessageTemplate.MatchExpression {
 		private static final long serialVersionUID = 1L;
@@ -144,6 +190,13 @@ public class CaptainMissionBehaviour extends Behaviour{
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
 	    	return msg.getContent().matches("MissionCrewResponse(.*)") && msg.getPerformative() == ACLMessage.CONFIRM;
+	    }
+	}
+	
+	private class MissionConfirmeResponse implements MessageTemplate.MatchExpression {
+		private static final long serialVersionUID = 1L;
+		public boolean match(ACLMessage msg) {
+	    	return msg.getContent().matches("MissionConfirmeResponse(.*)") && msg.getPerformative() == ACLMessage.CONFIRM;
 	    }
 	}
 }
