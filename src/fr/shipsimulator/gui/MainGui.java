@@ -9,14 +9,11 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.swing.event.ChangeEvent;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -44,6 +41,7 @@ import fr.shipsimulator.agent.EnvironnementAgent;
 import fr.shipsimulator.agent.boatCrew.BoatCrewAgent;
 import fr.shipsimulator.constantes.Constante;
 import fr.shipsimulator.gui.component.TileClicked;
+import fr.shipsimulator.structure.Mission;
 
 /**
  * 
@@ -453,9 +451,6 @@ public class MainGui extends Application implements Runnable{
 				statutGrid.addRow(rowIndex++, new Label(""));
 				statutGrid.addRow(rowIndex++, new Label("Stocks :"));
 				//ajouter map des stocks de la ville
-				statutGrid.addRow(rowIndex++, new Label(""));
-				statutGrid.addRow(rowIndex++, new Label("Missions :"));
-				//ajouter listes des noms de mission dispo dans la ville
 			}
 		});
 	}
