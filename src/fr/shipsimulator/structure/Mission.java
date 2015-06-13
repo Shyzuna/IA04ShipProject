@@ -2,6 +2,10 @@ package fr.shipsimulator.structure;
 
 public class Mission {
 	private Integer id;
+	public Integer getId() {
+		return id;
+	}
+
 	private City departure;
 	private City arrival;
 	
