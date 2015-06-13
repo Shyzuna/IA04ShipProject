@@ -1,6 +1,8 @@
 package fr.shipsimulator.structure;
 
 public class Mission {
+	private static Integer cptId;
+	
 	private Integer id;
 	private City departure;
 	private City arrival;
@@ -12,6 +14,7 @@ public class Mission {
 	
 	public Mission(City departure, City arrival, Ressource ressource, Integer resourceAmount) {
 		super();
+		this.id = cptId++;
 		this.departure = departure;
 		this.arrival = arrival;
 		this.ressource = ressource;
@@ -21,6 +24,10 @@ public class Mission {
 	
 	public Integer getId() {
 		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public City getDeparture() {

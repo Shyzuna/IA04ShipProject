@@ -26,27 +26,29 @@ public class CaptainMissionBehaviour extends Behaviour{
 	private HashMap<Mission, Integer> missionVote;
 	private Integer nbElecteur, nbVotant;
 	
+	private City currentCity;
+	
 	public CaptainMissionBehaviour() {
 		MainGui.writeLog("CaptainMissionBehaviour", "New Behaviour");
 		state = State.NO_MISSION;
 		
 		MainGui.writeLog("CaptainMissionBehaviour", "Demande des missions disponibles");
-		askAvailableMission(new City(0, 0));
+		askAvailableMission(currentCity);
 		state = State.MISSION_LIST_ASKED;
 	}
 	
 	@Override
 	public void action() {
 		MessageTemplate mt;
-		ACLMessage request;
+		ACLMessage msg;
 		
 		if(state == State.MISSION_LIST_ASKED){
 			mt = new MessageTemplate(new MissionResponse());
-			request = myAgent.receive(mt);
-			if (request != null) {
+			msg = myAgent.receive(mt);
+			if (msg != null) {
 				missionVote = new HashMap<Mission, Integer>();
 				
-				String rsp = request.getContent().split("MissionResponse")[0];
+				String rsp = msg.getContent().split("MissionResponse")[0];
 				List<Mission> missionList = new GenericMessageContent<Mission>().deserialize(rsp);
 				for(Mission mission : missionList) {
 					missionVote.put(mission, 0);
@@ -59,9 +61,9 @@ public class CaptainMissionBehaviour extends Behaviour{
 		}
 		else if(state == State.OBS_LIST_ASKED){
 			mt = new MessageTemplate(new CrewListResponse());
-			request = myAgent.receive(mt);
-			if (request != null) {
-				String rsp = request.getContent().split("CrewListResponse")[0];
+			msg = myAgent.receive(mt);
+			if (msg != null) {
+				String rsp = msg.getContent().split("CrewListResponse")[0];
 				List<AID> crewMembers = new GenericMessageContent<AID>().deserialize(rsp);
 				nbElecteur = crewMembers.size();
 				
@@ -72,9 +74,9 @@ public class CaptainMissionBehaviour extends Behaviour{
 		}
 		else if(state == State.WAIT_FOR_VOTE){
 			mt = new MessageTemplate(new MissionCrewResponse());
-			request = myAgent.receive(mt);
-			if (request != null) {
-				String rsp = request.getContent().split("MissionCrewResponse")[0];
+			msg = myAgent.receive(mt);
+			if (msg != null) {
+				String rsp = msg.getContent().split("MissionCrewResponse")[0];
 				Mission chosenMission = new GenericMessageContent<Mission>().deserialize(rsp).get(0);
 				for(Entry<Mission, Integer> entry : missionVote.entrySet()) {
 					if(entry.getKey().getId() == chosenMission.getId()){
@@ -90,15 +92,15 @@ public class CaptainMissionBehaviour extends Behaviour{
 		}
 		else if(state == State.WAIT_FOR_CONFIRM){
 			mt = new MessageTemplate(new MissionConfirmeResponse());
-			request = myAgent.receive(mt);
-			if (request != null) {
-				String rsp = request.getContent().split("MissionConfirmeResponse")[0];
+			msg = myAgent.receive(mt);
+			if (msg != null) {
+				String rsp = msg.getContent().split("MissionConfirmeResponse")[0];
 				
 				
 				if(rsp == "ok"){
 					MainGui.writeLog("CaptainMissionBehaviour", "Mission choisie !");			
 					((BoatCaptainAgent) myAgent).setCurrentMission(chosenMission);
-					myAgent.addBehaviour(new CaptainDirectionBehaviour(myAgent));
+					myAgent.addBehaviour(new CaptainDirectionBehaviour(myAgent, currentCity));
 					state = State.MISSION_OK;
 				}
 				else{
@@ -168,7 +170,7 @@ public class CaptainMissionBehaviour extends Behaviour{
 		GenericMessageContent<Mission> mission = new GenericMessageContent<Mission>();
 		mission.content.add(chosenMission);
 
-		missionRequest.setContent("ConfirMission:" + mission.serialize());
+		missionRequest.setContent("Observer" + mission.serialize());
 		myAgent.send(missionRequest);
 	}
 		
