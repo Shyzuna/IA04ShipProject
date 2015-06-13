@@ -36,7 +36,10 @@ public class MissionBehaviour extends Behaviour {
 					Random rand = new Random();
 					List<CityAgent> cities = ma.getEnvironnementAgent().getListCity();
 					City arrival =  ma.getEnvironnementAgent().getCityAgentByName("City" + recu.get(0)).getCity(); //comment trouver cette info ?
-					if (arrival != null) {
+					if(arrival == null){
+						reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
+					}
+					else {
 						City departure = cities.get(rand.nextInt(cities.size())).getCity();
 						Ressource res = Ressource.WOOD;
 						for (Ressource r : Ressource.values()) {
@@ -46,11 +49,20 @@ public class MissionBehaviour extends Behaviour {
 							}
 						}
 						Mission m = new Mission(departure, arrival, res, recu.get(2));
-						ma.addMission(m);
-						reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
-					}
-					else {
-						reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
+						boolean missionAlreadyExists = false;
+						for(int i = 0; i < ma.getMissions().size(); i++){
+							if(ma.getMissions().get(i).equals(m)) {
+								missionAlreadyExists = true;
+								break;
+							}
+						}
+						if(missionAlreadyExists){
+							reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
+						}
+						else {
+							ma.addMission(m);
+							reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+						}
 					}
 					ma.send(reply);
 				}

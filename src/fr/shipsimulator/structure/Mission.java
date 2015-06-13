@@ -2,10 +2,6 @@ package fr.shipsimulator.structure;
 
 public class Mission {
 	private Integer id;
-	public Integer getId() {
-		return id;
-	}
-
 	private City departure;
 	private City arrival;
 	
@@ -18,6 +14,10 @@ public class Mission {
 		this.arrival = arrival;
 		this.ressource = ressource;
 		this.resourceAmount = resourceAmount;
+	}
+	
+	public Integer getId() {
+		return id;
 	}
 
 	public City getDeparture() {

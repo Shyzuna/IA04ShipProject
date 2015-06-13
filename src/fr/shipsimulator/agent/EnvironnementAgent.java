@@ -70,6 +70,10 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 	public void setMainGui(MainGui mainGui) {
 		this.mainGui = mainGui;
 	}
+	
+	public MissionAgent getMissionAgent(){
+		return missionAgent;
+	}
 
 	public EnvironnementAgent() {
 
@@ -156,17 +160,25 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 		}
 		this.mapData = data;
 		
-		//affichage pour v�rification
-		for(int i = 0; i < MainGui.getRows(); i++){
-			for(int j = 0; j < MainGui.getCols(); j++){
-				if(data[j][i] == LAND)
-					System.out.print("# ");
-				else
-					System.out.print(". ");
-			}
-			System.out.println("");
-		}
+		//printDataMap();
 		
+	}
+	
+	public void printDataMap(){
+	//affichage pour v�rification
+			for(int i = 0; i < MainGui.getRows(); i++){
+				for(int j = 0; j < MainGui.getCols(); j++){
+					if(this.mapData[j][i] == LAND)
+						System.out.print("# ");
+					else if(this.mapData[j][i] == SEA)
+						System.out.print(". ");
+					else if(this.mapData[j][i] == CITY)
+						System.out.print("C ");
+					else
+						System.out.print("B ");
+				}
+				System.out.println("");
+			}
 	}
 	
 	private boolean isBoatAt(int x, int y){
@@ -181,11 +193,9 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 		if(mapData[x][y] != Constante.LAND)
 			return false;
 		for(int i = -1; i <= 1; i++){
-			for(int j = -1; j <= 1; j++){
-				if(x + i >= 0 && y + j >= 0 && x + i < MainGui.getCols() && y + j < MainGui.getRows())
-					if(mapData[x + i][y + j] == Constante.SEA)
-						return true;
-			}
+			if(i != 0 && ((x + i >= 0 && x + i < MainGui.getCols() && mapData[x + i][y] == Constante.SEA)
+					|| (y + i >= 0 && y + i < MainGui.getRows() && mapData[x][y + i] == Constante.SEA)))
+				return true;
 		}
 		return false;
 	}
@@ -223,6 +233,7 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 				ca.doDelete();
 			}
 			this.listCity.clear();
+			missionAgent.resetMissions();
 		}
 	}
 	
@@ -230,27 +241,9 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 		if(this.stateSimulation == STOP){
 			this.stateSimulation = RUNNING;
 			MainGui.writeLog("Env", "Start Simulation");
-			missionAgent.resetMissions();
 			fillMapData(MAP_PATH);
 			int x,y;
 			Random rand = new Random();
-			for(int i = 0; i < MainGui.getBoat();i++){
-				do{
-					x = rand.nextInt(MainGui.getCols()-1);
-					y = rand.nextInt(MainGui.getRows()-1);
-				}while(this.mapData[x][y] != Constante.SEA && !isBoatAt(x,y));
-				AgentController agBoat;
-				BoatAgent ba = new BoatAgent(x,y);
-				mapData[x][y] = Constante.SHIP;
-				try {
-					agBoat = this.getContainerController().acceptNewAgent("Boat"+i, ba);
-					this.listBoat.add(ba);
-					agBoat.start();
-				} catch (StaleProxyException e) {
-					e.printStackTrace();
-				}
-			}
-			
 			for(int i = 0; i < MainGui.getCity(); i++){
 				do{
 					x = rand.nextInt(MainGui.getCols()-1);
@@ -263,6 +256,42 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 					agCity = this.getContainerController().acceptNewAgent("City"+i, ca);
 					this.listCity.add(ca);
 					agCity.start();
+				} catch (StaleProxyException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			for(int i = 0; i < MainGui.getBoat();i++){
+				City nextTo = listCity.get(i).getCity();
+				x = -1;
+				y = -1;
+				if(nextTo.getPosX() + 1 < MainGui.getCols()
+						&& mapData[nextTo.getPosX() + 1][nextTo.getPosY()] == Constante.SEA){
+					x = nextTo.getPosX() + 1;
+					y = nextTo.getPosY();
+				}
+				else if(nextTo.getPosX() - 1 >= 0
+						&& mapData[nextTo.getPosX() - 1][nextTo.getPosY()] == Constante.SEA){
+					x = nextTo.getPosX() - 1;
+					y = nextTo.getPosY();
+				}
+				else if(nextTo.getPosY() + 1 < MainGui.getRows()
+						&& mapData[nextTo.getPosX()][nextTo.getPosY() + 1] == Constante.SEA){
+					x = nextTo.getPosX();
+					y = nextTo.getPosY() + 1;
+				}
+				else if(nextTo.getPosY() - 1 >= 0
+						&& mapData[nextTo.getPosX()][nextTo.getPosY() - 1] == Constante.SEA){
+					x = nextTo.getPosX();
+					y = nextTo.getPosY() - 1;
+				}
+				AgentController agBoat;
+				BoatAgent ba = new BoatAgent(x,y);
+				mapData[x][y] = Constante.SHIP;
+				try {
+					agBoat = this.getContainerController().acceptNewAgent("Boat"+i, ba);
+					this.listBoat.add(ba);
+					agBoat.start();
 				} catch (StaleProxyException e) {
 					e.printStackTrace();
 				}

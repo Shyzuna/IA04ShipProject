@@ -52,7 +52,7 @@ public class CaptainMissionBehaviour extends Behaviour{
 					missionVote.put(mission, 0);
 				}
 				
-				MainGui.writeLog("CaptainMissionBehaviour", "Demande de la liste d'équipage");
+				MainGui.writeLog("CaptainMissionBehaviour", "Demande de la liste d'ï¿½quipage");
 				askForCrewMembers();
 				state = State.OBS_LIST_ASKED;				
 			}
@@ -77,7 +77,7 @@ public class CaptainMissionBehaviour extends Behaviour{
 				String rsp = request.getContent().split("MissionCrewResponse")[0];
 				Mission chosenMission = new GenericMessageContent<Mission>().deserialize(rsp).get(0);
 				for(Entry<Mission, Integer> entry : missionVote.entrySet()) {
-				    if(entry.getKey().getId() == chosenMission.getId()){
+				    if(entry.getKey().equals(chosenMission)){
 				    	entry.setValue(entry.getValue() + 1);
 				    }
 				}
@@ -135,7 +135,7 @@ public class CaptainMissionBehaviour extends Behaviour{
 	private void askVoteToCrew(List<AID> crewMembers){		
 		ACLMessage crewRequest = new ACLMessage(ACLMessage.REQUEST);
 		
-		// Envoyer à tous les observer
+		// Envoyer ï¿½ tous les observer
 		for (AID aid : crewMembers) {
 			crewRequest.addReceiver(aid);
 		}
