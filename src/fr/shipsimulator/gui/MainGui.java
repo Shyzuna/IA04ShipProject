@@ -451,6 +451,14 @@ public class MainGui extends Application implements Runnable{
 				statutGrid.addRow(rowIndex++, new Label(""));
 				statutGrid.addRow(rowIndex++, new Label("Stocks :"));
 				//ajouter map des stocks de la ville
+				statutGrid.addRow(rowIndex++, new Label("Missions :"));
+				//ajouter map des missions dispo dans la ville
+				List<Mission> missions = myAgent.getMissionAgent().getMissions();
+				for(Mission m: missions){
+					if(m.getDeparture().equals(agent.getCity())){
+						statutGrid.addRow(rowIndex++, new Label("Mission" + m.getId()));
+					}
+				}
 			}
 		});
 	}
