@@ -77,7 +77,7 @@ public class CaptainMissionBehaviour extends Behaviour{
 				String rsp = request.getContent().split("MissionCrewResponse")[0];
 				Mission chosenMission = new GenericMessageContent<Mission>().deserialize(rsp).get(0);
 				for(Entry<Mission, Integer> entry : missionVote.entrySet()) {
-				    if(entry.getKey().equals(chosenMission)){
+					if(entry.getKey().getId() == chosenMission.getId()){
 				    	entry.setValue(entry.getValue() + 1);
 				    }
 				}

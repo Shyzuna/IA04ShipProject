@@ -8,12 +8,15 @@ public class Mission {
 	private Ressource ressource;
 	private Integer resourceAmount;
 	
+	private static Integer idCounter = 0;
+	
 	public Mission(City departure, City arrival, Ressource ressource, Integer resourceAmount) {
 		super();
 		this.departure = departure;
 		this.arrival = arrival;
 		this.ressource = ressource;
 		this.resourceAmount = resourceAmount;
+		this.id = idCounter++;
 	}
 	
 	public Integer getId() {
