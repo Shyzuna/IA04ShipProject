@@ -23,7 +23,7 @@ public class CityMissionBehaviour extends TickerBehaviour {
 		Integer quantity = 1;
 		city.getNeeds(type, quantity);
 		// Envoie un message à l'agent mission pour signifier les besoins
-		MainGui.writeLog("City Agent", "City needs " + quantity + " of " + type);
+		MainGui.writeLog("City Agent", this.myAgent.getName() + " needs " + quantity + " of " + type);
 		ACLMessage request = new ACLMessage();
 		request.setPerformative(ACLMessage.PROPOSE);
 		request.addReceiver(new AID("Mission", AID.ISLOCALNAME));

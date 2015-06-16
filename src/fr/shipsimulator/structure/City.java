@@ -89,5 +89,4 @@ public class City {
 		quantity = diff;
 	}
 	
-	
 }
