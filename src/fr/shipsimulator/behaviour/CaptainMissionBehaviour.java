@@ -93,11 +93,8 @@ public class CaptainMissionBehaviour extends Behaviour{
 		else if(state == State.WAIT_FOR_CONFIRM){
 			mt = new MessageTemplate(new MissionConfirmeResponse());
 			msg = myAgent.receive(mt);
-			if (msg != null) {
-				String rsp = msg.getContent().split("MissionConfirmeResponse")[0];
-				
-				
-				if(rsp == "ok"){
+			if (msg != null) {				
+				if(msg.getPerformative() == ACLMessage.AGREE){
 					MainGui.writeLog("CaptainMissionBehaviour", "Mission choisie !");			
 					((BoatCaptainAgent) myAgent).setCurrentMission(chosenMission);
 					myAgent.addBehaviour(new CaptainDirectionBehaviour(myAgent, currentCity));

@@ -95,7 +95,7 @@ public class MissionBehaviour extends Behaviour {
 					}
 					ACLMessage reply = msg.createReply();
 					reply.setPerformative(stillAvailable ? ACLMessage.AGREE : ACLMessage.REFUSE);
-					reply.setContent(gmc.serialize());
+					reply.setContent("MissionConfirmeResponse");
 					ma.send(reply);
 				}
 			}
