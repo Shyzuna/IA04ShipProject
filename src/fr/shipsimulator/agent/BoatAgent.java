@@ -1,11 +1,13 @@
 package fr.shipsimulator.agent;
 
 import jade.core.Agent;
-import fr.shipsimulator.behaviour.BoatMovingBehaviour;
+import fr.shipsimulator.agent.boatCrew.BoatCaptainAgent;
+import fr.shipsimulator.agent.boatCrew.BoatObserverAgent;
 import fr.shipsimulator.behaviour.BoatCrewListBehaviour;
 import fr.shipsimulator.behaviour.BoatDestructionBehaviour;
 import fr.shipsimulator.behaviour.BoatExchangeBehaviour;
 import fr.shipsimulator.behaviour.BoatFightingBehaviour;
+import fr.shipsimulator.behaviour.BoatMovingBehaviour;
 import fr.shipsimulator.constantes.Constante;
 import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.Boat;
@@ -17,6 +19,8 @@ public class BoatAgent extends Agent implements Constante {
 	public enum CrewType {OBSERVER, CAPTAIN, GUNNER}
 
 	private Boat boat;
+	private BoatCaptainAgent captain;
+	private BoatObserverAgent observer;
 	
 	public Boat getBoat() {
 		return boat;
@@ -28,6 +32,8 @@ public class BoatAgent extends Agent implements Constante {
 
 	public BoatAgent(int x, int y){
 		this.boat = new Boat(new Player(), x, y);
+		captain = new BoatCaptainAgent(this.getAID());
+		observer = new BoatObserverAgent(this);
 	}
 	
 	public void setup() {

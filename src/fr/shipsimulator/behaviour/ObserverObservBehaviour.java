@@ -22,7 +22,7 @@ public class ObserverObservBehaviour extends Behaviour implements Constante{
 	public ObserverObservBehaviour() {
 		porteeObs = OBS_PORTEE;
 		this.vision = new int[2 * porteeObs + 1][2 * porteeObs + 1];
-		this.currentposition.setLocation(departure.getPosX(), departure.getPosY());
+		//this.currentposition.setLocation(departure.getPosX(), departure.getPosY());
 	}
 	
 	@Override

@@ -11,12 +11,14 @@ public class BoatCaptainAgent extends BoatCrewAgent{
 	private AID myBoat;
 	private Mission	currentMission;
 	
-	public void setup(AID boat){
+	public BoatCaptainAgent(AID boat){
 		myBoat = boat;
-		
+	}
+	
+	public void setup(){
 		this.addBehaviour(new CaptainMissionBehaviour());
 		
-		// Crée dans le CaptainMissionBehaviour
+		// Crï¿½e dans le CaptainMissionBehaviour
 		// this.addBehaviour(new CaptainDirectionBehaviour());
 		MainGui.writeLog("BoatCaptainAgent", this.getLocalName() + " prend les commandes");
 	}
