@@ -1,10 +1,17 @@
 package fr.shipsimulator.agent;
 
+import fr.shipsimulator.behaviour.BoatCrewListBehaviour;
+import fr.shipsimulator.behaviour.BoatDestructionBehaviour;
+import fr.shipsimulator.behaviour.BoatExchangeBehaviour;
+import fr.shipsimulator.behaviour.BoatFightingBehaviour;
+import fr.shipsimulator.behaviour.BoatMovingBehaviour;
+import fr.shipsimulator.behaviour.CityMissionBehaviour;
+import fr.shipsimulator.constantes.Constante;
 import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.City;
 import jade.core.Agent;
 
-public class CityAgent extends Agent {
+public class CityAgent extends Agent implements Constante {
 	private static final long serialVersionUID = 1L;
 	
 	private City city;
@@ -21,7 +28,8 @@ public class CityAgent extends Agent {
 		this.city = new City(x, y);
 	}
 	
-	public void setup(){
+	public void setup() {
 		MainGui.writeLog("City Agent", "New city : "+ this.getLocalName());
+		this.addBehaviour(new CityMissionBehaviour(this, SIMULATION_TICK));
 	}
 }
