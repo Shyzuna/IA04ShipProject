@@ -1,10 +1,6 @@
 package fr.shipsimulator.agent;
 
-import fr.shipsimulator.behaviour.BoatCrewListBehaviour;
-import fr.shipsimulator.behaviour.BoatDestructionBehaviour;
-import fr.shipsimulator.behaviour.BoatExchangeBehaviour;
-import fr.shipsimulator.behaviour.BoatFightingBehaviour;
-import fr.shipsimulator.behaviour.BoatMovingBehaviour;
+import fr.shipsimulator.behaviour.CityExchangeBehaviour;
 import fr.shipsimulator.behaviour.CityMissionBehaviour;
 import fr.shipsimulator.constantes.Constante;
 import fr.shipsimulator.gui.MainGui;
@@ -31,5 +27,6 @@ public class CityAgent extends Agent implements Constante {
 	public void setup() {
 		MainGui.writeLog("City Agent", "New city : "+ this.getLocalName());
 		this.addBehaviour(new CityMissionBehaviour(this, SIMULATION_TICK));
+		this.addBehaviour(new CityExchangeBehaviour(this));
 	}
 }

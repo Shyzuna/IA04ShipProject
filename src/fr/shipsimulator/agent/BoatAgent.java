@@ -43,6 +43,8 @@ public class BoatAgent extends Agent implements Constante {
 		this.addBehaviour(new BoatCrewListBehaviour(this));
 		this.addBehaviour(new BoatFightingBehaviour(this));
 		this.addBehaviour(new BoatExchangeBehaviour(this));
+		new BoatCaptainAgent(this.getAID());
+		new BoatObserverAgent(this);
 	}
 
 }

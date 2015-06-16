@@ -3,6 +3,7 @@ package fr.shipsimulator.behaviour;
 import java.util.List;
 
 import fr.shipsimulator.agent.BoatAgent;
+import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.Boat;
 import fr.shipsimulator.structure.GenericMessageContent;
 import jade.core.Agent;
@@ -36,6 +37,8 @@ public class BoatExchangeBehaviour extends CyclicBehaviour {
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
+					} else {
+						MainGui.writeLog("BoatAgent", this.myAgent.getName() + " changed his reserves");
 					}
 				}
 			}

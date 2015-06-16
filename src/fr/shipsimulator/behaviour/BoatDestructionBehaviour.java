@@ -25,7 +25,7 @@ public class BoatDestructionBehaviour extends TickerBehaviour {
 			request.setContent("BoatDestroyed");
 			myAgent.send(request);
 			boat.killAllCrewMembers();
-			MainGui.writeLog("BoatAgent", "Boat Destroyed !");
+			MainGui.writeLog("BoatAgent", this.myAgent.getName() + " destroyed !");
 			myAgent.doDelete();
 		}
 	}

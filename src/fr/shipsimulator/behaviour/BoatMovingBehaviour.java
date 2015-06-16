@@ -3,6 +3,7 @@ package fr.shipsimulator.behaviour;
 import java.util.List;
 
 import fr.shipsimulator.agent.BoatAgent;
+import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.Boat;
 import fr.shipsimulator.structure.GenericMessageContent;
 import jade.core.AID;
@@ -26,6 +27,7 @@ public class BoatMovingBehaviour extends CyclicBehaviour {
 		if (request != null) {
 			String [] split = request.getContent().split("$:!");
 			Boolean correctReq = false;
+			MainGui.writeLog("BoatAgent", this.myAgent.getName() + " received a moving request");
 			if (split[1] != null) {
 				List<Integer> reqPosition = new GenericMessageContent<Integer>().deserialize(split[1]);
 				if (reqPosition.size() == 2) {
@@ -70,6 +72,7 @@ public class BoatMovingBehaviour extends CyclicBehaviour {
 				if (split[1] != null) {
 					List<Integer> reqPosition = new GenericMessageContent<Integer>().deserialize(split[1]);
 					if (reqPosition.size() == 2) {
+						MainGui.writeLog("BoatAgent", this.myAgent.getName() + " move to " + reqPosition.get(0) + " " + reqPosition.get(1));
 						boat.setPosX(reqPosition.get(0));
 						boat.setPosY(reqPosition.get(1));
 						correctReq = true;
