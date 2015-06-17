@@ -18,6 +18,12 @@ public class City implements Constante {
 		}					
 	}
 	
+	public City(int x,int y){
+		this.posX = x;
+		this.posY = y;
+		resources = new HashMap<Integer, Integer>();
+	}
+	
 	public Map<Integer, Integer> getResources() {
 		return resources;
 	}
@@ -59,13 +65,6 @@ public class City implements Constante {
 
 	public void setPosY(int posY) {
 		this.posY = posY;
-	}
-
-	
-	public City(int x,int y){
-		this.posX = x;
-		this.posY = y;
-		resources = new HashMap<Integer, Integer>();
 	}
 
 	public boolean equals(City other) {
