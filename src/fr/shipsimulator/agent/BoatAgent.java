@@ -49,6 +49,8 @@ public class BoatAgent extends Agent implements Constante {
 		int index = Integer.parseInt(this.getLocalName().replaceFirst("Boat", ""));
 		captain = new BoatCaptainAgent(this.getAID(), ea.getListCity().get(index).getCity());
 		observer = new BoatObserverAgent(this.getAID());
+		boat.addCrewMember(captain);
+		boat.addCrewMember(observer);
 		AgentController agCapitaine;
 		AgentController agObserver;
 		try {

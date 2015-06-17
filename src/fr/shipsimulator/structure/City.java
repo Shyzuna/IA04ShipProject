@@ -2,12 +2,21 @@ package fr.shipsimulator.structure;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
-public class City {
+import fr.shipsimulator.constantes.Constante;
+
+public class City implements Constante {
 	
 	private int posX;
 	private int posY;
 	private Map<Integer, Integer> resources;
+	
+	public City() {
+		for (int i = 0; i < Ressource.values().length; ++i) {
+			resources.put(i, new Random().nextInt((MAX_DEFAULT_RES - MIN_DEFAULT_RES) + 1) + MIN_DEFAULT_RES);
+		}					
+	}
 	
 	public Map<Integer, Integer> getResources() {
 		return resources;

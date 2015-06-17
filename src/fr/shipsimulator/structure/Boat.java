@@ -4,6 +4,7 @@ import jade.core.AID;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Random;
 
 import fr.shipsimulator.agent.boatCrew.BoatCrewAgent;
 import fr.shipsimulator.behaviour.CrewMemberDeathBehaviour;
@@ -473,6 +474,9 @@ public class Boat implements Constante {
 		actualDeckStorageNb = deckStorageNb;
 		actualDeckArmingNb = deckArmingNb;
 		actualCannonNb = cannonNb;
+		for (int i = 0; i < Ressource.values().length; ++i) {
+			resources.put(i, 0);
+		}
 	}
 	
 }

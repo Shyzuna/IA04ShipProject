@@ -57,8 +57,11 @@ public interface Constante {
 	double CREW_DEATH_DECK_DESTRUCTION_PROBABILITY = 0.4;
 	double CHAIN_EXPLOSION_PROBABILITY = 0.1;
 	
+	// City
+	int MAX_DEFAULT_RES = 50;
+	int MIN_DEFAULT_RES = 5;
 	
-	//OBSEREVRS
+	//OBSERVERS
 	public final int OBS_PORTEE = 3;
 	
 	// CAPITAIN
