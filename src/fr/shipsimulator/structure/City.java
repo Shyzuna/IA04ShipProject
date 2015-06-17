@@ -12,16 +12,13 @@ public class City implements Constante {
 	private int posY;
 	private Map<Integer, Integer> resources;
 	
-	public City() {
-		for (int i = 0; i < Ressource.values().length; ++i) {
-			resources.put(i, new Random().nextInt((MAX_DEFAULT_RES - MIN_DEFAULT_RES) + 1) + MIN_DEFAULT_RES);
-		}					
-	}
-	
 	public City(int x,int y){
 		this.posX = x;
 		this.posY = y;
 		resources = new HashMap<Integer, Integer>();
+		for (int i = 0; i < Ressource.values().length; ++i) {
+			resources.put(i, new Random().nextInt((MAX_DEFAULT_RES - MIN_DEFAULT_RES) + 1) + MIN_DEFAULT_RES);
+		}	
 	}
 	
 	public Map<Integer, Integer> getResources() {
