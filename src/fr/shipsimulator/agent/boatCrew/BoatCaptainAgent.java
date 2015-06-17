@@ -1,6 +1,7 @@
 package fr.shipsimulator.agent.boatCrew;
 
 import jade.core.AID;
+import fr.shipsimulator.behaviour.CaptainDirectionBehaviour;
 import fr.shipsimulator.behaviour.CaptainMissionBehaviour;
 import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.Mission;
@@ -18,8 +19,9 @@ public class BoatCaptainAgent extends BoatCrewAgent{
 	public void setup(){
 		this.addBehaviour(new CaptainMissionBehaviour());
 		
-		// Cr�e dans le CaptainMissionBehaviour
-		// this.addBehaviour(new CaptainDirectionBehaviour());
+		// Créé dans le CaptainMissionBehaviour
+		//this.addBehaviour(new CaptainDirectionBehaviour());
+		this.addBehaviour(new CaptainMissionBehaviour());
 		MainGui.writeLog("BoatCaptainAgent", this.getLocalName() + " prend les commandes");
 	}
 

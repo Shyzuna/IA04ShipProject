@@ -134,7 +134,7 @@ public class CaptainMissionBehaviour extends Behaviour{
 	private void askVoteToCrew(List<AID> crewMembers){		
 		ACLMessage crewRequest = new ACLMessage(ACLMessage.REQUEST);
 		
-		// Envoyer � tous les observer
+		// Envoyer à tous les observer
 		for (AID aid : crewMembers) {
 			crewRequest.addReceiver(aid);
 		}
