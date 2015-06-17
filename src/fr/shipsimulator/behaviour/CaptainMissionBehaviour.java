@@ -1,7 +1,6 @@
 package fr.shipsimulator.behaviour;
 
 import jade.core.AID;
-import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
@@ -15,7 +14,7 @@ import fr.shipsimulator.structure.City;
 import fr.shipsimulator.structure.GenericMessageContent;
 import fr.shipsimulator.structure.Mission;
 
-public class CaptainMissionBehaviour extends Behaviour{
+public class CaptainMissionBehaviour extends CrewMainBehaviour{
 	private static final long serialVersionUID = 1L;
 	
 	private enum State {NO_MISSION, MISSION_LIST_ASKED, OBS_LIST_ASKED, WAIT_FOR_VOTE, WAIT_FOR_CONFIRM, MISSION_OK};
@@ -25,15 +24,13 @@ public class CaptainMissionBehaviour extends Behaviour{
 	private Mission chosenMission;
 	private HashMap<Mission, Integer> missionVote;
 	private Integer nbElecteur, nbVotant;
-	
-	private City currentCity;
-	
+		
 	public CaptainMissionBehaviour() {
 		MainGui.writeLog("CaptainMissionBehaviour", "New Behaviour");
 		state = State.NO_MISSION;
 		
 		MainGui.writeLog("CaptainMissionBehaviour", "Demande des missions disponibles");
-		askAvailableMission(currentCity);
+		askAvailableMission(((BoatCaptainAgent) myAgent).getCityDeparture());
 		state = State.MISSION_LIST_ASKED;
 	}
 	
@@ -97,7 +94,7 @@ public class CaptainMissionBehaviour extends Behaviour{
 				if(msg.getPerformative() == ACLMessage.AGREE){
 					MainGui.writeLog("CaptainMissionBehaviour", "Mission choisie !");			
 					((BoatCaptainAgent) myAgent).setCurrentMission(chosenMission);
-					myAgent.addBehaviour(new CaptainDirectionBehaviour(myAgent, currentCity));
+					myAgent.addBehaviour(new CaptainDirectionBehaviour(myAgent));
 					state = State.MISSION_OK;
 				}
 				else{
@@ -123,18 +120,11 @@ public class CaptainMissionBehaviour extends Behaviour{
 		missionRequest.setContent("MissionListRequest");
 		myAgent.send(missionRequest);
 	}
-	
-	private void askForCrewMembers(){
-		ACLMessage memberRequest = new ACLMessage(ACLMessage.REQUEST);
-		memberRequest.addReceiver(((BoatCaptainAgent) myAgent).getMyBoat());
-		memberRequest.setContent("CrewListRequest");
-		myAgent.send(memberRequest);
-	}
-	
+		
 	private void askVoteToCrew(List<AID> crewMembers){		
 		ACLMessage crewRequest = new ACLMessage(ACLMessage.REQUEST);
 		
-		// Envoyer ï¿½ tous les observer
+		// Envoyer à tous les observer
 		for (AID aid : crewMembers) {
 			crewRequest.addReceiver(aid);
 		}

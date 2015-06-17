@@ -1,6 +1,8 @@
 package fr.shipsimulator.constantes;
 
 public interface Constante {
+	// DIRECTION CSTS 
+	public enum Direction{N, NE, E, SE, S, SO, O, NO};
 	
 	//ACTION
 	int QUIT = 0;
