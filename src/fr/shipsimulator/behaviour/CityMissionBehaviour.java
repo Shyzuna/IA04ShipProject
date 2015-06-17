@@ -19,9 +19,9 @@ public class CityMissionBehaviour extends TickerBehaviour {
 	}
 	
 	protected void onTick() {
-		Integer type = 0;
-		Integer quantity = 1;
-		city.getNeeds(type, quantity);
+		int[] needs = city.getNeeds();
+		Integer type = needs[0];
+		Integer quantity = needs[1];
 		// Envoie un message � l'agent mission pour signifier les besoins
 		MainGui.writeLog("City Agent", this.myAgent.getLocalName() + " needs " + quantity + " of " + type);
 		ACLMessage request = new ACLMessage(ACLMessage.PROPOSE);

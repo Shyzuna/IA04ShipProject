@@ -68,7 +68,8 @@ public class City implements Constante {
 		return (posX == other.getPosX() && posY == other.getPosY());
 	}
 
-	public void getNeeds(Integer type, Integer quantity) {
+	public int[] getNeeds() {
+		int[] needs = new int[2];
 		int minType = 0;
 		int minQuant = -1;
 		for (int i = 0; i < resources.size(); ++i) {
@@ -85,8 +86,9 @@ public class City implements Constante {
 		}
 		int min = minQuant < MIN_DEFAULT_RES ? MIN_DEFAULT_RES - minQuant : 1;
 		int max = MAX_DEFAULT_RES - minQuant;
-		type = minType;
-		quantity = new Random().nextInt((max - min) + 1) + min;
+		needs[0] = minType;
+		needs[1] = new Random().nextInt((max - min) + 1) + min;
+		return needs;
 	}
 	
 }
