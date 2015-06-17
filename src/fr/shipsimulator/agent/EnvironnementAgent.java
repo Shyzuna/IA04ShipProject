@@ -241,6 +241,7 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 	private void startSimulation(){
 		if(this.stateSimulation == STOP){
 			this.stateSimulation = RUNNING;
+			MainGui.clearLog();
 			MainGui.writeLog("Env", "Start Simulation");
 			fillMapData(MAP_PATH);
 			int x,y;

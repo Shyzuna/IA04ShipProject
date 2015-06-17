@@ -382,7 +382,16 @@ public class MainGui extends Application implements Runnable{
 		Platform.runLater(new Runnable(){
 			@Override
 			public void run() {
-				logArea.setText(logArea.getText() + "\n"+author+">"+content);
+				logArea.setText(logArea.getText()+author+">"+content + "\n");
+			}
+		});
+	}
+	
+	public static void clearLog(){
+		Platform.runLater(new Runnable(){
+			@Override
+			public void run() {
+				logArea.setText("");
 			}
 		});
 	}
