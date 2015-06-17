@@ -22,9 +22,7 @@ public class BoatCaptainAgent extends BoatCrewAgent{
 	
 	public void setup(){
 		this.addBehaviour(new CaptainMissionBehaviour());
-		
-		// Crée dans le CaptainMissionBehaviour
-		// this.addBehaviour(new CaptainDirectionBehaviour());
+		// NB: CaptainDirectionBehaviour crée à la fin du CaptainMissionBehaviour
 		MainGui.writeLog("BoatCaptainAgent", this.getLocalName() + " prend les commandes");
 	}
 	

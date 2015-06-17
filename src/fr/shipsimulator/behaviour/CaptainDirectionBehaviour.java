@@ -16,19 +16,12 @@ import fr.shipsimulator.structure.City;
 
 public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 	private static final long serialVersionUID = 1L;
-
-	private enum State {PAUSE, OBS_LIST_ASKED, WAIT_ALL_OBSERVATIONS, DIRECTION_SENDED};
-	
-	private State state;
-	
-	
-	private List<AID> crewMembers;
-	private Integer cptObsResponse;
-	
+		
 	private City departure;
 	private City destination;
 	
 	private Direction lastDirection;
+	private Integer cptObsResponse;
 	
 	public CaptainDirectionBehaviour(Agent a) {
 		MainGui.writeLog("CaptainDirectionBehaviour", "New Behaviour");

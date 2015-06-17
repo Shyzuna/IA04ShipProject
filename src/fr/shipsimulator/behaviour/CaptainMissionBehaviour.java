@@ -16,11 +16,7 @@ import fr.shipsimulator.structure.Mission;
 
 public class CaptainMissionBehaviour extends CrewMainBehaviour{
 	private static final long serialVersionUID = 1L;
-	
-	private enum State {NO_MISSION, MISSION_LIST_ASKED, OBS_LIST_ASKED, WAIT_FOR_VOTE, WAIT_FOR_CONFIRM, MISSION_OK};
 
-	private State state;
-	
 	private Mission chosenMission;
 	private HashMap<Mission, Integer> missionVote;
 	private Integer nbElecteur, nbVotant;

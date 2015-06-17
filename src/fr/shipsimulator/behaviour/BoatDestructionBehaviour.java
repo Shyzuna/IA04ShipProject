@@ -19,8 +19,7 @@ public class BoatDestructionBehaviour extends TickerBehaviour {
 	
 	protected void onTick() {
 		if (boat.isDestroyed()) {
-			ACLMessage request = new ACLMessage();
-			request.setPerformative(ACLMessage.INFORM);
+			ACLMessage request = new ACLMessage(ACLMessage.INFORM);
 			request.addReceiver(new AID("Environnement", AID.ISLOCALNAME));
 			request.setContent("BoatDestroyed");
 			myAgent.send(request);

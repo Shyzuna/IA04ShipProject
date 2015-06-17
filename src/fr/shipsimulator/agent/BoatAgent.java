@@ -11,6 +11,7 @@ import fr.shipsimulator.behaviour.BoatMovingBehaviour;
 import fr.shipsimulator.constantes.Constante;
 import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.Boat;
+import fr.shipsimulator.structure.City;
 import fr.shipsimulator.structure.Player;
 
 public class BoatAgent extends Agent implements Constante {
@@ -32,8 +33,6 @@ public class BoatAgent extends Agent implements Constante {
 
 	public BoatAgent(int x, int y){
 		this.boat = new Boat(new Player(), x, y);
-		captain = new BoatCaptainAgent(this.getAID());
-		observer = new BoatObserverAgent(this);
 	}
 	
 	public void setup() {
@@ -43,8 +42,9 @@ public class BoatAgent extends Agent implements Constante {
 		this.addBehaviour(new BoatCrewListBehaviour(this));
 		this.addBehaviour(new BoatFightingBehaviour(this));
 		this.addBehaviour(new BoatExchangeBehaviour(this));
-		new BoatCaptainAgent(this.getAID());
-		new BoatObserverAgent(this);
+		//TODO: Passer la vraie ville
+		captain = new BoatCaptainAgent(this.getAID(), new City(0, 0));
+		observer = new BoatObserverAgent(this.getAID());
 	}
 
 }

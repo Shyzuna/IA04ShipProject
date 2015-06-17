@@ -1,11 +1,11 @@
 package fr.shipsimulator.agent;
 
+import jade.core.Agent;
 import fr.shipsimulator.behaviour.CityExchangeBehaviour;
 import fr.shipsimulator.behaviour.CityMissionBehaviour;
 import fr.shipsimulator.constantes.Constante;
 import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.City;
-import jade.core.Agent;
 
 public class CityAgent extends Agent implements Constante {
 	private static final long serialVersionUID = 1L;
