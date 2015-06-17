@@ -12,6 +12,7 @@ import fr.shipsimulator.agent.boatCrew.BoatCaptainAgent;
 import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.City;
 import fr.shipsimulator.structure.GenericMessageContent;
+import fr.shipsimulator.structure.MessageContent;
 import fr.shipsimulator.structure.Mission;
 
 public class CaptainMissionBehaviour extends CrewMainBehaviour{
@@ -105,8 +106,10 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 	private void askAvailableMission(City city){		
 		ACLMessage missionRequest = new ACLMessage(ACLMessage.REQUEST);
 		missionRequest.addReceiver(new AID("Mission", AID.ISLOCALNAME));
-		missionRequest.setContent(MissionlistRequestPatern);
-		// TODO: Voir avec Ines pour le format, la ca va pas ce qu'elle attend
+		MessageContent mc = new MessageContent();
+		mc.content.add(this.myAgent.getCityDeparture().getPosX());
+		mc.content.add(this.myAgent.getCityDeparture().getPosY());
+		missionRequest.setContent(mc.serialize());
 		myAgent.send(missionRequest);
 	}
 		

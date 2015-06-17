@@ -33,6 +33,7 @@ public class MissionAgent extends Agent {
 	
 	public void resetMissions(){
 		missions.clear();
+		Mission.resetId();
 	}
 	
 	public EnvironnementAgent getEnvironnementAgent(){

@@ -73,13 +73,12 @@ public class MissionBehaviour extends Behaviour {
 				List<Mission> missions = ma.getMissions();
 				GenericMessageContent gmc= new GenericMessageContent();
 				if(msg.getPerformative() == ACLMessage.REQUEST && msg.getContent() != null){
-					//le message contient le nom de la ville dont on veut les missions
-					// TODO: ByGuillaume: Ca ne peut pas marcher, je travail pas avec des agent ville
-					// TODO: Je ne peux te filer que des coordonnee de la ville en x et Y 
-					City nextTo = ma.getEnvironnementAgent().getCityAgentByName(msg.getContent()).getCity();
-					for(int i = 0; i < missions.size(); i++){
-						if(missions.get(i).getDeparture().equals(nextTo)){
-							gmc.content.add(missions.get(i));
+					List<Integer> coord = gmc.deserialize(msg.getContent());
+					List<CityAgent> cities = this.ma.getEnvironnementAgent().getListCity();
+					City nextTo = new City(coord.get(0), coord.get(1));
+					for(Mission mission : missions){
+						if(mission.getDeparture().equals(nextTo)){
+							gmc.content.add(mission);
 						}
 					}
 					ACLMessage reply = msg.createReply();
@@ -91,8 +90,8 @@ public class MissionBehaviour extends Behaviour {
 					//le message contient la mission choisie
 					Mission chosen = (Mission)gmc.deserialize(msg.getContent()).get(0);
 					boolean stillAvailable = false;
-					for(int i = 0; i < missions.size(); i++){
-						if(missions.get(i).equals(chosen)){
+					for(Mission mission : missions){
+						if(mission.equals(chosen)){
 							stillAvailable = true;
 							break;
 						}
