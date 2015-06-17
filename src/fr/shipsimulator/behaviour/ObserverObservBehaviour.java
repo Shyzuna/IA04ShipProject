@@ -15,12 +15,11 @@ public class ObserverObservBehaviour extends CrewMainBehaviour{
 
 	private final Integer porteeObs;
 	
-	private int[][] vision;
+	
 	
 	public ObserverObservBehaviour(BoatCrewAgent ag) {
 		super(ag);
 		porteeObs = OBS_PORTEE;
-		this.vision = new int[2 * porteeObs + 1][2 * porteeObs + 1];
 	}
 	
 	@Override
@@ -28,23 +27,17 @@ public class ObserverObservBehaviour extends CrewMainBehaviour{
 		MessageTemplate mt;
 		ACLMessage msg;
 		
-		mt = new MessageTemplate(new SuroundingEnvironnementResponse());
+		mt = new MessageTemplate(new ObserveRequest());
 		msg = myAgent.receive(mt);
 		if (msg != null) {
-			List<Integer> surrounding = new GenericMessageContent<Integer>().deserialize(msg.getContent());
-			
-			for(int i = 0; i < 2 * porteeObs + 1; i++){
-				for(int j = 0; j < 2 * porteeObs + 1; j++){
-					vision[i][j] = surrounding.get(2*i*porteeObs + j);
-				}
-			}
+			List<Point> pos = new GenericMessageContent<Point>().deserialize(msg.getContent());
+			askSuroundingEnvironnement(pos.get(0));
 		}
 		else{
-			mt = new MessageTemplate(new ObserveRequest());
+			mt = new MessageTemplate(new SuroundingEnvironnementResponse());
 			msg = myAgent.receive(mt);
 			if (msg != null) {
-				List<Point> pos = new GenericMessageContent<Point>().deserialize(msg.getContent());
-				askSuroundingEnvironnement(pos.get(0));
+				transfertObservToCaptain(msg);
 			}
 			else block();
 		}
@@ -61,5 +54,11 @@ public class ObserverObservBehaviour extends CrewMainBehaviour{
 		
 		envRequest.setContent(pos.serialize());
 		myAgent.send(envRequest);
+	}
+	
+	private void transfertObservToCaptain(ACLMessage msg){
+		ACLMessage obsResponse = new ACLMessage(ACLMessage.INFORM);
+		obsResponse.setContent(ObservationResponsePattern + msg.getContent());
+		myAgent.send(obsResponse);
 	}
 }

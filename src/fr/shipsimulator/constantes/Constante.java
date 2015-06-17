@@ -63,6 +63,7 @@ public interface Constante {
 	
 	//OBSERVERS
 	public final int OBS_PORTEE = 3;
+	public final int MAX_OBS_PORTEE = 10;
 	
 	// CAPITAIN
 	public enum TypeCommerce{ACHAT, VENTE};
