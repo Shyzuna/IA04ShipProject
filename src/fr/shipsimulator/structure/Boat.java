@@ -42,6 +42,7 @@ public class Boat implements Constante {
 		this.posY = posY;
 		destroyed = false;
 		resources = new HashMap<Integer, Integer>();
+		crewMembers = new ArrayList<BoatCrewAgent>();
 		initStats();
 		restoreActualStats();
 	}
