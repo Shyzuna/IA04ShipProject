@@ -20,13 +20,15 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 	private Mission chosenMission;
 	private HashMap<Mission, Integer> missionVote;
 	private Integer nbElecteur, nbVotant;
+	private BoatCaptainAgent myAgent;
 		
-	public CaptainMissionBehaviour() {
+	public CaptainMissionBehaviour(BoatCaptainAgent a) {
+		myAgent = a;
 		MainGui.writeLog("CaptainMissionBehaviour", "New Behaviour");
 		state = State.NO_MISSION;
 		
 		MainGui.writeLog("CaptainMissionBehaviour", "Demande des missions disponibles");
-		askAvailableMission(((BoatCaptainAgent) myAgent).getCityDeparture());
+		askAvailableMission(myAgent.getCityDeparture());
 		state = State.MISSION_LIST_ASKED;
 	}
 	
@@ -119,7 +121,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 		
 	private void askVoteToCrew(List<AID> crewMembers){		
 		ACLMessage crewRequest = new ACLMessage(ACLMessage.REQUEST);
-		// Envoyer à tous les observer
+		// Envoyer ï¿½ tous les observer
 		for (AID aid : crewMembers) {
 			crewRequest.addReceiver(aid);
 		}
