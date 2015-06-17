@@ -18,7 +18,7 @@ public class BoatObserverAgent extends BoatCrewAgent{
 	public void setup(){
 		this.addBehaviour(new ObserverVoteBehaviour(this));
 		this.addBehaviour(new ObserverObservBehaviour(this));
-		MainGui.writeLog("BoatObserverAgent", this.getLocalName() + " prend les commandesready");
+		MainGui.writeLog("BoatObserverAgent", this.getLocalName() + " prend les commandes");
 	}
 	
 	public BoatAgent getBoatAgent(){
