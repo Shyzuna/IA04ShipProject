@@ -21,7 +21,7 @@ public class ObserverVoteBehaviour extends CrewMainBehaviour{
 	public void action() {
 		MessageTemplate mt;
 		ACLMessage msg;
-		mt = new MessageTemplate(new MissionCrewAsk());
+		mt = new MessageTemplate(new MissionCrewRequest());
 		msg = myAgent.receive(mt);
 		if(msg != null){
 			Mission missionChoosed = null;
