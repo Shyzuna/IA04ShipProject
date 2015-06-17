@@ -23,10 +23,10 @@ public class BoatFightingBehaviour extends CyclicBehaviour {
 	public void action() {
 		MessageTemplate mt = new MessageTemplate(new TakingDamageInform());
 		ACLMessage inform = myAgent.receive(mt);
-		//CYCLIC// 4. Engager un combat sur demande d'environnement (subir des dégats)
+		//CYCLIC// 4. Engager un combat sur demande d'environnement (subir des dï¿½gats)
 				// -> recevoir d'env le nombre d'impacts et les degats
 		if (inform != null) {
-			String [] split = inform.getContent().split("$:!");
+			String [] split = inform.getContent().split("\\$:!");
 			Boolean correctReq = false;
 			if (split[1] != null) {
 				List<Integer> reqDamage = new GenericMessageContent<Integer>().deserialize(split[1]);
@@ -46,10 +46,10 @@ public class BoatFightingBehaviour extends CyclicBehaviour {
 		
 		MessageTemplate mt2 = new MessageTemplate(new FightingRequest());
 		ACLMessage request = myAgent.receive(mt2);
-		// Attendre des ordres de l'équipe sur demande
-			// 1.1 Attendre un ordre de combat -> simuler attaque, communiquer à env le bateau concerné, nombre impacts et dégats
+		// Attendre des ordres de l'ï¿½quipe sur demande
+			// 1.1 Attendre un ordre de combat -> simuler attaque, communiquer ï¿½ env le bateau concernï¿½, nombre impacts et dï¿½gats
 		if (request != null) {
-			String [] split = inform.getContent().split("$:!");
+			String [] split = inform.getContent().split("\\$:!");
 			Boolean correctInf = false;
 			int impactCount = 0;
 			int damageGiven = 0;

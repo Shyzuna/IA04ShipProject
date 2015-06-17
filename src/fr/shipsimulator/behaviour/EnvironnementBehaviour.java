@@ -69,7 +69,7 @@ public class EnvironnementBehaviour extends Behaviour {
 			}
 			else if(sender.getLocalName().matches("Boat(\\d)*")){
 				if(msg.getPerformative() == ACLMessage.REQUEST && msg.getContent() != null){
-					List<Integer> recu = MessageContent.deserialize(msg.getContent().split("$:!")[1]);
+					List<Integer> recu = MessageContent.deserialize(msg.getContent().split("\\$:!")[1]);
 					int oldPosX = recu.get(0);
 					int oldPosY = recu.get(1);
 					int newPosX = recu.get(2);

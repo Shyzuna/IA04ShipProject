@@ -21,13 +21,13 @@ public class BoatExchangeBehaviour extends CyclicBehaviour {
 	}
 	
 	public void action() {
-		// Après l'échange le capitaine informe le bateau des changements effectués dans la cargaison
-		// Le capitaine envoie ExchangeInform séparateur deux integer (type + quantité), quantité peut être négatif
-		// On met ici à jour l'objet boat avec les changements de cargaison
+		// Aprï¿½s l'ï¿½change le capitaine informe le bateau des changements effectuï¿½s dans la cargaison
+		// Le capitaine envoie ExchangeInform sï¿½parateur deux integer (type + quantitï¿½), quantitï¿½ peut ï¿½tre nï¿½gatif
+		// On met ici ï¿½ jour l'objet boat avec les changements de cargaison
 		MessageTemplate mt = new MessageTemplate(new ExchangeInform());
 		ACLMessage request = myAgent.receive(mt);
 		if (request != null) {
-			String [] split = request.getContent().split("$:!");
+			String [] split = request.getContent().split("\\$:!");
 			if (split[1] != null) {
 				List<Integer> reqExchange = new GenericMessageContent<Integer>().deserialize(split[1]);
 				if (reqExchange.size() == 2) {
