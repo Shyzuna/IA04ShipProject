@@ -31,11 +31,14 @@ public class MissionBehaviour extends Behaviour {
 			AID sender = msg.getSender();
 			if(sender.getName().matches("City(\\d)*")){
 				if(msg.getPerformative() == ACLMessage.PROPOSE && msg.getContent() != null){
-					List<Integer> recu = MessageContent.deserialize(msg.getContent());
+					String [] recuTot = msg.getContent().split("$:!");
+					List<Integer> recu = MessageContent.deserialize(recuTot[1]);
+					GenericMessageContent<AID> mcAid = new GenericMessageContent<AID>();
+					AID citySender = mcAid.deserialize(recuTot[0]).get(0);
 					ACLMessage reply = msg.createReply();
 					Random rand = new Random();
 					List<CityAgent> cities = ma.getEnvironnementAgent().getListCity();
-					City arrival =  ma.getEnvironnementAgent().getCityAgentByName("City" + recu.get(0)).getCity(); //comment trouver cette info ?
+					City arrival =  ma.getEnvironnementAgent().getCityAgentByName(citySender.getName()).getCity(); //comment trouver cette info ?
 					if(arrival == null){
 						reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
 					}

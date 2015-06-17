@@ -1,6 +1,7 @@
 package fr.shipsimulator.behaviour;
 
 import fr.shipsimulator.agent.BoatAgent;
+import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.Boat;
 import fr.shipsimulator.structure.GenericMessageContent;
 import jade.core.AID;
@@ -29,6 +30,7 @@ public class BoatCrewListBehaviour extends CyclicBehaviour {
 				mc.content.add(aid);
 			}
 			reply.setContent("CrewListResponse$:!" + mc.serialize());
+			MainGui.writeLog("Boat Agent", this.myAgent.getName() + " sends crew list");
 			myAgent.send(reply);
 		}
 		block();

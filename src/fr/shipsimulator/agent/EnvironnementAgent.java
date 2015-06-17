@@ -16,8 +16,7 @@ import fr.shipsimulator.behaviour.EnvironnementBehaviour;
 import fr.shipsimulator.constantes.Constante;
 import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.City;
-import fr.shipsimulator.structure.Mission;
-import fr.shipsimulator.structure.Ressource;
+
 /*
  * TODO : CHANGE DEFAULT COL/ROW to current and location of mapData init
  */
@@ -165,7 +164,7 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 	}
 	
 	public void printDataMap(){
-	//affichage pour vï¿½rification
+	//affichage pour vérification
 			for(int i = 0; i < MainGui.getRows(); i++){
 				for(int j = 0; j < MainGui.getCols(); j++){
 					if(this.mapData[j][i] == LAND)
@@ -213,6 +212,7 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 			MainGui.writeLog("Env", "Suspend Simulation");
 			this.stateSimulation = Constante.SUSPEND;
 			for(BoatAgent ba : listBoat){
+				ba.suspendBoat(); //suspend crewmember
 				ba.doSuspend();
 			}
 			for(CityAgent ca : listCity){
@@ -226,6 +226,7 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 			MainGui.writeLog("Env", "Stop Simulation");
 			this.stateSimulation = STOP;
 			for(BoatAgent ba : listBoat){
+				ba.stopBoat(); //delete crewmember
 				ba.doDelete();
 			}
 			this.listBoat.clear();
@@ -301,6 +302,7 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 			MainGui.writeLog("Env", "ReStart Simulation");
 			this.stateSimulation = RUNNING;
 			for(BoatAgent ba : listBoat){
+				ba.activateBoat(); //activate crewmember
 				ba.doActivate();
 			}
 			for(CityAgent ca : listCity){

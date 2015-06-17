@@ -16,7 +16,6 @@ public class ObserverObservBehaviour extends Behaviour implements Constante{
 
 	private final Integer porteeObs;
 	
-	private Point currentposition;
 	private int[][] vision;
 	
 	public ObserverObservBehaviour() {
@@ -49,13 +48,13 @@ public class ObserverObservBehaviour extends Behaviour implements Constante{
 		return false;
 	}
 	
-	private void askSuroundingEnvironnement(){
+	private void askSuroundingEnvironnement(Point p){
 		ACLMessage envRequest = new ACLMessage(ACLMessage.REQUEST);
 
 		envRequest.addReceiver(new AID("Environnement", AID.ISLOCALNAME));
 		GenericMessageContent<Integer> pos = new GenericMessageContent<Integer>();
-		pos.content.add((int) currentposition.getX());
-		pos.content.add((int) currentposition.getY());
+		pos.content.add((int) p.getX());
+		pos.content.add((int) p.getY());
 		pos.content.add(porteeObs);
 		
 		envRequest.setContent(pos.serialize());
