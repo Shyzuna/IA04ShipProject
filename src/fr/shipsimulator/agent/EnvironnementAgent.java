@@ -298,7 +298,6 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 					e.printStackTrace();
 				}
 			}
-			
 		} else if(this.stateSimulation == SUSPEND){
 			MainGui.writeLog("Env", "ReStart Simulation");
 			this.stateSimulation = RUNNING;

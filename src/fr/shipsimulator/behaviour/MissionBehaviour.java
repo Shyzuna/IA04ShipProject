@@ -96,6 +96,7 @@ public class MissionBehaviour extends Behaviour {
 					for(Mission mission : missions){
 						if(mission.equals(chosen)){
 							stillAvailable = true;
+							missions.remove(mission);
 							break;
 						}
 					}
