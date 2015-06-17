@@ -5,27 +5,26 @@ import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-
-import java.util.List;
-
 import fr.shipsimulator.agent.boatCrew.BoatCaptainAgent;
+import fr.shipsimulator.agent.boatCrew.BoatCrewAgent;
 import fr.shipsimulator.constantes.Constante;
-import fr.shipsimulator.constantes.Constante.Direction;
 import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.City;
 
 public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 	private static final long serialVersionUID = 1L;
-		
+	
+	
+	
 	private City departure;
 	private City destination;
 	
 	private Direction lastDirection;
 	private Integer cptObsResponse;
 	
-	private BoatCaptainAgent myAgent;
-	
-	public CaptainDirectionBehaviour(BoatCaptainAgent a) {
+	public CaptainDirectionBehaviour(BoatCrewAgent ag) {
+		super(ag);
+
 		MainGui.writeLog("CaptainDirectionBehaviour", "New Behaviour");
 		this.departure =  myAgent.getCityDeparture();	
 		this.cptObsResponse = 0;
@@ -54,42 +53,26 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 			}
 		}
 		else if(state == State.DIRECTION_SENDED){
-			
+			mt = new MessageTemplate(new DirectionResponse());
+			msg = myAgent.receive(mt);
+			if (msg != null) {
+				
+			}
 		}
-		
-		// Recolter rï¿½sultats observateurs
-		
-		//
-	}
-
-	@Override
-	public boolean done() {
-		return done;
-	}
-		
-	private void askVoteToCrew(List<AID> crewMembers){		
-		ACLMessage crewRequest = new ACLMessage(ACLMessage.REQUEST);
-		
-		// Envoyer ï¿½ tous les observer
-		for (AID aid : crewMembers) {
-			crewRequest.addReceiver(aid);
-		}
-		
-		// Creer liste des missions		
-		crewRequest.setContent("ObservRequest");
-		myAgent.send(crewRequest);
 	}
 	
 	private void askForObservation(){
+		ACLMessage obsRequest = new ACLMessage(ACLMessage.REQUEST);
+
+		// Envoyer à tous les observer
+		for (AID aid : crewMembers) obsRequest.addReceiver(aid);
 		
+		// Creer liste des missions		
+		obsRequest.setContent("ObservRequest");
+		myAgent.send(obsRequest);
 	}
 	
-	private class ObservationResponse implements MessageTemplate.MatchExpression {
-		private static final long serialVersionUID = 1L;
-		public boolean match(ACLMessage msg) {
-	    	return msg.getContent().matches("ObservationResponse:(.*)") && msg.getPerformative() == ACLMessage.INFORM;
-	    }
-	}
+	
 	
 	// CADENCEUR
 	public class CaptainTickerBehaviour extends TickerBehaviour implements Constante{
