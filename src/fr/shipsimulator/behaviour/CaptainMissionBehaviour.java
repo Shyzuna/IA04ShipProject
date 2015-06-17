@@ -38,7 +38,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 		ACLMessage msg;
 		
 		if(state == State.MISSION_LIST_ASKED){
-			mt = new MessageTemplate(new MissionResponse());
+			mt = new MessageTemplate(new MissionListResponse());
 			msg = myAgent.receive(mt);
 			if (msg != null) {
 				missionVote = new HashMap<Mission, Integer>();
@@ -48,7 +48,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 					missionVote.put(mission, 0);
 				}
 				
-				MainGui.writeLog("CaptainMissionBehaviour", "Demande de la liste d'équipage");
+				MainGui.writeLog("CaptainMissionBehaviour", "Demande de la liste d'équipage pour vote");
 				askForCrewMembers();
 				state = State.OBS_LIST_ASKED;				
 			}
@@ -57,8 +57,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 			mt = new MessageTemplate(new CrewListResponse());
 			msg = myAgent.receive(mt);
 			if (msg != null) {
-				String rsp = msg.getContent().split("CrewListResponse")[0];
-				List<AID> crewMembers = new GenericMessageContent<AID>().deserialize(rsp);
+				List<AID> crewMembers = new GenericMessageContent<AID>().deserialize(msg.getContent());
 				nbElecteur = crewMembers.size();
 				
 				MainGui.writeLog("CaptainMissionBehaviour", "Vote pour choisir une mission");
@@ -70,11 +69,11 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 			mt = new MessageTemplate(new MissionCrewResponse());
 			msg = myAgent.receive(mt);
 			if (msg != null) {
-				String rsp = msg.getContent().split("MissionCrewResponse")[0];
-				Mission chosenMission = new GenericMessageContent<Mission>().deserialize(rsp).get(0);
+				Mission chosenMission = new GenericMessageContent<Mission>().deserialize(msg.getContent()).get(0);
 				for(Entry<Mission, Integer> entry : missionVote.entrySet()) {
 					if(entry.getKey().getId() == chosenMission.getId()){
 				    	entry.setValue(entry.getValue() + 1);
+				    	nbVotant++;
 				    }
 				}
 				if(nbVotant >= nbElecteur){
@@ -90,27 +89,20 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 			if (msg != null) {				
 				if(msg.getPerformative() == ACLMessage.AGREE){
 					MainGui.writeLog("CaptainMissionBehaviour", "Mission choisie !");			
-					((BoatCaptainAgent) myAgent).setCurrentMission(chosenMission);
+					myAgent.setCurrentMission(chosenMission);
 					myAgent.addBehaviour(new CaptainCommerceBehaviour(myAgent, TypeCommerce.ACHAT));
-					state = State.MISSION_OK;
 				}
-				else{
-					state = State.NO_MISSION;
-					
+				else{					
 					MainGui.writeLog("CaptainMissionBehaviour", "La mission n'est plus dispo, on recommence");
-					askAvailableMission(new City(0, 0));
-					state = State.MISSION_LIST_ASKED;
+					// Nouveau behaviour pour recommencer le choix et suppreesion de celui-ci
+					myAgent.addBehaviour(new CaptainMissionBehaviour(myAgent));
 				}
+				done = true;
 			}
 		}
 		block();
 	}
 
-	@Override
-	public boolean done() {
-		return false;
-	}	
-	
 	private void askAvailableMission(City city){		
 		ACLMessage missionRequest = new ACLMessage(ACLMessage.REQUEST);
 		missionRequest.addReceiver(new AID("Mission", AID.ISLOCALNAME));
@@ -155,33 +147,5 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 
 		missionRequest.setContent("Observer" + mission.serialize());
 		myAgent.send(missionRequest);
-	}
-		
-	private class MissionResponse implements MessageTemplate.MatchExpression {
-		private static final long serialVersionUID = 1L;
-		public boolean match(ACLMessage msg) {
-	    	return msg.getContent().matches("MissionResponse(.*)") && msg.getPerformative() == ACLMessage.INFORM;
-	    }
-	}
-	
-	private class CrewListResponse implements MessageTemplate.MatchExpression {
-		private static final long serialVersionUID = 1L;
-		public boolean match(ACLMessage msg) {
-	    	return msg.getContent().matches("CrewListResponse(.*)") && msg.getPerformative() == ACLMessage.INFORM;
-	    }
-	}
-	
-	private class MissionCrewResponse implements MessageTemplate.MatchExpression {
-		private static final long serialVersionUID = 1L;
-		public boolean match(ACLMessage msg) {
-	    	return msg.getContent().matches("MissionCrewResponse(.*)") && msg.getPerformative() == ACLMessage.CONFIRM;
-	    }
-	}
-	
-	private class MissionConfirmeResponse implements MessageTemplate.MatchExpression {
-		private static final long serialVersionUID = 1L;
-		public boolean match(ACLMessage msg) {
-	    	return msg.getContent().matches("MissionConfirmeResponse(.*)") && msg.getPerformative() == ACLMessage.CONFIRM;
-	    }
 	}
 }
