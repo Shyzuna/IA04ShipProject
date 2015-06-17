@@ -24,6 +24,7 @@ public class BoatAgent extends Agent implements Constante {
 	private Boat boat;
 	private BoatCaptainAgent captain;
 	private BoatObserverAgent observer;
+	private EnvironnementAgent ea;
 	
 	public Boat getBoat() {
 		return boat;
@@ -33,22 +34,21 @@ public class BoatAgent extends Agent implements Constante {
 		this.boat = boat;
 	}
 
-	public BoatAgent(int x, int y){
+	public BoatAgent(int x, int y, EnvironnementAgent env){
 		this.boat = new Boat(new Player(), x, y);
+		ea = env;
 	}
 	
 	public void setup() {
 		MainGui.writeLog("Boat Agent", "New boat : "+ this.getLocalName());
-		//TODO : créer agent captain
-		//captain = new BoatCaptainAgent(this.getAID());
-		observer = new BoatObserverAgent(this.getAID());
 		this.addBehaviour(new BoatMovingBehaviour(this));
 		this.addBehaviour(new BoatDestructionBehaviour(this, SIMULATION_TICK));
 		this.addBehaviour(new BoatCrewListBehaviour(this));
 		this.addBehaviour(new BoatFightingBehaviour(this));
 		this.addBehaviour(new BoatExchangeBehaviour(this));
 		//TODO: Passer la vraie ville
-		captain = new BoatCaptainAgent(this.getAID(), new City(0, 0));
+		int index = Integer.parseInt(this.getLocalName().replaceFirst("Boat", ""));
+		captain = new BoatCaptainAgent(this.getAID(), ea.getListCity().get(index).getCity());
 		observer = new BoatObserverAgent(this.getAID());
 		AgentController agCapitaine;
 		AgentController agObserver;

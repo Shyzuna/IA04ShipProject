@@ -23,9 +23,11 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 	private Direction lastDirection;
 	private Integer cptObsResponse;
 	
-	public CaptainDirectionBehaviour(Agent a) {
+	private BoatCaptainAgent myAgent;
+	
+	public CaptainDirectionBehaviour(BoatCaptainAgent a) {
 		MainGui.writeLog("CaptainDirectionBehaviour", "New Behaviour");
-		this.departure = ((BoatCaptainAgent) myAgent).getCityDeparture();	
+		this.departure =  myAgent.getCityDeparture();	
 		this.cptObsResponse = 0;
 		
 		askForCrewMembers();
@@ -55,7 +57,7 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 			
 		}
 		
-		// Recolter résultats observateurs
+		// Recolter rï¿½sultats observateurs
 		
 		//
 	}
@@ -68,7 +70,7 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 	private void askVoteToCrew(List<AID> crewMembers){		
 		ACLMessage crewRequest = new ACLMessage(ACLMessage.REQUEST);
 		
-		// Envoyer à tous les observer
+		// Envoyer ï¿½ tous les observer
 		for (AID aid : crewMembers) {
 			crewRequest.addReceiver(aid);
 		}

@@ -164,7 +164,7 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 	}
 	
 	public void printDataMap(){
-	//affichage pour vérification
+	//affichage pour vï¿½rification
 			for(int i = 0; i < MainGui.getRows(); i++){
 				for(int j = 0; j < MainGui.getCols(); j++){
 					if(this.mapData[j][i] == LAND)
@@ -287,7 +287,7 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 					y = nextTo.getPosY() - 1;
 				}
 				AgentController agBoat;
-				BoatAgent ba = new BoatAgent(x,y);
+				BoatAgent ba = new BoatAgent(x,y, this);
 				mapData[x][y] = Constante.SHIP;
 				try {
 					agBoat = this.getContainerController().acceptNewAgent("Boat"+i, ba);
