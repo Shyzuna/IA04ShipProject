@@ -9,7 +9,6 @@ import java.util.List;
 
 import fr.shipsimulator.agent.EnvironnementAgent;
 import fr.shipsimulator.constantes.Constante;
-import fr.shipsimulator.structure.GenericMessageContent;
 import fr.shipsimulator.structure.MessageContent;
 
 public class EnvironnementBehaviour extends Behaviour {
