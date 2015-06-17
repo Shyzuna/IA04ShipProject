@@ -1,6 +1,8 @@
 package fr.shipsimulator.agent;
 
 import jade.core.Agent;
+import jade.wrapper.AgentController;
+import jade.wrapper.StaleProxyException;
 import fr.shipsimulator.agent.boatCrew.BoatCaptainAgent;
 import fr.shipsimulator.agent.boatCrew.BoatObserverAgent;
 import fr.shipsimulator.behaviour.BoatCrewListBehaviour;
@@ -45,6 +47,17 @@ public class BoatAgent extends Agent implements Constante {
 		//TODO: Passer la vraie ville
 		captain = new BoatCaptainAgent(this.getAID(), new City(0, 0));
 		observer = new BoatObserverAgent(this.getAID());
+		AgentController agCapitaine;
+		AgentController agObserver;
+		try {
+			agObserver = this.getContainerController().acceptNewAgent("Observeur_"+this.getLocalName(), observer);
+			agObserver.start();
+			agCapitaine = this.getContainerController().acceptNewAgent("Capitaine_"+this.getLocalName(), captain);
+			agCapitaine.start();
+		} catch (StaleProxyException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }
