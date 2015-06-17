@@ -26,8 +26,9 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 	private BoatCaptainAgent myAgent;
 	
 	public CaptainDirectionBehaviour(BoatCaptainAgent a) {
+		myAgent = a;
 		MainGui.writeLog("CaptainDirectionBehaviour", "New Behaviour");
-		this.departure =  myAgent.getCityDeparture();	
+		this.departure =  myAgent.getCityDeparture().getCity();	
 		this.cptObsResponse = 0;
 		
 		askForCrewMembers();

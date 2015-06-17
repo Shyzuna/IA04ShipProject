@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import fr.shipsimulator.agent.CityAgent;
 import fr.shipsimulator.agent.boatCrew.BoatCaptainAgent;
 import fr.shipsimulator.gui.MainGui;
-import fr.shipsimulator.structure.City;
 import fr.shipsimulator.structure.GenericMessageContent;
 import fr.shipsimulator.structure.Mission;
 
@@ -99,7 +99,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 					state = State.NO_MISSION;
 					
 					MainGui.writeLog("CaptainMissionBehaviour", "La mission n'est plus dispo, on recommence");
-					askAvailableMission(new City(0, 0));
+					askAvailableMission(myAgent.getCityDeparture());
 					state = State.MISSION_LIST_ASKED;
 				}
 			}
@@ -112,10 +112,10 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 		return false;
 	}	
 	
-	private void askAvailableMission(City city){		
+	private void askAvailableMission(CityAgent city){		
 		ACLMessage missionRequest = new ACLMessage(ACLMessage.REQUEST);
 		missionRequest.addReceiver(new AID("Mission", AID.ISLOCALNAME));
-		missionRequest.setContent("MissionListRequest");
+		missionRequest.setContent(city.getLocalName());
 		myAgent.send(missionRequest);
 	}
 		

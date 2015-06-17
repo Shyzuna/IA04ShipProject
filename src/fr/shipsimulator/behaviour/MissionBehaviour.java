@@ -9,6 +9,7 @@ import java.util.Random;
 
 import fr.shipsimulator.agent.CityAgent;
 import fr.shipsimulator.agent.MissionAgent;
+import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.City;
 import fr.shipsimulator.structure.GenericMessageContent;
 import fr.shipsimulator.structure.MessageContent;
@@ -29,16 +30,17 @@ public class MissionBehaviour extends Behaviour {
 		ACLMessage msg = ma.receive();
 		if(msg != null) {
 			AID sender = msg.getSender();
-			if(sender.getName().matches("City(\\d)*")){
+			if(sender.getLocalName().matches("City(\\d)*")){
 				if(msg.getPerformative() == ACLMessage.PROPOSE && msg.getContent() != null){
-					String [] recuTot = msg.getContent().split("$:!");
+					String [] recuTot = msg.getContent().split("\\$:!");
+					System.out.println(recuTot[0]);
 					List<Integer> recu = MessageContent.deserialize(recuTot[1]);
 					GenericMessageContent<AID> mcAid = new GenericMessageContent<AID>();
 					AID citySender = mcAid.deserialize(recuTot[0]).get(0);
 					ACLMessage reply = msg.createReply();
 					Random rand = new Random();
 					List<CityAgent> cities = ma.getEnvironnementAgent().getListCity();
-					City arrival =  ma.getEnvironnementAgent().getCityAgentByName(citySender.getName()).getCity(); //comment trouver cette info ?
+					City arrival =  ma.getEnvironnementAgent().getCityAgentByName(citySender.getLocalName()).getCity(); 
 					if(arrival == null){
 						reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
 					}
@@ -46,12 +48,12 @@ public class MissionBehaviour extends Behaviour {
 						City departure = cities.get(rand.nextInt(cities.size())).getCity();
 						Ressource res = Ressource.WOOD;
 						for (Ressource r : Ressource.values()) {
-							if(r.ordinal() == recu.get(1)){
+							if(r.ordinal() == recu.get(0)){
 								res = r;
 								break;
 							}
 						}
-						Mission m = new Mission(departure, arrival, res, recu.get(2));
+						Mission m = new Mission(departure, arrival, res, recu.get(1));
 						boolean missionAlreadyExists = false;
 						for(int i = 0; i < ma.getMissions().size(); i++){
 							if(ma.getMissions().get(i).equals(m)) {
@@ -64,13 +66,14 @@ public class MissionBehaviour extends Behaviour {
 						}
 						else {
 							ma.addMission(m);
+							MainGui.writeLog("Mission", "Nouvelle mission ajoutée : " + recu.get(1) + " " + res.name());
 							reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
 						}
 					}
 					ma.send(reply);
 				}
 			}
-			else if (sender.getName().matches("BoatCaptain(\\d)*")){
+			else if (sender.getLocalName().matches("Capitaine_Boat(\\d)*")){
 				List<Mission> missions = ma.getMissions();
 				GenericMessageContent gmc= new GenericMessageContent();
 				if(msg.getPerformative() == ACLMessage.REQUEST && msg.getContent() != null){

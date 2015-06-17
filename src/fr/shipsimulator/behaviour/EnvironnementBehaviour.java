@@ -25,7 +25,7 @@ public class EnvironnementBehaviour extends Behaviour {
 		ACLMessage msg = ea.receive();
 		if(msg != null) {
 			AID sender = msg.getSender();
-			if(sender.getName().matches("Observer(\\d)*")){
+			if(sender.getLocalName().matches("Observer(\\d)*")){
 				if(msg.getPerformative() == ACLMessage.REQUEST && msg.getContent() != null){
 					List<Integer> recu = MessageContent.deserialize(msg.getContent());
 					int posX = recu.get(0);
@@ -68,7 +68,7 @@ public class EnvironnementBehaviour extends Behaviour {
 					ea.send(reply);
 				}
 			}
-			else if(sender.getName().matches("Boat(\\d)*")){
+			else if(sender.getLocalName().matches("Boat(\\d)*")){
 				if(msg.getPerformative() == ACLMessage.REQUEST && msg.getContent() != null){
 					List<Integer> recu = MessageContent.deserialize(msg.getContent().split("$:!")[1]);
 					int oldPosX = recu.get(0);

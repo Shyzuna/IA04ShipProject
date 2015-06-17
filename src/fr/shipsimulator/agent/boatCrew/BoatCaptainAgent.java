@@ -1,7 +1,7 @@
 package fr.shipsimulator.agent.boatCrew;
 
 import jade.core.AID;
-import fr.shipsimulator.behaviour.CaptainDirectionBehaviour;
+import fr.shipsimulator.agent.CityAgent;
 import fr.shipsimulator.behaviour.CaptainMissionBehaviour;
 import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.City;
@@ -10,10 +10,10 @@ import fr.shipsimulator.structure.Mission;
 public class BoatCaptainAgent extends BoatCrewAgent{
 	private static final long serialVersionUID = 1L;
 	
-	private City cityDeparture;
+	private CityAgent cityDeparture;
 	private Mission	currentMission;
 	
-	public BoatCaptainAgent(AID boat, City city){
+	public BoatCaptainAgent(AID boat, CityAgent city){
 		super(boat);
 		this.cityDeparture = city;
 		
@@ -28,11 +28,11 @@ public class BoatCaptainAgent extends BoatCrewAgent{
 	}
 	
 	
-	public City getCityDeparture() {
+	public CityAgent getCityDeparture() {
 		return cityDeparture;
 	}
 
-	public void setCityDeparture(City cityDeparture) {
+	public void setCityDeparture(CityAgent cityDeparture) {
 		this.cityDeparture = cityDeparture;
 	}
 
