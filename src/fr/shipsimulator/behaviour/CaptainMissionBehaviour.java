@@ -88,7 +88,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 				if(msg.getPerformative() == ACLMessage.AGREE){
 					MainGui.writeLog("CaptainMissionBehaviour", "Mission choisie !");			
 					myAgent.setCurrentMission(chosenMission);
-					myAgent.addBehaviour(new CaptainCommerceBehaviour(myAgent, TypeCommerce.ACHAT));
+					//myAgent.addBehaviour(new CaptainCommerceBehaviour(myAgent, TypeCommerce.ACHAT));
 				}
 				else{					
 					MainGui.writeLog("CaptainMissionBehaviour", "La mission n'est plus dispo, on recommence");

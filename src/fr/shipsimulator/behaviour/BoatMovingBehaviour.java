@@ -25,7 +25,7 @@ public class BoatMovingBehaviour extends CyclicBehaviour {
 		MessageTemplate mt = new MessageTemplate(new MovingRequest());
 		ACLMessage request = myAgent.receive(mt);
 		if (request != null) {
-			String [] split = request.getContent().split("$:!");
+			String [] split = request.getContent().split("\\$:!");
 			Boolean correctReq = false;
 			MainGui.writeLog("BoatAgent", this.myAgent.getName() + " received a moving request");
 			if (split[1] != null) {
