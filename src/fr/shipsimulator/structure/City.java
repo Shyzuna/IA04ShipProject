@@ -71,29 +71,22 @@ public class City implements Constante {
 	public void getNeeds(Integer type, Integer quantity) {
 		int minType = 0;
 		int minQuant = -1;
-		int maxQuant = 0;
 		for (int i = 0; i < resources.size(); ++i) {
 			int quant = resources.get(i);
 			if (minQuant == -1) {
 				minType = i;
 				minQuant = quant;
-				maxQuant = quant;
 				continue;
 			}
 			if (quant < minQuant) {
 				minType = i;
 				minQuant = quant;
 			}
-			if (quant > maxQuant) {
-				maxQuant = quant;
-			}
 		}
-		int diff = maxQuant - minQuant;
-		if (diff == 0) {
-			diff = 1;
-		}
+		int min = minQuant < MIN_DEFAULT_RES ? MIN_DEFAULT_RES - minQuant : 1;
+		int max = MAX_DEFAULT_RES - minQuant;
 		type = minType;
-		quantity = diff;
+		quantity = new Random().nextInt((max - min) + 1) + min;
 	}
 	
 }
