@@ -42,6 +42,9 @@ public class MissionBehaviour extends Behaviour {
 					}
 					else {
 						City departure = cities.get(rand.nextInt(cities.size())).getCity();
+						while(departure.equals(arrival)){
+							departure = cities.get(rand.nextInt(cities.size())).getCity();
+						}
 						Ressource res = Ressource.WOOD;
 						for (Ressource r : Ressource.values()) {
 							if(r.ordinal() == recu.get(1)){

@@ -486,7 +486,7 @@ public class MainGui extends Application implements Runnable{
 				List<Mission> missions = myAgent.getMissionAgent().getMissions();
 				for(Mission m: missions){
 					if(m.getDeparture().equals(agent.getCity())){
-						statutGrid.addRow(rowIndex++, new Label("Mission" + m.getId()));
+						statutGrid.addRow(rowIndex++, new Label("Mission" + m.getId()), new Label("" + m.getResourceAmount() + " " + m.getRessource().name()));
 					}
 				}
 			}
