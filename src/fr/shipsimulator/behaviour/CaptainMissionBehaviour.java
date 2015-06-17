@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import fr.shipsimulator.agent.CityAgent;
 import fr.shipsimulator.agent.boatCrew.BoatCaptainAgent;
 import fr.shipsimulator.gui.MainGui;
+import fr.shipsimulator.structure.City;
 import fr.shipsimulator.structure.GenericMessageContent;
 import fr.shipsimulator.structure.Mission;
 
@@ -19,11 +19,11 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 
 	private Mission chosenMission;
 	private HashMap<Mission, Integer> missionVote;
-	private Integer nbElecteur, nbVotant;
+	private Integer nbVotant;
 	private BoatCaptainAgent myAgent;
 		
 	public CaptainMissionBehaviour(BoatCaptainAgent a) {
-		myAgent = a;
+		super(a);
 		MainGui.writeLog("CaptainMissionBehaviour", "New Behaviour");
 		state = State.NO_MISSION;
 		
@@ -38,18 +38,17 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 		ACLMessage msg;
 		
 		if(state == State.MISSION_LIST_ASKED){
-			mt = new MessageTemplate(new MissionResponse());
+			mt = new MessageTemplate(new MissionListResponse());
 			msg = myAgent.receive(mt);
 			if (msg != null) {
 				missionVote = new HashMap<Mission, Integer>();
 				
-				String rsp = msg.getContent().split("MissionResponse")[0];
-				List<Mission> missionList = new GenericMessageContent<Mission>().deserialize(rsp);
+				List<Mission> missionList = new GenericMessageContent<Mission>().deserialize(msg.getContent());
 				for(Mission mission : missionList) {
 					missionVote.put(mission, 0);
 				}
 				
-				MainGui.writeLog("CaptainMissionBehaviour", "Demande de la liste d'�quipage");
+				MainGui.writeLog("CaptainMissionBehaviour", "Demande de la liste d'�quipage pour vote");
 				askForCrewMembers();
 				state = State.OBS_LIST_ASKED;				
 			}
@@ -58,10 +57,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 			mt = new MessageTemplate(new CrewListResponse());
 			msg = myAgent.receive(mt);
 			if (msg != null) {
-				String rsp = msg.getContent().split("CrewListResponse")[0];
-				List<AID> crewMembers = new GenericMessageContent<AID>().deserialize(rsp);
-				nbElecteur = crewMembers.size();
-				
+				updateCrewMembers(msg.getContent());
 				MainGui.writeLog("CaptainMissionBehaviour", "Vote pour choisir une mission");
 				askVoteToCrew(crewMembers);
 				state = State.WAIT_FOR_VOTE;
@@ -71,14 +67,14 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 			mt = new MessageTemplate(new MissionCrewResponse());
 			msg = myAgent.receive(mt);
 			if (msg != null) {
-				String rsp = msg.getContent().split("MissionCrewResponse")[0];
-				Mission chosenMission = new GenericMessageContent<Mission>().deserialize(rsp).get(0);
+				Mission chosenMission = new GenericMessageContent<Mission>().deserialize(msg.getContent()).get(0);
 				for(Entry<Mission, Integer> entry : missionVote.entrySet()) {
 					if(entry.getKey().getId() == chosenMission.getId()){
 				    	entry.setValue(entry.getValue() + 1);
+				    	nbVotant++;
 				    }
 				}
-				if(nbVotant >= nbElecteur){
+				if(nbVotant >= nbCrew){
 					deduceChosenMission();
 					confirmMission();
 					state = State.WAIT_FOR_CONFIRM;
@@ -91,40 +87,33 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 			if (msg != null) {				
 				if(msg.getPerformative() == ACLMessage.AGREE){
 					MainGui.writeLog("CaptainMissionBehaviour", "Mission choisie !");			
-					((BoatCaptainAgent) myAgent).setCurrentMission(chosenMission);
-					myAgent.addBehaviour(new CaptainDirectionBehaviour(myAgent));
-					state = State.MISSION_OK;
+					myAgent.setCurrentMission(chosenMission);
+					myAgent.addBehaviour(new CaptainCommerceBehaviour(myAgent, TypeCommerce.ACHAT));
 				}
-				else{
-					state = State.NO_MISSION;
-					
+				else{					
 					MainGui.writeLog("CaptainMissionBehaviour", "La mission n'est plus dispo, on recommence");
-					askAvailableMission(myAgent.getCityDeparture());
-					state = State.MISSION_LIST_ASKED;
+					// Nouveau behaviour pour recommencer le choix et suppreesion de celui-ci
+					myAgent.addBehaviour(new CaptainMissionBehaviour(myAgent));
 				}
+				done = true;
 			}
 		}
 		block();
 	}
 
-	@Override
-	public boolean done() {
-		return false;
-	}	
-	
-	private void askAvailableMission(CityAgent city){		
+
+	private void askAvailableMission(City city){		
 		ACLMessage missionRequest = new ACLMessage(ACLMessage.REQUEST);
 		missionRequest.addReceiver(new AID("Mission", AID.ISLOCALNAME));
-		missionRequest.setContent(city.getLocalName());
+		missionRequest.setContent(MissionlistRequestPatern);
+		// TODO: Voir avec Ines pour le format, la ca va pas ce qu'elle attend
 		myAgent.send(missionRequest);
 	}
 		
 	private void askVoteToCrew(List<AID> crewMembers){		
 		ACLMessage crewRequest = new ACLMessage(ACLMessage.REQUEST);
 		// Envoyer � tous les observer
-		for (AID aid : crewMembers) {
-			crewRequest.addReceiver(aid);
-		}
+		for (AID aid : crewMembers)	crewRequest.addReceiver(aid);
 		
 		// Creer liste des missions
 		GenericMessageContent<Mission> missions = new GenericMessageContent<Mission>();
@@ -132,7 +121,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 		    missions.content.add(entry.getKey());
 		}
 		
-		crewRequest.setContent("MissionVote:" + missions.serialize());
+		crewRequest.setContent(MissionVoteRequestPatern + missions.serialize());
 		myAgent.send(crewRequest);
 	}
 	
@@ -142,7 +131,6 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 		for (Entry<Mission, Integer> entry : missionVote.entrySet()){
 		    if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0) maxEntry = entry;
 		}
-		
 		chosenMission = maxEntry.getKey();
 	}
 	
@@ -154,35 +142,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 		GenericMessageContent<Mission> mission = new GenericMessageContent<Mission>();
 		mission.content.add(chosenMission);
 
-		missionRequest.setContent("Observer" + mission.serialize());
+		missionRequest.setContent(ConfirmMissionVoteRequestPatern + mission.serialize());
 		myAgent.send(missionRequest);
-	}
-		
-	private class MissionResponse implements MessageTemplate.MatchExpression {
-		private static final long serialVersionUID = 1L;
-		public boolean match(ACLMessage msg) {
-	    	return msg.getContent().matches("MissionResponse(.*)") && msg.getPerformative() == ACLMessage.INFORM;
-	    }
-	}
-	
-	private class CrewListResponse implements MessageTemplate.MatchExpression {
-		private static final long serialVersionUID = 1L;
-		public boolean match(ACLMessage msg) {
-	    	return msg.getContent().matches("CrewListResponse(.*)") && msg.getPerformative() == ACLMessage.INFORM;
-	    }
-	}
-	
-	private class MissionCrewResponse implements MessageTemplate.MatchExpression {
-		private static final long serialVersionUID = 1L;
-		public boolean match(ACLMessage msg) {
-	    	return msg.getContent().matches("MissionCrewResponse(.*)") && msg.getPerformative() == ACLMessage.CONFIRM;
-	    }
-	}
-	
-	private class MissionConfirmeResponse implements MessageTemplate.MatchExpression {
-		private static final long serialVersionUID = 1L;
-		public boolean match(ACLMessage msg) {
-	    	return msg.getContent().matches("MissionConfirmeResponse(.*)") && msg.getPerformative() == ACLMessage.CONFIRM;
-	    }
 	}
 }

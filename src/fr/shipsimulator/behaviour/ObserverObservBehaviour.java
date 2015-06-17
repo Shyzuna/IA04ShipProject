@@ -1,27 +1,26 @@
 package fr.shipsimulator.behaviour;
 
 import jade.core.AID;
-import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
 import java.awt.Point;
 import java.util.List;
 
-import fr.shipsimulator.constantes.Constante;
+import fr.shipsimulator.agent.boatCrew.BoatCrewAgent;
 import fr.shipsimulator.structure.GenericMessageContent;
 
-public class ObserverObservBehaviour extends Behaviour implements Constante{
+public class ObserverObservBehaviour extends CrewMainBehaviour{
 	private static final long serialVersionUID = 1L;
 
 	private final Integer porteeObs;
 	
 	private int[][] vision;
 	
-	public ObserverObservBehaviour() {
+	public ObserverObservBehaviour(BoatCrewAgent ag) {
+		super(ag);
 		porteeObs = OBS_PORTEE;
 		this.vision = new int[2 * porteeObs + 1][2 * porteeObs + 1];
-		//this.currentposition.setLocation(departure.getPosX(), departure.getPosY());
 	}
 	
 	@Override
@@ -40,12 +39,15 @@ public class ObserverObservBehaviour extends Behaviour implements Constante{
 				}
 			}
 		}
-		else block();		
-	}
-
-	@Override
-	public boolean done() {
-		return false;
+		else{
+			mt = new MessageTemplate(new ObserveRequest());
+			msg = myAgent.receive(mt);
+			if (msg != null) {
+				List<Point> pos = new GenericMessageContent<Point>().deserialize(msg.getContent());
+				askSuroundingEnvironnement(pos.get(0));
+			}
+			else block();
+		}
 	}
 	
 	private void askSuroundingEnvironnement(Point p){
@@ -59,12 +61,5 @@ public class ObserverObservBehaviour extends Behaviour implements Constante{
 		
 		envRequest.setContent(pos.serialize());
 		myAgent.send(envRequest);
-	}
-	
-	private class SuroundingEnvironnementResponse implements MessageTemplate.MatchExpression {
-		private static final long serialVersionUID = 1L;
-		public boolean match(ACLMessage msg) {
-	    	return  msg.getSender().getName().matches("Environnement(.*)") && msg.getPerformative() == ACLMessage.INFORM;
-	    }
 	}
 }

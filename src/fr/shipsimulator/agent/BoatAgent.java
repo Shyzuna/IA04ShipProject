@@ -13,7 +13,6 @@ import fr.shipsimulator.behaviour.BoatMovingBehaviour;
 import fr.shipsimulator.constantes.Constante;
 import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.Boat;
-import fr.shipsimulator.structure.City;
 import fr.shipsimulator.structure.Player;
 
 public class BoatAgent extends Agent implements Constante {
@@ -46,7 +45,7 @@ public class BoatAgent extends Agent implements Constante {
 		this.addBehaviour(new BoatCrewListBehaviour(this));
 		this.addBehaviour(new BoatFightingBehaviour(this));
 		this.addBehaviour(new BoatExchangeBehaviour(this));
-		//TODO: Passer la vraie ville
+
 		int index = Integer.parseInt(this.getLocalName().replaceFirst("Boat", ""));
 		captain = new BoatCaptainAgent(this.getAID(), ea.getListCity().get(index));
 		observer = new BoatObserverAgent(this.getAID());

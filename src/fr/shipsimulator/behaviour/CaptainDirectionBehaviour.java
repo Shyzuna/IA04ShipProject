@@ -6,29 +6,33 @@ import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-import java.util.List;
+import java.awt.Point;
 
 import fr.shipsimulator.agent.boatCrew.BoatCaptainAgent;
+import fr.shipsimulator.agent.boatCrew.BoatCrewAgent;
 import fr.shipsimulator.constantes.Constante;
-import fr.shipsimulator.constantes.Constante.Direction;
 import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.City;
+import fr.shipsimulator.structure.GenericMessageContent;
 
 public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 	private static final long serialVersionUID = 1L;
-		
+	
 	private City departure;
 	private City destination;
+	private Point currentPosition;
 	
 	private Direction lastDirection;
 	private Integer cptObsResponse;
+
 	
-	private BoatCaptainAgent myAgent;
-	
-	public CaptainDirectionBehaviour(BoatCaptainAgent a) {
-		myAgent = a;
+	public CaptainDirectionBehaviour(BoatCrewAgent ag) {
+		super(ag);
 		MainGui.writeLog("CaptainDirectionBehaviour", "New Behaviour");
-		this.departure =  myAgent.getCityDeparture().getCity();	
+		this.departure =  ((BoatCaptainAgent) ag).getCityDeparture();
+		this.destination = ((BoatCaptainAgent) ag).getCurrentMission().getArrival();
+		this.currentPosition.setLocation(departure.getPosX(), departure.getPosY());
+		this.lastDirection = Direction.NONE;
 		this.cptObsResponse = 0;
 		
 		askForCrewMembers();
@@ -41,56 +45,47 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 		ACLMessage msg;
 		
 		if(state == State.OBS_LIST_ASKED){
-			
+			mt = new MessageTemplate(new CrewListResponse());
+			msg = myAgent.receive(mt);
+			if (msg != null) {
+				updateCrewMembers(msg.getContent());
+				askForObservation();
+				state = State.WAIT_ALL_OBSERVATIONS;
+			}
 		}
 		else if(state == State.WAIT_ALL_OBSERVATIONS){
 			mt = new MessageTemplate(new ObservationResponse());
 			msg = myAgent.receive(mt);
 			if (msg != null) {
 				
-				if(cptObsResponse >= crewMembers.size()){
+				if(cptObsResponse >= nbCrew){
 					state = State.DIRECTION_SENDED;
 				}
 				
 			}
 		}
 		else if(state == State.DIRECTION_SENDED){
-			
+			mt = new MessageTemplate(new DirectionResponse());
+			msg = myAgent.receive(mt);
+			if (msg != null) {
+				
+			}
 		}
-		
-		// Recolter r�sultats observateurs
-		
-		//
-	}
-
-	@Override
-	public boolean done() {
-		return done;
-	}
-		
-	private void askVoteToCrew(List<AID> crewMembers){		
-		ACLMessage crewRequest = new ACLMessage(ACLMessage.REQUEST);
-		
-		// Envoyer � tous les observer
-		for (AID aid : crewMembers) {
-			crewRequest.addReceiver(aid);
-		}
-		
-		// Creer liste des missions		
-		crewRequest.setContent("ObservRequest");
-		myAgent.send(crewRequest);
 	}
 	
 	private void askForObservation(){
+		ACLMessage obsRequest = new ACLMessage(ACLMessage.REQUEST);
+
+		// Envoyer � tous les observer
+		for (AID aid : crewMembers) obsRequest.addReceiver(aid);
 		
+		// Mettre les coord de la position actuelle
+		GenericMessageContent<Point> pt = new GenericMessageContent<Point>();
+		pt.content.add(currentPosition);
+		obsRequest.setContent(ObserveRequestPatern + pt.serialize());
+		myAgent.send(obsRequest);
 	}
 	
-	private class ObservationResponse implements MessageTemplate.MatchExpression {
-		private static final long serialVersionUID = 1L;
-		public boolean match(ACLMessage msg) {
-	    	return msg.getContent().matches("ObservationResponse:(.*)") && msg.getPerformative() == ACLMessage.INFORM;
-	    }
-	}
 	
 	// CADENCEUR
 	public class CaptainTickerBehaviour extends TickerBehaviour implements Constante{
@@ -102,7 +97,7 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 
 		@Override
 		protected void onTick() {
-			askForObservation();		
+			askForCrewMembers();
 		}	
 	}
 }

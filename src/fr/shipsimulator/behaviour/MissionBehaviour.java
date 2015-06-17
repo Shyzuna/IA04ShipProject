@@ -78,6 +78,8 @@ public class MissionBehaviour extends Behaviour {
 				GenericMessageContent gmc= new GenericMessageContent();
 				if(msg.getPerformative() == ACLMessage.REQUEST && msg.getContent() != null){
 					//le message contient le nom de la ville dont on veut les missions
+					// TODO: ByGuillaume: Ca ne peut pas marcher, je travail pas avec des agent ville
+					// TODO: Je ne peux te filer que des coordonnee de la ville en x et Y 
 					City nextTo = ma.getEnvironnementAgent().getCityAgentByName(msg.getContent()).getCity();
 					for(int i = 0; i < missions.size(); i++){
 						if(missions.get(i).getDeparture().equals(nextTo)){
