@@ -87,7 +87,7 @@ public class City implements Constante {
 		int min = minQuant < MIN_DEFAULT_RES ? MIN_DEFAULT_RES - minQuant : 1;
 		int max = MAX_DEFAULT_RES - minQuant;
 		needs[0] = minType;
-		needs[1] = new Random().nextInt((max - min) + 1) + min;
+		needs[1] = new Random().nextInt(max - min) + min;
 		return needs;
 	}
 	
