@@ -23,7 +23,8 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 	protected static final String MissionConfirmResponsePattern = "MissionConfirmResponse";
 	protected static final String ObservationResponsePattern = "ObservationResponse";
 	protected static final String DirectionResponsePattern = "DirectionResponse";
-	
+	protected static final String MissionCrewAskPattern = "DirectionResponse";
+
 	protected boolean done = false;
 	protected State state;
 	
@@ -61,6 +62,17 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 		public boolean match(ACLMessage msg) {
 	    	if(msg.getContent().matches(MissionListResponsePattern + "(.*)") && msg.getPerformative() == ACLMessage.INFORM){
 				msg.setContent(msg.getContent().split(MissionListResponsePattern)[0]);
+				return true;
+			}
+	    	return false;
+	    }
+	}
+	
+	protected class MissionCrewAsk implements MessageTemplate.MatchExpression {
+		private static final long serialVersionUID = 1L;
+		public boolean match(ACLMessage msg) {
+			if(msg.getContent().matches(MissionCrewAskPattern + "(.*)") && msg.getPerformative() == ACLMessage.REQUEST){
+				msg.setContent(msg.getContent().split(MissionCrewAskPattern)[0]);
 				return true;
 			}
 	    	return false;
