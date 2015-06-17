@@ -19,7 +19,7 @@ public class CaptainCommerceBehaviour extends CrewMainBehaviour{
 		ACLMessage msg;
 		
 		if(state == State.MISSION_LIST_ASKED){
-			myAgent.addBehaviour(new CaptainDirectionBehaviour(myAgent));
+			myAgent.addBehaviour(new CaptainDirectionBehaviour((BoatCrewAgent) myAgent));
 		}
 		block();
 	}

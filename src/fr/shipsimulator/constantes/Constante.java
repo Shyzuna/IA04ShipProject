@@ -63,5 +63,4 @@ public interface Constante {
 	
 	// CAPITAIN
 	public enum TypeCommerce{ACHAT, VENTE};
-	
 }
