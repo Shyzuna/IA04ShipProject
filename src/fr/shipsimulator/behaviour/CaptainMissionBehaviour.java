@@ -19,7 +19,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 
 	private Mission chosenMission;
 	private HashMap<Mission, Integer> missionVote;
-	private Integer nbElecteur, nbVotant;
+	private Integer nbVotant;
 	private BoatCaptainAgent myAgent;
 		
 	public CaptainMissionBehaviour(BoatCaptainAgent a) {
@@ -57,9 +57,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 			mt = new MessageTemplate(new CrewListResponse());
 			msg = myAgent.receive(mt);
 			if (msg != null) {
-				List<AID> crewMembers = new GenericMessageContent<AID>().deserialize(msg.getContent());
-				nbElecteur = crewMembers.size();
-				
+				updateCrewMembers(msg.getContent());
 				MainGui.writeLog("CaptainMissionBehaviour", "Vote pour choisir une mission");
 				askVoteToCrew(crewMembers);
 				state = State.WAIT_FOR_VOTE;
@@ -76,7 +74,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 				    	nbVotant++;
 				    }
 				}
-				if(nbVotant >= nbElecteur){
+				if(nbVotant >= nbCrew){
 					deduceChosenMission();
 					confirmMission();
 					state = State.WAIT_FOR_CONFIRM;
@@ -106,16 +104,15 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 	private void askAvailableMission(City city){		
 		ACLMessage missionRequest = new ACLMessage(ACLMessage.REQUEST);
 		missionRequest.addReceiver(new AID("Mission", AID.ISLOCALNAME));
-		missionRequest.setContent("MissionListRequest");
+		missionRequest.setContent(MissionlistRequestPatern);
+		// TODO: Voir avec Ines pour le format, la ca va pas ce qu'elle attend
 		myAgent.send(missionRequest);
 	}
 		
 	private void askVoteToCrew(List<AID> crewMembers){		
 		ACLMessage crewRequest = new ACLMessage(ACLMessage.REQUEST);
-		// Envoyer ï¿½ tous les observer
-		for (AID aid : crewMembers) {
-			crewRequest.addReceiver(aid);
-		}
+		// Envoyer à tous les observer
+		for (AID aid : crewMembers)	crewRequest.addReceiver(aid);
 		
 		// Creer liste des missions
 		GenericMessageContent<Mission> missions = new GenericMessageContent<Mission>();
@@ -123,7 +120,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 		    missions.content.add(entry.getKey());
 		}
 		
-		crewRequest.setContent("MissionVote:" + missions.serialize());
+		crewRequest.setContent(MissionVoteRequestPatern + missions.serialize());
 		myAgent.send(crewRequest);
 	}
 	
@@ -133,7 +130,6 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 		for (Entry<Mission, Integer> entry : missionVote.entrySet()){
 		    if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0) maxEntry = entry;
 		}
-		
 		chosenMission = maxEntry.getKey();
 	}
 	
@@ -145,7 +141,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 		GenericMessageContent<Mission> mission = new GenericMessageContent<Mission>();
 		mission.content.add(chosenMission);
 
-		missionRequest.setContent("Observer" + mission.serialize());
+		missionRequest.setContent(ConfirmMissionVoteRequestPatern + mission.serialize());
 		myAgent.send(missionRequest);
 	}
 }
