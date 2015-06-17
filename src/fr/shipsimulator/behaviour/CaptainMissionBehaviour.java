@@ -23,7 +23,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 	private BoatCaptainAgent myAgent;
 		
 	public CaptainMissionBehaviour(BoatCaptainAgent a) {
-		myAgent = a;
+		super(a);
 		MainGui.writeLog("CaptainMissionBehaviour", "New Behaviour");
 		state = State.NO_MISSION;
 		
@@ -91,7 +91,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 				if(msg.getPerformative() == ACLMessage.AGREE){
 					MainGui.writeLog("CaptainMissionBehaviour", "Mission choisie !");			
 					((BoatCaptainAgent) myAgent).setCurrentMission(chosenMission);
-					myAgent.addBehaviour(new CaptainDirectionBehaviour(myAgent));
+					myAgent.addBehaviour(new CaptainCommerceBehaviour(myAgent, TypeCommerce.ACHAT));
 					state = State.MISSION_OK;
 				}
 				else{

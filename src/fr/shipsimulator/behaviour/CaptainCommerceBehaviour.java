@@ -10,9 +10,7 @@ public class CaptainCommerceBehaviour extends CrewMainBehaviour{
 	
 	public CaptainCommerceBehaviour(BoatCrewAgent mAgent, TypeCommerce typeCommerce) {
 		super(mAgent);
-		MainGui.writeLog("CaptainMissionBehaviour", "New Behaviour");
-		state = State.NO_MISSION;
-
+		MainGui.writeLog("CaptainCommerceBehaviour", "New Behaviour");
 	}
 	
 	@Override
@@ -21,7 +19,7 @@ public class CaptainCommerceBehaviour extends CrewMainBehaviour{
 		ACLMessage msg;
 		
 		if(state == State.MISSION_LIST_ASKED){
-			
+			myAgent.addBehaviour(new CaptainDirectionBehaviour(myAgent));
 		}
 		block();
 	}
