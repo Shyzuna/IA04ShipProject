@@ -32,15 +32,11 @@ public class MissionBehaviour extends Behaviour {
 			AID sender = msg.getSender();
 			if(sender.getLocalName().matches("City(\\d)*")){
 				if(msg.getPerformative() == ACLMessage.PROPOSE && msg.getContent() != null){
-					String [] recuTot = msg.getContent().split("\\$:!");
-					System.out.println(recuTot[0]);
-					List<Integer> recu = MessageContent.deserialize(recuTot[1]);
-					GenericMessageContent<AID> mcAid = new GenericMessageContent<AID>();
-					AID citySender = mcAid.deserialize(recuTot[0]).get(0);
+					List<Integer> recu = MessageContent.deserialize(msg.getContent());
 					ACLMessage reply = msg.createReply();
 					Random rand = new Random();
 					List<CityAgent> cities = ma.getEnvironnementAgent().getListCity();
-					City arrival =  ma.getEnvironnementAgent().getCityAgentByName(citySender.getLocalName()).getCity(); 
+					City arrival =  ma.getEnvironnementAgent().getCityAgentByName("City"+recu.get(0)).getCity(); 
 					if(arrival == null){
 						reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
 					}
@@ -48,12 +44,12 @@ public class MissionBehaviour extends Behaviour {
 						City departure = cities.get(rand.nextInt(cities.size())).getCity();
 						Ressource res = Ressource.WOOD;
 						for (Ressource r : Ressource.values()) {
-							if(r.ordinal() == recu.get(0)){
+							if(r.ordinal() == recu.get(1)){
 								res = r;
 								break;
 							}
 						}
-						Mission m = new Mission(departure, arrival, res, recu.get(1));
+						Mission m = new Mission(departure, arrival, res, recu.get(2));
 						boolean missionAlreadyExists = false;
 						for(int i = 0; i < ma.getMissions().size(); i++){
 							if(ma.getMissions().get(i).equals(m)) {
@@ -66,7 +62,7 @@ public class MissionBehaviour extends Behaviour {
 						}
 						else {
 							ma.addMission(m);
-							MainGui.writeLog("Mission", "Nouvelle mission ajoutée : " + recu.get(1) + " " + res.name());
+							MainGui.writeLog("Mission", "Nouvelle mission ajoutée : " + recu.get(2) + " " + res.name());
 							reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
 						}
 					}

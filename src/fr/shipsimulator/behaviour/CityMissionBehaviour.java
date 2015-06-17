@@ -26,12 +26,12 @@ public class CityMissionBehaviour extends TickerBehaviour {
 		MainGui.writeLog("City Agent", this.myAgent.getLocalName() + " needs " + quantity + " of " + type);
 		ACLMessage request = new ACLMessage(ACLMessage.PROPOSE);
 		request.addReceiver(new AID("Mission", AID.ISLOCALNAME));
-		GenericMessageContent<AID> mcAid = new GenericMessageContent<AID>();
-		mcAid.content.add(this.myAgent.getAID());
 		GenericMessageContent<Integer> mcQuant = new GenericMessageContent<Integer>();
+		int cityID = Integer.parseInt(myAgent.getLocalName().replaceFirst("City", ""));
+		mcQuant.content.add(cityID);
 		mcQuant.content.add(type);
 		mcQuant.content.add(quantity);
-		request.setContent(mcAid.serialize() + "$:!" + mcQuant.serialize());
+		request.setContent(mcQuant.serialize());
 		myAgent.send(request);
 	}
 
