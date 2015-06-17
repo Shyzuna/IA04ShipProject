@@ -61,4 +61,6 @@ public interface Constante {
 	//OBSEREVRS
 	public final int OBS_PORTEE = 3;
 	
+	// CAPITAIN
+	public enum TypeCommerce{ACHAT, VENTE};
 }

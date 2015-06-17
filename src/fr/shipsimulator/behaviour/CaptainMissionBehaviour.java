@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import fr.shipsimulator.agent.boatCrew.BoatCaptainAgent;
-import fr.shipsimulator.agent.boatCrew.BoatCrewAgent;
 import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.City;
 import fr.shipsimulator.structure.GenericMessageContent;
@@ -23,9 +22,8 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 	private Integer nbElecteur, nbVotant;
 	private BoatCaptainAgent myAgent;
 		
-	public CaptainMissionBehaviour(BoatCrewAgent mAgent) {
-		super(mAgent);
-		
+	public CaptainMissionBehaviour(BoatCaptainAgent a) {
+		super(a);
 		MainGui.writeLog("CaptainMissionBehaviour", "New Behaviour");
 		state = State.NO_MISSION;
 		
@@ -40,17 +38,17 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 		ACLMessage msg;
 		
 		if(state == State.MISSION_LIST_ASKED){
-			mt = new MessageTemplate(new MissionResponse());
+			mt = new MessageTemplate(new MissionListResponse());
 			msg = myAgent.receive(mt);
 			if (msg != null) {
 				missionVote = new HashMap<Mission, Integer>();
-
+				
 				List<Mission> missionList = new GenericMessageContent<Mission>().deserialize(msg.getContent());
 				for(Mission mission : missionList) {
 					missionVote.put(mission, 0);
 				}
 				
-				MainGui.writeLog("CaptainMissionBehaviour", "Demande de la liste d'équipage");
+				MainGui.writeLog("CaptainMissionBehaviour", "Demande de la liste d'équipage pour vote");
 				askForCrewMembers();
 				state = State.OBS_LIST_ASKED;				
 			}
@@ -75,6 +73,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 				for(Entry<Mission, Integer> entry : missionVote.entrySet()) {
 					if(entry.getKey().getId() == chosenMission.getId()){
 				    	entry.setValue(entry.getValue() + 1);
+				    	nbVotant++;
 				    }
 				}
 				if(nbVotant >= nbElecteur){
@@ -87,21 +86,18 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 		else if(state == State.WAIT_FOR_CONFIRM){
 			mt = new MessageTemplate(new MissionConfirmeResponse());
 			msg = myAgent.receive(mt);
-			if (msg != null) {
-				//TODO: Note perso Ca ne marchera pas faut faire autrement !
+			if (msg != null) {				
 				if(msg.getPerformative() == ACLMessage.AGREE){
 					MainGui.writeLog("CaptainMissionBehaviour", "Mission choisie !");			
-					((BoatCaptainAgent) myAgent).setCurrentMission(chosenMission);
-					myAgent.addBehaviour(new CaptainDirectionBehaviour((BoatCrewAgent) myAgent));
-					state = State.MISSION_OK;
+					myAgent.setCurrentMission(chosenMission);
+					myAgent.addBehaviour(new CaptainCommerceBehaviour(myAgent, TypeCommerce.ACHAT));
 				}
-				else{
-					state = State.NO_MISSION;
-					
+				else{					
 					MainGui.writeLog("CaptainMissionBehaviour", "La mission n'est plus dispo, on recommence");
-					askAvailableMission(new City(0, 0));
-					state = State.MISSION_LIST_ASKED;
+					// Nouveau behaviour pour recommencer le choix et suppreesion de celui-ci
+					myAgent.addBehaviour(new CaptainMissionBehaviour(myAgent));
 				}
+				done = true;
 			}
 		}
 		block();

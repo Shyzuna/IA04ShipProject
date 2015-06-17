@@ -1,7 +1,6 @@
 package fr.shipsimulator.agent.boatCrew;
 
 import jade.core.AID;
-import fr.shipsimulator.behaviour.CaptainDirectionBehaviour;
 import fr.shipsimulator.behaviour.CaptainMissionBehaviour;
 import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.City;
@@ -16,8 +15,6 @@ public class BoatCaptainAgent extends BoatCrewAgent{
 	public BoatCaptainAgent(AID boat, City city){
 		super(boat);
 		this.cityDeparture = city;
-		
-		// Chose after
 		this.currentMission = null;
 	}
 	
