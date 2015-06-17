@@ -42,6 +42,7 @@ import fr.shipsimulator.agent.boatCrew.BoatCrewAgent;
 import fr.shipsimulator.constantes.Constante;
 import fr.shipsimulator.gui.component.TileClicked;
 import fr.shipsimulator.structure.Mission;
+import fr.shipsimulator.structure.Ressource;
 
 /**
  * 
@@ -420,8 +421,15 @@ public class MainGui extends Application implements Runnable{
 				//ajouter map de la cargaison
 				Map<Integer, Integer> boatResources = agent.getBoat().getResources();
 				if(boatResources != null){
+					Ressource res = Ressource.WOOD;
 					for(Map.Entry<Integer,Integer> entry : boatResources.entrySet()) {
-						statutGrid.addRow(rowIndex++, new Label(""+entry.getKey()), new Label("" + entry.getValue()));
+						for (Ressource r : Ressource.values()) {
+							if(r.ordinal() == entry.getKey()){
+								res = r;
+								break;
+							}
+						}
+						statutGrid.addRow(rowIndex++, new Label(""+ res.name()), new Label("" + entry.getValue()));
 					}
 				}
 				statutGrid.addRow(rowIndex++, new Label(""));
@@ -459,8 +467,22 @@ public class MainGui extends Application implements Runnable{
 				statutGrid.addRow(rowIndex++, new Label(""));
 				statutGrid.addRow(rowIndex++, new Label("Stocks :"));
 				//ajouter map des stocks de la ville
+				Map<Integer, Integer> cityResources = agent.getCity().getResources();
+				if(cityResources != null){
+					Ressource res = Ressource.WOOD;
+					for(Map.Entry<Integer,Integer> entry : cityResources.entrySet()) {
+						for (Ressource r : Ressource.values()) {
+							if(r.ordinal() == entry.getKey()){
+								res = r;
+								break;
+							}
+						}
+						statutGrid.addRow(rowIndex++, new Label(""+ res.name()), new Label("" + entry.getValue()));
+					}
+				}
+				
 				statutGrid.addRow(rowIndex++, new Label("Missions :"));
-				//ajouter map des missions dispo dans la ville
+				//missions dispo dans la ville
 				List<Mission> missions = myAgent.getMissionAgent().getMissions();
 				for(Mission m: missions){
 					if(m.getDeparture().equals(agent.getCity())){
