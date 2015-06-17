@@ -1,5 +1,6 @@
 package fr.shipsimulator.structure;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class City {
@@ -55,6 +56,7 @@ public class City {
 	public City(int x,int y){
 		this.posX = x;
 		this.posY = y;
+		resources = new HashMap<Integer, Integer>();
 	}
 
 	public boolean equals(City other) {
