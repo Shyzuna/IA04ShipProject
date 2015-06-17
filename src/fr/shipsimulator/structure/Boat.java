@@ -475,9 +475,11 @@ public class Boat implements Constante {
 		actualDeckStorageNb = deckStorageNb;
 		actualDeckArmingNb = deckArmingNb;
 		actualCannonNb = cannonNb;
+		resources = new HashMap<Integer, Integer>();
 		for (int i = 0; i < Ressource.values().length; ++i) {
 			resources.put(i, 0);
 		}
+		crewMembers = new ArrayList<BoatCrewAgent>();
 	}
 	
 }
