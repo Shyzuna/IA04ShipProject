@@ -212,6 +212,7 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 			MainGui.writeLog("Env", "Suspend Simulation");
 			this.stateSimulation = Constante.SUSPEND;
 			for(BoatAgent ba : listBoat){
+				ba.suspendBoat(); //suspend crewmember
 				ba.doSuspend();
 			}
 			for(CityAgent ca : listCity){
@@ -225,6 +226,7 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 			MainGui.writeLog("Env", "Stop Simulation");
 			this.stateSimulation = STOP;
 			for(BoatAgent ba : listBoat){
+				ba.stopBoat(); //delete crewmember
 				ba.doDelete();
 			}
 			this.listBoat.clear();
@@ -300,6 +302,7 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 			MainGui.writeLog("Env", "ReStart Simulation");
 			this.stateSimulation = RUNNING;
 			for(BoatAgent ba : listBoat){
+				ba.activateBoat(); //activate crewmember
 				ba.doActivate();
 			}
 			for(CityAgent ca : listCity){

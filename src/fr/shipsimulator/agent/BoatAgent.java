@@ -60,4 +60,18 @@ public class BoatAgent extends Agent implements Constante {
 		
 	}
 
+	public void stopBoat(){
+		captain.doDelete();
+		observer.doDelete();
+	}
+	
+	public void suspendBoat(){
+		captain.doSuspend();
+		observer.doSuspend();
+	}
+	
+	public void activateBoat(){
+		captain.doActivate();
+		observer.doActivate();
+	}
 }
