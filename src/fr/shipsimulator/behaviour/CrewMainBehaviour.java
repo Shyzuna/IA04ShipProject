@@ -28,6 +28,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 	protected static final String MissionlistRequestPatern = "MissionListRequest:";
 	protected static final String MissionVoteRequestPatern = "MissionVoteRequest:";
 	protected static final String ConfirmMissionVoteRequestPatern = "ConfirmMissionVoteRequest:";
+	protected static final String ObserveRequestPatern = "ObserveRequest:";
 
 	protected boolean done = false;
 	protected State state;
@@ -130,6 +131,25 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 				return true;
 			}
 	    	return false;
+	    }
+	}
+	
+	// Observers
+	protected class ObserveRequest implements MessageTemplate.MatchExpression {
+		private static final long serialVersionUID = 1L;
+		public boolean match(ACLMessage msg) {
+			if(msg.getContent().matches(ObserveRequestPatern + "(.*)") && msg.getPerformative() == ACLMessage.REQUEST){
+				msg.setContent(msg.getContent().split(ObserveRequestPatern)[0]);
+				return true;
+			}
+	    	return false;
+	    }
+	}
+	
+	protected class SuroundingEnvironnementResponse implements MessageTemplate.MatchExpression {
+		private static final long serialVersionUID = 1L;
+		public boolean match(ACLMessage msg) {
+	    	return  msg.getSender().getName().matches("Environnement(.*)") && msg.getPerformative() == ACLMessage.INFORM;
 	    }
 	}
 }

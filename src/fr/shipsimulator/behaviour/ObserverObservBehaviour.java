@@ -21,7 +21,6 @@ public class ObserverObservBehaviour extends CrewMainBehaviour{
 		super(ag);
 		porteeObs = OBS_PORTEE;
 		this.vision = new int[2 * porteeObs + 1][2 * porteeObs + 1];
-		//this.currentposition.setLocation(departure.getPosX(), departure.getPosY());
 	}
 	
 	@Override
@@ -40,7 +39,15 @@ public class ObserverObservBehaviour extends CrewMainBehaviour{
 				}
 			}
 		}
-		else block();		
+		else{
+			mt = new MessageTemplate(new ObserveRequest());
+			msg = myAgent.receive(mt);
+			if (msg != null) {
+				List<Point> pos = new GenericMessageContent<Point>().deserialize(msg.getContent());
+				askSuroundingEnvironnement(pos.get(0));
+			}
+			else block();
+		}
 	}
 	
 	private void askSuroundingEnvironnement(Point p){
@@ -54,12 +61,5 @@ public class ObserverObservBehaviour extends CrewMainBehaviour{
 		
 		envRequest.setContent(pos.serialize());
 		myAgent.send(envRequest);
-	}
-	
-	private class SuroundingEnvironnementResponse implements MessageTemplate.MatchExpression {
-		private static final long serialVersionUID = 1L;
-		public boolean match(ACLMessage msg) {
-	    	return  msg.getSender().getName().matches("Environnement(.*)") && msg.getPerformative() == ACLMessage.INFORM;
-	    }
 	}
 }

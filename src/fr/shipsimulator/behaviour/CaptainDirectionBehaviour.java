@@ -5,19 +5,22 @@ import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+
+import java.awt.Point;
+
 import fr.shipsimulator.agent.boatCrew.BoatCaptainAgent;
 import fr.shipsimulator.agent.boatCrew.BoatCrewAgent;
 import fr.shipsimulator.constantes.Constante;
 import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.City;
+import fr.shipsimulator.structure.GenericMessageContent;
 
 public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 	private static final long serialVersionUID = 1L;
 	
-	
-	
 	private City departure;
 	private City destination;
+	private Point currentPosition;
 	
 	private Direction lastDirection;
 	private Integer cptObsResponse;
@@ -26,7 +29,10 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 		super(ag);
 
 		MainGui.writeLog("CaptainDirectionBehaviour", "New Behaviour");
-		this.departure =  ((BoatCaptainAgent) ag).getCityDeparture();	
+		this.departure =  ((BoatCaptainAgent) ag).getCityDeparture();
+		this.destination = ((BoatCaptainAgent) ag).getCurrentMission().getArrival();
+		this.currentPosition.setLocation(departure.getPosX(), departure.getPosY());
+		this.lastDirection = Direction.NONE;
 		this.cptObsResponse = 0;
 		
 		askForCrewMembers();
@@ -39,14 +45,20 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 		ACLMessage msg;
 		
 		if(state == State.OBS_LIST_ASKED){
-			
+			mt = new MessageTemplate(new CrewListResponse());
+			msg = myAgent.receive(mt);
+			if (msg != null) {
+				updateCrewMembers(msg.getContent());
+				askForObservation();
+				state = State.WAIT_ALL_OBSERVATIONS;
+			}
 		}
 		else if(state == State.WAIT_ALL_OBSERVATIONS){
 			mt = new MessageTemplate(new ObservationResponse());
 			msg = myAgent.receive(mt);
 			if (msg != null) {
 				
-				if(cptObsResponse >= crewMembers.size()){
+				if(cptObsResponse >= nbCrew){
 					state = State.DIRECTION_SENDED;
 				}
 				
@@ -67,11 +79,12 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 		// Envoyer à tous les observer
 		for (AID aid : crewMembers) obsRequest.addReceiver(aid);
 		
-		// Creer liste des missions		
-		obsRequest.setContent("ObservRequest");
+		// Mettre les coord de la position actuelle
+		GenericMessageContent<Point> pt = new GenericMessageContent<Point>();
+		pt.content.add(currentPosition);
+		obsRequest.setContent(ObserveRequestPatern + pt.serialize());
 		myAgent.send(obsRequest);
 	}
-	
 	
 	
 	// CADENCEUR
@@ -84,7 +97,7 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 
 		@Override
 		protected void onTick() {
-			askForObservation();		
+			askForCrewMembers();
 		}	
 	}
 }
