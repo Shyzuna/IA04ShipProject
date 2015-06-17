@@ -480,7 +480,7 @@ public class MainGui extends Application implements Runnable{
 						statutGrid.addRow(rowIndex++, new Label(""+ res.name()), new Label("" + entry.getValue()));
 					}
 				}
-				
+				statutGrid.addRow(rowIndex++, new Label(""));
 				statutGrid.addRow(rowIndex++, new Label("Missions :"));
 				//missions dispo dans la ville
 				List<Mission> missions = myAgent.getMissionAgent().getMissions();
