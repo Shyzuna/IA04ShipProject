@@ -212,7 +212,7 @@ public class MainGui extends Application implements Runnable{
         logPane = new ScrollPane();
         logPane.setContent(logArea);
         logPane.setFitToWidth(true);
-        logPane.setPrefWidth(150);
+        logPane.setPrefWidth(300);
         logPane.setFitToHeight(true);
 		
         //statut side
@@ -248,7 +248,7 @@ public class MainGui extends Application implements Runnable{
 		Image boat_icone = new Image(new FileInputStream(Constante.BATEAU_PATH));
 		Image city_icone = new Image(new FileInputStream(Constante.VILLE_PATH));
 
-		Scene scene = new Scene(bp, Constante.DEFAULT_FACTOR*MainGui.cols+logPane.getPrefWidth()+statutPane.getPrefWidth()+Constante.BORDER_W, Constante.DEFAULT_FACTOR*MainGui.rows+tb_bot.getPrefHeight()+menu.getPrefHeight()+Constante.BORDER_H);
+		Scene scene = new Scene(bp, Constante.DEFAULT_FACTOR*MainGui.cols+logPane.getPrefWidth()+statutPane.getPrefWidth(), Constante.DEFAULT_FACTOR*MainGui.rows+tb_bot.getPrefHeight()+menu.getPrefHeight());
 		//Event resize scene
 		scene.widthProperty().addListener(new ChangeListener<Number>() {
 		    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
@@ -354,21 +354,20 @@ public class MainGui extends Application implements Runnable{
 						if(myAgent.getStateSimulation() == Constante.RUNNING){
 							ImageView iv;
 							gp.getChildren().clear();
-							gp.setGridLinesVisible(true);
-							for(BoatAgent ba : myAgent.getListBoat()){
-								iv = new ImageView();
-								iv.addEventHandler(MouseEvent.MOUSE_CLICKED, new TileClicked(ba));
-						    	iv.setImage(boat_icone);
-						    	GridPane.setRowIndex(iv, ba.getBoat().getPosY());
-						    	GridPane.setColumnIndex(iv, ba.getBoat().getPosX());
-						    	gp.getChildren().add(iv);
-							}
 							for(CityAgent ca : myAgent.getListCity()){
 								iv = new ImageView();
 								iv.addEventHandler(MouseEvent.MOUSE_CLICKED, new TileClicked(ca));
 						    	iv.setImage(city_icone);
 						    	GridPane.setRowIndex(iv, ca.getCity().getPosY());
 						    	GridPane.setColumnIndex(iv, ca.getCity().getPosX());
+						    	gp.getChildren().add(iv);
+							}
+							for(BoatAgent ba : myAgent.getListBoat()){
+								iv = new ImageView();
+								iv.addEventHandler(MouseEvent.MOUSE_CLICKED, new TileClicked(ba));
+						    	iv.setImage(boat_icone);
+						    	GridPane.setRowIndex(iv, ba.getBoat().getPosY());
+						    	GridPane.setColumnIndex(iv, ba.getBoat().getPosX());
 						    	gp.getChildren().add(iv);
 							}
 						}

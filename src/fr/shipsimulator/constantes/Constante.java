@@ -18,8 +18,8 @@ public interface Constante {
 	int DEFAULT_FACTOR = 15;
 	int MAX_W = 1920;
 	int MAX_H = 1080;
-	int MIN_W = 800;
-	int MIN_H = 600;
+	int MIN_W = 900;
+	int MIN_H = 510;
 	
 	//MAP GRAPHICS
 	int MAP_H = 600;
