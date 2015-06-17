@@ -3,8 +3,8 @@ package fr.shipsimulator.structure;
 import jade.core.AID;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 import fr.shipsimulator.agent.boatCrew.BoatCrewAgent;
 import fr.shipsimulator.behaviour.CrewMemberDeathBehaviour;
@@ -41,6 +41,7 @@ public class Boat implements Constante {
 		this.posX = posX;
 		this.posY = posY;
 		destroyed = false;
+		resources = new HashMap<Integer, Integer>();
 		initStats();
 		restoreActualStats();
 	}

@@ -25,12 +25,14 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 	private Direction lastDirection;
 	private Integer cptObsResponse;
 
+	private BoatCaptainAgent myAgent;
 	
 	public CaptainDirectionBehaviour(BoatCrewAgent ag) {
 		super(ag);
 		MainGui.writeLog("CaptainDirectionBehaviour", "New Behaviour");
-		this.departure =  ((BoatCaptainAgent) ag).getCityDeparture();
-		this.destination = ((BoatCaptainAgent) ag).getCurrentMission().getArrival();
+		myAgent = (BoatCaptainAgent) ag;
+		this.departure =  myAgent.getCityDeparture();
+		this.destination = myAgent.getCurrentMission().getArrival();
 		this.currentPosition.setLocation(departure.getPosX(), departure.getPosY());
 		this.lastDirection = Direction.NONE;
 		this.cptObsResponse = 0;
