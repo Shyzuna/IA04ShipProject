@@ -1,10 +1,11 @@
 package fr.shipsimulator.behaviour;
 
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
+
 import java.util.List;
 import java.util.Random;
 
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import fr.shipsimulator.agent.boatCrew.BoatCrewAgent;
 import fr.shipsimulator.structure.GenericMessageContent;
 import fr.shipsimulator.structure.Mission;
@@ -29,7 +30,7 @@ public class ObserverVoteBehaviour extends CrewMainBehaviour{
 			Integer randValue;
 			List<Mission> missionList = new GenericMessageContent<Mission>().deserialize(msg.getContent());
 			
-			//init seed différente ?
+			// Init seed différente
 			Random r = new Random();
 			for(Mission m : missionList){
 				randValue = r.nextInt()*100;
@@ -44,16 +45,9 @@ public class ObserverVoteBehaviour extends CrewMainBehaviour{
 			GenericMessageContent<Mission> missionReply = new GenericMessageContent<Mission>();
 			missionReply.content.add(missionChoosed);
 			
-			reply.setContent("MissionCrewResponse:"+missionReply.serialize());
+			reply.setContent(MissionCrewResponsePattern + missionReply.serialize());
 			myAgent.send(reply);
 		}
-		
-		block();
+		else block();
 	}
-
-	@Override
-	public boolean done() {
-		return false;
-	}
-
 }
