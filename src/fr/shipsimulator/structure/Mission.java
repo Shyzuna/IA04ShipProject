@@ -24,10 +24,6 @@ public class Mission {
 		return id;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
 	public static void resetId(){
 		idCounter = 0;
 	}

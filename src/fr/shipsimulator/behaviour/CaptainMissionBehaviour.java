@@ -25,6 +25,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 		
 	public CaptainMissionBehaviour(BoatCaptainAgent a) {
 		super(a);
+		myAgent = a;
 		MainGui.writeLog("CaptainMissionBehaviour", "New Behaviour");
 		state = State.NO_MISSION;
 		
