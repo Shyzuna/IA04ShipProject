@@ -4,7 +4,9 @@ import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import fr.shipsimulator.agent.CityAgent;
@@ -43,31 +45,35 @@ public class MissionBehaviour extends Behaviour {
 					}
 					else {
 						City departure = cities.get(rand.nextInt(cities.size())).getCity();
-						while(departure.equals(arrival)){
+						while(departure.equals(arrival)) {
 							departure = cities.get(rand.nextInt(cities.size())).getCity();
 						}
-						Ressource res = Ressource.WOOD;
-						for (Ressource r : Ressource.values()) {
-							if(r.ordinal() == recu.get(1)){
-								res = r;
-								break;
+						if (isPossibleMission(departure.getResources(), recu.get(0), recu.get(1))) {
+							Ressource res = Ressource.WOOD;
+							for (Ressource r : Ressource.values()) {
+								if(r.ordinal() == recu.get(1)){
+									res = r;
+									break;
+								}
 							}
-						}
-						Mission m = new Mission(departure, arrival, res, recu.get(2));
-						boolean missionAlreadyExists = false;
-						for(int i = 0; i < ma.getMissions().size(); i++){
-							if(ma.getMissions().get(i).equals(m)) {
-								missionAlreadyExists = true;
-								break;
+							Mission m = new Mission(departure, arrival, res, recu.get(2));
+							boolean missionAlreadyExists = false;
+							for(int i = 0; i < ma.getMissions().size(); i++){
+								if(ma.getMissions().get(i).equals(m)) {
+									missionAlreadyExists = true;
+									break;
+								}
 							}
-						}
-						if(missionAlreadyExists){
+							if(missionAlreadyExists){
+								reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
+							}
+							else {
+								ma.addMission(m);
+								MainGui.writeLog("Mission", "Nouvelle mission ajoutée : " + recu.get(2) + " " + res.name());
+								reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+							}
+						} else {
 							reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
-						}
-						else {
-							ma.addMission(m);
-							MainGui.writeLog("Mission", "Nouvelle mission ajoutée : " + recu.get(2) + " " + res.name());
-							reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
 						}
 					}
 					ma.send(reply);
@@ -78,12 +84,16 @@ public class MissionBehaviour extends Behaviour {
 				if(msg.getPerformative() == ACLMessage.REQUEST && msg.getContent() != null){
 					List<Integer> coord = new GenericMessageContent<Integer>().deserialize(msg.getContent());
 					GenericMessageContent<Mission> result = new GenericMessageContent<Mission>();
-					for(Mission mission : missions){
-						if(mission.getDeparture().getPosX() == coord.get(0) && mission.getDeparture().getPosY() == coord.get(1)){
-							result.content.add(mission);
+					Iterator<Mission> iterMi = missions.iterator();
+					while (iterMi.hasNext()) {
+						if(iterMi.next().getDeparture().getPosX() == coord.get(0) && iterMi.next().getDeparture().getPosY() == coord.get(1)){
+							if (isPossibleMission(iterMi.next().getDeparture().getResources(), iterMi.next().getRessource().ordinal(), iterMi.next().getResourceAmount())) {
+								result.content.add(iterMi.next());
+							} else {
+								iterMi.remove();
+							}
 						}
 					}
-
 					ACLMessage reply = msg.createReply();
 					reply.setPerformative(ACLMessage.INFORM);
 					reply.setContent("MissionListResponse:" + result.serialize());
@@ -93,10 +103,11 @@ public class MissionBehaviour extends Behaviour {
 					//le message contient la mission choisie
 					Mission chosen = new GenericMessageContent<Mission>().deserialize(msg.getContent(), Mission.class).get(0);
 					boolean stillAvailable = false;
-					for(Mission mission : missions){
-						if(mission.equals(chosen)){
+					Iterator<Mission> iterMi = missions.iterator();
+					while (iterMi.hasNext()) {
+						if(iterMi.next().equals(chosen)){
 							stillAvailable = true;
-							missions.remove(mission);
+							iterMi.remove();
 							break;
 						}
 					}
@@ -108,6 +119,14 @@ public class MissionBehaviour extends Behaviour {
 				}
 			}
 		}
+	}
+
+	private boolean isPossibleMission(Map<Integer, Integer> resources,
+			Integer type, Integer quantity) {
+		if (resources.get(type) < quantity) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
