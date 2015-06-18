@@ -29,12 +29,6 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 		myAgent = a;
 		MainGui.writeLog(myAgent.getLocalName(), "New MissionBehaviour");
 		state = State.NO_MISSION;
-		
-		// TODO: Pour attendre que la ville envoie, à Enlever
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {e.printStackTrace();}
-		
 		MainGui.writeLog(myAgent.getLocalName(), "Demande des missions disponibles");
 		askAvailableMission(myAgent.getCityDeparture());
 		state = State.MISSION_LIST_ASKED;
