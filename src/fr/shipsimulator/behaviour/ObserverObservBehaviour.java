@@ -26,7 +26,6 @@ public class ObserverObservBehaviour extends CrewMainBehaviour{
 	public void action() {
 		MessageTemplate mt;
 		ACLMessage msg;
-		
 		mt = new MessageTemplate(new ObserveRequest());
 		msg = myAgent.receive(mt);
 		if (msg != null) {

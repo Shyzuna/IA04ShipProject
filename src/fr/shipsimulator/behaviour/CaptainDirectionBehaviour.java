@@ -119,7 +119,12 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 		ACLMessage obsRequest = new ACLMessage(ACLMessage.REQUEST);
 		
 		// Envoyer à tous les observer
-		for (String s : crewMembers) obsRequest.addReceiver(new AID(s,AID.ISLOCALNAME));
+		for (String s : crewMembers){
+			System.out.println(s);
+			if(s.matches("Observeur(.*)")){
+				obsRequest.addReceiver(new AID(s,AID.ISLOCALNAME));
+			}
+		}
 		
 		// Mettre les coord de la position actuelle
 		GenericMessageContent<Integer> pt = new GenericMessageContent<Integer>();
