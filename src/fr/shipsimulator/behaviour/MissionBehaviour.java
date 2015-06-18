@@ -9,6 +9,7 @@ import java.util.Random;
 
 import fr.shipsimulator.agent.CityAgent;
 import fr.shipsimulator.agent.MissionAgent;
+import fr.shipsimulator.constantes.Constante;
 import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.City;
 import fr.shipsimulator.structure.GenericMessageContent;
@@ -74,24 +75,25 @@ public class MissionBehaviour extends Behaviour {
 			}
 			else if (sender.getLocalName().matches("Capitaine_Boat(\\d)*")){
 				List<Mission> missions = ma.getMissions();
-				GenericMessageContent gmc= new GenericMessageContent();
 				if(msg.getPerformative() == ACLMessage.REQUEST && msg.getContent() != null){
-					List<Integer> coord = gmc.deserialize(msg.getContent());
+					List<Integer> coord = new GenericMessageContent<Integer>().deserialize(msg.getContent());
 					List<CityAgent> cities = this.ma.getEnvironnementAgent().getListCity();
 					City nextTo = new City(coord.get(0), coord.get(1));
+					
+					GenericMessageContent<Mission> result = new GenericMessageContent<Mission>();
 					for(Mission mission : missions){
 						if(mission.getDeparture().equals(nextTo)){
-							gmc.content.add(mission);
+							result.content.add(mission);
 						}
 					}
 					ACLMessage reply = msg.createReply();
 					reply.setPerformative(ACLMessage.INFORM);
-					reply.setContent(gmc.serialize());
+					reply.setContent(Constante.MissionListResponsePattern + result.serialize());
 					ma.send(reply);
 				}
 				else if(msg.getPerformative() == ACLMessage.INFORM && msg.getContent() != null){
 					//le message contient la mission choisie
-					Mission chosen = (Mission)gmc.deserialize(msg.getContent()).get(0);
+					Mission chosen = new GenericMessageContent<Mission>().deserialize(msg.getContent()).get(0);
 					boolean stillAvailable = false;
 					for(Mission mission : missions){
 						if(mission.equals(chosen)){
