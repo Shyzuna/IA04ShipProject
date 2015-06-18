@@ -29,12 +29,6 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 		myAgent = a;
 		MainGui.writeLog(myAgent.getLocalName(), "New MissionBehaviour");
 		state = State.NO_MISSION;
-		
-		// TODO: Pour attendre que la ville envoie, � Enlever
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {e.printStackTrace();}
-		
 		MainGui.writeLog(myAgent.getLocalName(), "Demande des missions disponibles");
 		askAvailableMission(myAgent.getCityDeparture());
 		state = State.MISSION_LIST_ASKED;
@@ -52,20 +46,16 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 				MainGui.writeLog(myAgent.getLocalName(), "Missions disponibles re�ues\n\t" + msg.getContent());
 				missionVote = new HashMap<Mission, Integer>();
 				List<Mission> missionList = new GenericMessageContent<Mission>().deserialize(msg.getContent(),Mission.class);
-				if (!missionList.isEmpty()) {
+				if(missionList.isEmpty()){
+					MainGui.writeLog(myAgent.getLocalName(), "Pas de missions dispo, demande des missions disponibles");
+					askAvailableMission(myAgent.getCityDeparture());
+				} else {
 					for(Mission mission : missionList) {
 						missionVote.put(mission, 0);
 					}
 					askForCrewMembers();
 					state = State.OBS_LIST_ASKED;	
 					MainGui.writeLog(myAgent.getLocalName(), "Demande de la liste d'�quipage pour vote envoy�e");
-				} else {
-					MainGui.writeLog(myAgent.getLocalName(), "Aucune mission disponible, on recommence");
-					askAvailableMission(myAgent.getCityDeparture());
-					// TODO: Pour attendre que la ville envoie, � Enlever
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {e.printStackTrace();}
 				}
 			}
 		}

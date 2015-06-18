@@ -11,7 +11,6 @@ import java.util.Random;
 
 import fr.shipsimulator.agent.CityAgent;
 import fr.shipsimulator.agent.MissionAgent;
-import fr.shipsimulator.constantes.Constante;
 import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.City;
 import fr.shipsimulator.structure.GenericMessageContent;
@@ -47,33 +46,32 @@ public class MissionBehaviour extends Behaviour {
 						City departure = cities.get(rand.nextInt(cities.size())).getCity();
 						while(departure.equals(arrival)) {
 							departure = cities.get(rand.nextInt(cities.size())).getCity();
+						}		
+						int quant = recu.get(2);
+						if (departure.getResources().get(recu.get(1)) < quant)
+							quant = departure.getResources().get(recu.get(1));
+						Ressource res = Ressource.WOOD;
+						for (Ressource r : Ressource.values()) {
+							if(r.ordinal() == recu.get(1)){
+								res = r;
+								break;
+							}
 						}
-						if (isPossibleMission(departure.getResources(), recu.get(0), recu.get(1))) {
-							Ressource res = Ressource.WOOD;
-							for (Ressource r : Ressource.values()) {
-								if(r.ordinal() == recu.get(1)){
-									res = r;
-									break;
-								}
+						Mission m = new Mission(departure, arrival, res, quant);
+						boolean missionAlreadyExists = false;
+						for(int i = 0; i < ma.getMissions().size(); i++){
+							if(ma.getMissions().get(i).equals(m)) {
+								missionAlreadyExists = true;
+								break;
 							}
-							Mission m = new Mission(departure, arrival, res, recu.get(2));
-							boolean missionAlreadyExists = false;
-							for(int i = 0; i < ma.getMissions().size(); i++){
-								if(ma.getMissions().get(i).equals(m)) {
-									missionAlreadyExists = true;
-									break;
-								}
-							}
-							if(missionAlreadyExists){
-								reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
-							}
-							else {
-								ma.addMission(m);
-								MainGui.writeLog("Mission", "Nouvelle mission ajoutée : " + recu.get(2) + " " + res.name());
-								reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
-							}
-						} else {
+						}
+						if(missionAlreadyExists){
 							reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
+						}
+						else {
+							ma.addMission(m);
+							MainGui.writeLog("Mission", "Nouvelle mission ajoutée : " + recu.get(2) + " " + res.name());
+							reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
 						}
 					}
 					ma.send(reply);
