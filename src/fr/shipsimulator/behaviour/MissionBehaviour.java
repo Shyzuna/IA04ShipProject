@@ -86,7 +86,7 @@ public class MissionBehaviour extends Behaviour {
 
 					ACLMessage reply = msg.createReply();
 					reply.setPerformative(ACLMessage.INFORM);
-					reply.setContent(Constante.MissionListResponsePattern + result.serialize());
+					reply.setContent("MissionListResponse:" + result.serialize());
 					ma.send(reply);
 				}
 				else if(msg.getPerformative() == ACLMessage.INFORM && msg.getContent() != null){

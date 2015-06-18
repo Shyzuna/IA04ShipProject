@@ -21,6 +21,20 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 	protected enum State {NO_MISSION, MISSION_LIST_ASKED, OBS_LIST_ASKED, WAIT_FOR_VOTE, WAIT_FOR_CONFIRM, MISSION_OK, 
 							PAUSE, WAIT_ALL_OBSERVATIONS, DIRECTION_SENDED};
 
+	protected static final String CrewListResponsePattern = "CrewListResponse:";
+							
+	protected static final String MissionListResponsePattern = "MissionListResponse:";
+	protected static final String MissionCrewResponsePattern = "MissionCrewResponse:";
+	protected static final String MissionConfirmResponsePattern = "MissionConfirmResponse:";
+	protected static final String ObservationResponsePattern = "ObservationResponse:";
+	protected static final String DirectionResponsePattern = "DirectionResponse:";
+	
+	protected static final String MissionlistRequestPatern = "MissionListRequest:";
+	protected static final String MissionVoteRequestPatern = "MissionVoteRequest:";
+	protected static final String ConfirmMissionVoteRequestPatern = "ConfirmMissionVoteRequest:";
+	protected static final String ObserveRequestPatern = "ObserveRequest:";
+	protected static final String MovingRequestPatern = "MovingRequest$:!";
+							
 	protected boolean done = false;
 	protected State state;
 	
