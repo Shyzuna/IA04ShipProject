@@ -29,6 +29,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 	protected static final String MissionVoteRequestPatern = "MissionVoteRequest:";
 	protected static final String ConfirmMissionVoteRequestPatern = "ConfirmMissionVoteRequest:";
 	protected static final String ObserveRequestPatern = "ObserveRequest:";
+	protected static final String MovingRequestPatern = "MovingRequest$:!";
 
 	protected boolean done = false;
 	protected State state;
@@ -126,7 +127,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 	protected class DirectionResponse implements MessageTemplate.MatchExpression {
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg){
-	    	if(msg.getContent().matches(DirectionResponsePattern + "(.*)") && msg.getPerformative() == ACLMessage.INFORM){
+	    	if(msg.getContent().matches(DirectionResponsePattern + "(.*)")){
 				msg.setContent(msg.getContent().split(DirectionResponsePattern)[0]);
 				return true;
 			}

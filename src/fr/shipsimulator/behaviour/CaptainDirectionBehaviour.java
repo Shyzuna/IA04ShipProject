@@ -11,7 +11,6 @@ import java.util.List;
 
 import fr.shipsimulator.agent.boatCrew.BoatCaptainAgent;
 import fr.shipsimulator.agent.boatCrew.BoatCrewAgent;
-import fr.shipsimulator.behaviour.CrewMainBehaviour.SuroundingEnvironnementResponse;
 import fr.shipsimulator.constantes.Constante;
 import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.City;
@@ -23,8 +22,9 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 	private City departure;
 	private City destination;
 	private Point currentPosition;
+	private Point askedPosition;
 	
-	private Direction lastDirection;
+	private Point lastDirection;
 	private Integer cptObsResponse;
 	
 	private int[][] vision;
@@ -38,7 +38,9 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 		this.departure =  ((BoatCaptainAgent) myAgent).getCityDeparture();
 		this.destination = ((BoatCaptainAgent) myAgent).getCurrentMission().getArrival();
 		this.currentPosition.setLocation(departure.getPosX(), departure.getPosY());
-		this.lastDirection = Direction.NONE;
+		Integer offsetX = (destination.getPosX() - departure.getPosX()) / Math.abs(destination.getPosX() - departure.getPosX());
+		Integer offsetY = (destination.getPosY() - departure.getPosY()) / Math.abs(destination.getPosY() - departure.getPosY());
+		this.lastDirection = new Point(offsetX, offsetY);
 		this.cptObsResponse = 0;
 		
 		askForCrewMembers();
@@ -85,6 +87,7 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 					}
 				}
 				if(cptObsResponse >= nbCrew){
+					determineDirection();
 					sendDirection();
 					state = State.DIRECTION_SENDED;
 				}
@@ -95,7 +98,17 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 			mt = new MessageTemplate(new DirectionResponse());
 			msg = myAgent.receive(mt);
 			if (msg != null) {
-				
+				if(msg.getPerformative() == ACLMessage.AGREE){
+					// Mise a jour des vars locales pour le prochain tour
+					currentPosition = askedPosition;
+					
+					lastDirection.x = askedPosition.x - currentPosition.x;
+					lastDirection.y = askedPosition.y - currentPosition.y;
+				}
+				else{
+					MainGui.writeLog("CaptainDirectionBehaviour", "Deplacement en x:" + askedPosition.x + ", y:" + askedPosition.y + " refusée");
+				}
+				// Sinon on saute le tour
 			}
 		}
 	}
@@ -113,11 +126,52 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 		myAgent.send(obsRequest);
 	}
 	
-	private void sendDirection(){
+	private void determineDirection(){
 		if(vision[boatIndex][boatIndex] != Constante.SELF) MainGui.writeLog("CaptainDirectionBehaviour", "Erreur de vision, mon bateau n'est pas au centre");
 		
-		// TODO: Vision a +1 uniquement pour l'instant
-		// En tenant compte du cap précédent, déterminer l'évitement si besoin
+		askedPosition = new Point(-9, -9);
+		// On essaye de garder le meme cap
+		if(vision[boatIndex+lastDirection.x][boatIndex+lastDirection.y] == SEA){
+			askedPosition.x = currentPosition.x + lastDirection.x;
+			askedPosition.y = currentPosition.y + lastDirection.y;
+		}
+		// Sinon on essaye de se rapprocher des coordonnées de la destination
+		else{
+			if(currentPosition.x < destination.getPosX() && vision[boatIndex+1][boatIndex] == SEA) askedPosition.x = currentPosition.x + 1;
+			else if(vision[boatIndex-1][boatIndex] == SEA) askedPosition.x = currentPosition.x - 1;
+			
+			if(currentPosition.y < destination.getPosY() && vision[boatIndex][boatIndex+1] == SEA) askedPosition.y = currentPosition.y + 1;
+			else if(vision[boatIndex][boatIndex-1] == SEA) askedPosition.y = currentPosition.y - 1;
+		}
+		// On n'a encore rien trouvé
+		if(askedPosition.x == -9 || askedPosition.y == -9){
+			for(int i = boatIndex-1; i <= boatIndex+1; i++){
+				for(int j = boatIndex-1; j <= boatIndex+1; j++){
+					if(vision[i][j] == SEA){
+						askedPosition.x = currentPosition.x + i - boatIndex;
+						askedPosition.y = currentPosition.y + i - boatIndex;
+						 break;
+					}
+				}
+			}
+		}
+		// Blocage, on ne bouge pas
+		if(askedPosition.x == -9 || askedPosition.y == -9){
+			askedPosition.x = currentPosition.x;;
+			askedPosition.y = currentPosition.y;
+		}
+	}
+	
+	private void sendDirection(){
+		ACLMessage moveRequest = new ACLMessage(ACLMessage.REQUEST);
+		moveRequest.addReceiver(myBoat);
+		
+		// Mettre les coord de la position demandee
+		GenericMessageContent<Integer> pt = new GenericMessageContent<Integer>();
+		pt.content.add(askedPosition.x);
+		pt.content.add(askedPosition.y);
+		moveRequest.setContent(MovingRequestPatern + pt.serialize());
+		myAgent.send(moveRequest);
 	}
 	
 	// CADENCEUR
