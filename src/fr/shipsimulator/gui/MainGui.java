@@ -380,6 +380,7 @@ public class MainGui extends Application implements Runnable{
 	}
 	
 	public static void writeLog (String author, String content){
+		System.out.println(author+">"+content);
 		Platform.runLater(new Runnable(){
 			@Override
 			public void run() {

@@ -32,7 +32,7 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 		
 	public CaptainDirectionBehaviour(BoatCrewAgent ag) {
 		super(ag);
-		MainGui.writeLog("CaptainDirectionBehaviour", "New Behaviour");
+		MainGui.writeLog(myAgent.getLocalName(), "New DirectionBehaviour");
 		myAgent = (BoatCaptainAgent) ag;
 		this.boatIndex = MAX_OBS_PORTEE;
 		this.departure =  ((BoatCaptainAgent) myAgent).getCityDeparture();
@@ -184,7 +184,7 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 
 		@Override
 		protected void onTick() {
-			askForCrewMembers();
+			//askForCrewMembers();
 		}	
 	}
 }

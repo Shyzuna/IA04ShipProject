@@ -29,8 +29,8 @@ public interface Constante {
 	String BATEAU_PATH = "./ressource/bateau_icone.png";
 	String VILLE_PATH = "./ressource/ville_icone.png";
 
-	int DEFAULT_CITY = 4;
-	int DEFAULT_BOAT = 4;
+	int DEFAULT_CITY = 2;
+	int DEFAULT_BOAT = 1;
 	
 	//MAP DATA
 	int DEFAULT_COLS = 30;
