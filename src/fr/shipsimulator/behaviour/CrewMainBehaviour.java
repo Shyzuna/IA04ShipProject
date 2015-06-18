@@ -27,7 +27,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 	protected AID environnementAgent;
 	protected AID missionAgent;
 	protected AID myBoat;
-	protected List<AID> crewMembers;
+	protected List<String> crewMembers;
 	protected Integer nbCrew;
 		
 	public CrewMainBehaviour(BoatCrewAgent mAgent) {
@@ -47,7 +47,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 	}
 	
 	protected void updateCrewMembers(String msg){
-		crewMembers = new GenericMessageContent<AID>().deserialize(msg, AID.class);
+		crewMembers = new GenericMessageContent<String>().deserialize(msg, String.class);
 		nbCrew = crewMembers.size();
 	}
 	

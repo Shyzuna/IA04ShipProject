@@ -37,6 +37,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 		MainGui.writeLog(myAgent.getLocalName(), "Demande des missions disponibles");
 		askAvailableMission(myAgent.getCityDeparture());
 		state = State.MISSION_LIST_ASKED;
+		nbVotant = 0;
 	}
 	
 	@Override
@@ -76,7 +77,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 			msg = myAgent.receive(mt);
 			if (msg != null) {
 				MainGui.writeLog(myAgent.getLocalName(), "Vote re�u de " + msg.getSender());
-				Mission chosenMission = new GenericMessageContent<Mission>().deserialize(msg.getContent()).get(0);
+				Mission chosenMission = new GenericMessageContent<Mission>().deserialize(msg.getContent(),Mission.class).get(0);
 				for(Entry<Mission, Integer> entry : missionVote.entrySet()) {
 					if(entry.getKey().getId() == chosenMission.getId()){
 				    	entry.setValue(entry.getValue() + 1);
@@ -122,10 +123,10 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 		myAgent.send(missionRequest);
 	}
 		
-	private void askVoteToCrew(List<AID> crewMembers){
+	private void askVoteToCrew(List<String> crewMembers){
 		ACLMessage crewRequest = new ACLMessage(ACLMessage.REQUEST);
 		// Envoyer � tous les observer
-		for (AID aid : crewMembers)	crewRequest.addReceiver(aid);
+		for (String s : crewMembers)	crewRequest.addReceiver(new AID(s,AID.ISLOCALNAME));
 		
 		// Creer liste des missions
 		GenericMessageContent<Mission> missions = new GenericMessageContent<Mission>();
