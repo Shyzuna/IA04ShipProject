@@ -125,6 +125,8 @@ public class MissionBehaviour extends Behaviour {
 
 	private boolean isPossibleMission(Map<Integer, Integer> resources,
 			Integer type, Integer quantity) {
+		if(resources == null)
+			return false;
 		if (resources.get(type) < quantity) {
 			return false;
 		}

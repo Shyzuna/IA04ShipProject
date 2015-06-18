@@ -62,6 +62,10 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 				} else {
 					MainGui.writeLog(myAgent.getLocalName(), "Aucune mission disponible, on recommence");
 					askAvailableMission(myAgent.getCityDeparture());
+					// TODO: Pour attendre que la ville envoie, � Enlever
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {e.printStackTrace();}
 				}
 			}
 		}
