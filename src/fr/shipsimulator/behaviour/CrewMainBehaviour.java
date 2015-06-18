@@ -137,6 +137,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 	protected class ObservationResponse implements MessageTemplate.MatchExpression {
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
+			System.out.println(msg.getContent());
 			if(msg.getContent().matches(ObservationResponsePattern + "(.*)") && msg.getPerformative() == ACLMessage.INFORM){
 				msg.setContent(msg.getContent().split(ObservationResponsePattern)[1]);
 				return true;
