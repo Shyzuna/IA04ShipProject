@@ -52,12 +52,17 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 				MainGui.writeLog(myAgent.getLocalName(), "Missions disponibles re�ues\n\t" + msg.getContent());
 				missionVote = new HashMap<Mission, Integer>();
 				List<Mission> missionList = new GenericMessageContent<Mission>().deserialize(msg.getContent(),Mission.class);
-				for(Mission mission : missionList) {
-					missionVote.put(mission, 0);
+				if (missionList.isEmpty()) {
+					for(Mission mission : missionList) {
+						missionVote.put(mission, 0);
+					}
+					askForCrewMembers();
+					state = State.OBS_LIST_ASKED;	
+					MainGui.writeLog(myAgent.getLocalName(), "Demande de la liste d'�quipage pour vote envoy�e");
+				} else {
+					MainGui.writeLog(myAgent.getLocalName(), "Aucune mission disponible, on recommence");
+					askAvailableMission(myAgent.getCityDeparture());
 				}
-				askForCrewMembers();
-				state = State.OBS_LIST_ASKED;	
-				MainGui.writeLog(myAgent.getLocalName(), "Demande de la liste d'�quipage pour vote envoy�e");
 			}
 		}
 		else if(state == State.OBS_LIST_ASKED){
