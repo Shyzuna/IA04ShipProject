@@ -29,6 +29,11 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 		MainGui.writeLog(myAgent.getLocalName(), "New MissionBehaviour");
 		state = State.NO_MISSION;
 		
+		// TODO: Pour attendre que la ville envoie, à Enlever
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {e.printStackTrace();}
+		
 		MainGui.writeLog(myAgent.getLocalName(), "Demande des missions disponibles");
 		askAvailableMission(myAgent.getCityDeparture());
 		state = State.MISSION_LIST_ASKED;
@@ -47,8 +52,11 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 				missionVote = new HashMap<Mission, Integer>();
 				
 				List<Mission> missionList = new GenericMessageContent<Mission>().deserialize(msg.getContent());
+			
 				for(Mission mission : missionList) {
+					System.out.println("ok2");
 					missionVote.put(mission, 0);
+					System.out.println("ok3");
 				}
 				
 				askForCrewMembers();
@@ -111,7 +119,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 
 	private void askAvailableMission(City city){		
 		ACLMessage missionRequest = new ACLMessage(ACLMessage.REQUEST);
-		missionRequest.addReceiver(new AID("Mission", AID.ISLOCALNAME));
+		missionRequest.addReceiver(missionAgent);
 		MessageContent mc = new MessageContent();
 		mc.content.add(this.myAgent.getCityDeparture().getPosX());
 		mc.content.add(this.myAgent.getCityDeparture().getPosY());

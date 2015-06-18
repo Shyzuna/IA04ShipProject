@@ -26,7 +26,8 @@ public class CityAgent extends Agent implements Constante {
 	
 	public void setup() {
 		MainGui.writeLog("City Agent", "New city : "+ this.getLocalName());
-		this.addBehaviour(new CityMissionBehaviour(this, 5000));
+		//TODO: ENLEVER DEV TICK
+		this.addBehaviour(new CityMissionBehaviour(this, 30000));
 		this.addBehaviour(new CityExchangeBehaviour(this));
 	}
 }

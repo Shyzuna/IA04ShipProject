@@ -1,5 +1,9 @@
 package fr.shipsimulator.agent;
 
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
 import jade.wrapper.AgentController;
@@ -80,6 +84,21 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 
 	@Override
 	protected void setup() {
+		// Enregistrement sur le DF
+		ServiceDescription sd = new ServiceDescription();
+		sd.setType("Environnement");
+		sd.setName("Environnement");
+		
+		DFAgentDescription dfad = new DFAgentDescription();
+		dfad.setName(getAID());
+		dfad.addServices(sd);
+		try {
+			DFService.register(this, dfad);
+		}
+		catch (FIPAException fe) {
+			fe.printStackTrace();
+		}
+		
 		//create and launch interface
 		this.mainGui = new MainGui();
 		MainGui.setMyAgent(this);

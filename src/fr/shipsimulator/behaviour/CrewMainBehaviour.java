@@ -2,6 +2,10 @@ package fr.shipsimulator.behaviour;
 
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
@@ -16,9 +20,9 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 	
 	protected enum State {NO_MISSION, MISSION_LIST_ASKED, OBS_LIST_ASKED, WAIT_FOR_VOTE, WAIT_FOR_CONFIRM, MISSION_OK, 
 							PAUSE, WAIT_ALL_OBSERVATIONS, DIRECTION_SENDED};
-	
+
 	protected static final String CrewListResponsePattern = "CrewListResponse:";
-	
+							
 	protected static final String MissionListResponsePattern = "MissionListResponse:";
 	protected static final String MissionCrewResponsePattern = "MissionCrewResponse:";
 	protected static final String MissionConfirmResponsePattern = "MissionConfirmResponse:";
@@ -30,16 +34,20 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 	protected static final String ConfirmMissionVoteRequestPatern = "ConfirmMissionVoteRequest:";
 	protected static final String ObserveRequestPatern = "ObserveRequest:";
 	protected static final String MovingRequestPatern = "MovingRequest$:!";
-
+							
 	protected boolean done = false;
 	protected State state;
 	
+	protected AID environnementAgent;
+	protected AID missionAgent;
 	protected AID myBoat;
 	protected List<AID> crewMembers;
 	protected Integer nbCrew;
 		
 	public CrewMainBehaviour(BoatCrewAgent mAgent) {
 		this.myBoat = mAgent.getMyBoat();
+		environnementAgent = getEnvironnementAgent(mAgent);
+		missionAgent = getMissionAgent(mAgent);
 	}
 	
 	@Override
@@ -57,12 +65,40 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 		nbCrew = crewMembers.size();
 	}
 	
+	private AID getEnvironnementAgent(BoatCrewAgent selfAg) {
+		AID rec = null;
+		DFAgentDescription template = new DFAgentDescription();
+		ServiceDescription sd = new ServiceDescription();
+		sd.setType("Environnement");
+		sd.setName("Environnement");
+		template.addServices(sd);
+		try {
+			DFAgentDescription[] result = DFService.search(selfAg, template);
+			rec = result[0].getName();
+		} catch(FIPAException fe) {}
+		return rec;
+	}
+	
+	private AID getMissionAgent(BoatCrewAgent selfAg) {
+		AID rec = null;
+		DFAgentDescription template = new DFAgentDescription();
+		ServiceDescription sd = new ServiceDescription();
+		sd.setType("Mission");
+		sd.setName("Mission");
+		template.addServices(sd);
+		try {
+			DFAgentDescription[] result = DFService.search(selfAg, template);
+			rec = result[0].getName();
+		} catch(FIPAException fe) {}
+		return rec;
+	}
+	
 	// ==== MESSAGE TEMPLATES ====
 	protected class CrewListResponse implements MessageTemplate.MatchExpression {
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
 	    	if(msg.getContent().matches(CrewListResponsePattern + "(.*)") && msg.getPerformative() == ACLMessage.INFORM){
-				msg.setContent(msg.getContent().split(CrewListResponsePattern)[0]);
+				msg.setContent(msg.getContent().split(CrewListResponsePattern)[1]);
 				return true;
 			}
 	    	return false;
@@ -73,9 +109,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
 	    	if(msg.getContent().matches(MissionListResponsePattern + "(.*)") && msg.getPerformative() == ACLMessage.INFORM){
-	    		System.out.println(msg.getContent().replaceFirst(MissionListResponsePattern, ""));
-	    		System.out.println(msg.getContent().split(MissionListResponsePattern)[0]);
-	    		msg.setContent(msg.getContent().replaceFirst(MissionListResponsePattern, ""));
+				msg.setContent(msg.getContent().split(MissionListResponsePattern)[1]);
 				return true;
 			}
 	    	return false;
