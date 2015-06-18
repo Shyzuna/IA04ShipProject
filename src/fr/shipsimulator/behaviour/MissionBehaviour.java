@@ -9,7 +9,6 @@ import java.util.Random;
 
 import fr.shipsimulator.agent.CityAgent;
 import fr.shipsimulator.agent.MissionAgent;
-import fr.shipsimulator.constantes.Constante;
 import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.City;
 import fr.shipsimulator.structure.GenericMessageContent;
