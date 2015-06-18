@@ -73,7 +73,6 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 			mt = new MessageTemplate(new ObservationResponse());
 			msg = myAgent.receive(mt);
 			if (msg != null) {
-				System.out.println("nya7");
 				mt = new MessageTemplate(new ObservationResponse());
 				msg = myAgent.receive(mt);
 				if (msg != null) {

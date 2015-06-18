@@ -15,7 +15,7 @@ public class ObserverObservBehaviour extends CrewMainBehaviour{
 	private static final long serialVersionUID = 1L;
 
 	private final Integer porteeObs;
-	
+	private AID captain;
 	
 	
 	public ObserverObservBehaviour(BoatCrewAgent ag) {
@@ -31,6 +31,7 @@ public class ObserverObservBehaviour extends CrewMainBehaviour{
 		msg = myAgent.receive(mt);
 		if (msg != null) {
 			List<Integer> pos = new GenericMessageContent<Integer>().deserialize(msg.getContent(),Integer.class);
+			captain = msg.getSender();
 			askSuroundingEnvironnement(new Point(pos.get(0), pos.get(1)));
 		}
 		else{
@@ -59,13 +60,8 @@ public class ObserverObservBehaviour extends CrewMainBehaviour{
 	private void transfertObservToCaptain(ACLMessage msg){
 		ACLMessage obsResponse = new ACLMessage(ACLMessage.INFORM);
 		
-		GenericMessageContent<Integer> pt = new GenericMessageContent<Integer>();
-		List<Integer> list = pt.deserialize(msg.getContent());
-		pt.content = new ArrayList<Integer>();
-		pt.content.add(list.get(0));
-		pt.content.add(list.get(1));
-		obsResponse.setContent(ObservationResponsePattern + pt.serialize());
-		obsResponse.addReceiver(new AID("Captain_Boat"+list.get(2), AID.ISLOCALNAME));
+		obsResponse.setContent(ObservationResponsePattern + msg.getContent());
+		obsResponse.addReceiver(captain);
 		myAgent.send(obsResponse);
 	}
 }
