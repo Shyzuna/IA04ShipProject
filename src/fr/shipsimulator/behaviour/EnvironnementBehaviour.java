@@ -25,7 +25,7 @@ public class EnvironnementBehaviour extends Behaviour {
 		ACLMessage msg = ea.receive();
 		if(msg != null) {
 			AID sender = msg.getSender();
-			if(sender.getLocalName().matches("Observeur_(.*)")){
+			if(sender.getLocalName().matches("Observeur_Boat(.*)")){
 				if(msg.getPerformative() == ACLMessage.REQUEST && msg.getContent() != null){
 					System.out.println("nya2");
 					List<Integer> recu = MessageContent.deserialize(msg.getContent());
