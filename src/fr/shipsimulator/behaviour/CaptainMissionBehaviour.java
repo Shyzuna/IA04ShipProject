@@ -52,7 +52,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 				MainGui.writeLog(myAgent.getLocalName(), "Missions disponibles re�ues\n\t" + msg.getContent());
 				missionVote = new HashMap<Mission, Integer>();
 				List<Mission> missionList = new GenericMessageContent<Mission>().deserialize(msg.getContent(),Mission.class);
-				if (missionList.isEmpty()) {
+				if (!missionList.isEmpty()) {
 					for(Mission mission : missionList) {
 						missionVote.put(mission, 0);
 					}
