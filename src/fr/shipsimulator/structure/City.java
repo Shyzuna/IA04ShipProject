@@ -85,6 +85,7 @@ public class City implements Constante {
 		int[] needs = new int[2];
 		int minType = 0;
 		int minQuant = -1;
+		int maxQuant = 0;
 		for (int i = 0; i < resources.size(); ++i) {
 			int quant = resources.get(i);
 			if (minQuant == -1) {
@@ -96,9 +97,12 @@ public class City implements Constante {
 				minType = i;
 				minQuant = quant;
 			}
+			if (quant > maxQuant) {
+				maxQuant = quant;
+			}
 		}
-		int min = minQuant < MIN_DEFAULT_RES ? MIN_DEFAULT_RES - minQuant : 1;
-		int max = MAX_DEFAULT_RES - minQuant;
+		int min = minQuant < 1 ? 1 : minQuant;
+		int max = maxQuant > minQuant ? maxQuant : min + MIN_DEFAULT_RES;
 		needs[0] = minType;
 		needs[1] = min + new Random().nextInt(max - min);
 		return needs;

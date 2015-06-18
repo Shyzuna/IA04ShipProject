@@ -1,11 +1,8 @@
 package fr.shipsimulator.behaviour;
 
-import java.util.List;
-
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import fr.shipsimulator.agent.BoatAgent;
 import fr.shipsimulator.agent.boatCrew.BoatCrewAgent;
 import fr.shipsimulator.constantes.Constante;
 import fr.shipsimulator.gui.MainGui;
@@ -29,11 +26,7 @@ public class CaptainCommerceBehaviour extends CrewMainBehaviour{
 	public void action() {
 		MessageTemplate mt;
 		ACLMessage msg;
-		
-		if(state == State.MISSION_LIST_ASKED){
-			myAgent.addBehaviour(new CaptainDirectionBehaviour((BoatCrewAgent) myAgent));
-		}
-		
+
 		if(tc == TypeCommerce.ACHAT){
 			if(state == State.REQUEST_RES){
 				// 1. State = demande achat envoyée
@@ -64,6 +57,7 @@ public class CaptainCommerceBehaviour extends CrewMainBehaviour{
 						MainGui.writeLog("CaptainAgent", this.myAgent.getName() + " exchange with city failed");
 					}
 				}
+				myAgent.addBehaviour(new CaptainDirectionBehaviour((BoatCrewAgent) myAgent));
 				this.done = true;
 			}
 		}

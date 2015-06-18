@@ -3,6 +3,7 @@ package fr.shipsimulator.behaviour;
 import java.util.List;
 
 import fr.shipsimulator.agent.CityAgent;
+import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.City;
 import fr.shipsimulator.structure.GenericMessageContent;
 import jade.core.Agent;
@@ -32,9 +33,11 @@ public class CityExchangeBehaviour extends CyclicBehaviour {
 			ACLMessage response = request.createReply();
 			if (correctReq == true) {
 				response.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+				MainGui.writeLog("CityAgent", this.myAgent.getName() + " accepted exchange");
 				response.setContent("RessourcesExchanged");
 			} else {
 				response.setPerformative(ACLMessage.REJECT_PROPOSAL);
+				MainGui.writeLog("CityAgent", this.myAgent.getName() + " refused exchange");
 				response.setContent("RessourcesNotExchanged");
 			}
 			this.myAgent.send(response);
