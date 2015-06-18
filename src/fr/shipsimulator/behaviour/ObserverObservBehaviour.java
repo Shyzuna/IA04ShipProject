@@ -5,6 +5,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.shipsimulator.agent.boatCrew.BoatCrewAgent;
@@ -36,7 +37,6 @@ public class ObserverObservBehaviour extends CrewMainBehaviour{
 			mt = new MessageTemplate(new SuroundingEnvironnementResponse());
 			msg = myAgent.receive(mt);
 			if (msg != null) {
-				System.out.println("nya5");
 				transfertObservToCaptain(msg);
 			}
 			else block();
@@ -58,8 +58,14 @@ public class ObserverObservBehaviour extends CrewMainBehaviour{
 	
 	private void transfertObservToCaptain(ACLMessage msg){
 		ACLMessage obsResponse = new ACLMessage(ACLMessage.INFORM);
-		obsResponse.setContent(ObservationResponsePattern + msg.getContent());
-		obsResponse.addReceiver(new AID("Environnement", AID.ISLOCALNAME));
+		
+		GenericMessageContent<Integer> pt = new GenericMessageContent<Integer>();
+		List<Integer> list = pt.deserialize(msg.getContent());
+		pt.content = new ArrayList<Integer>();
+		pt.content.add(list.get(0));
+		pt.content.add(list.get(1));
+		obsResponse.setContent(ObservationResponsePattern + pt.serialize());
+		obsResponse.addReceiver(new AID("Captain_Boat"+list.get(2), AID.ISLOCALNAME));
 		myAgent.send(obsResponse);
 	}
 }

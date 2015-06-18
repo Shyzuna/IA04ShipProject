@@ -29,8 +29,10 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 	protected AID myBoat;
 	protected List<String> crewMembers;
 	protected Integer nbCrew;
+	protected BoatCrewAgent myAgent;
 		
 	public CrewMainBehaviour(BoatCrewAgent mAgent) {
+		myAgent = mAgent;
 		this.myBoat = mAgent.getMyBoat();
 		environnementAgent = getEnvironnementAgent(mAgent);
 		missionAgent = getMissionAgent(mAgent);
