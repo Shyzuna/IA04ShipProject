@@ -85,6 +85,12 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 		MainGui.setMyAgent(this);
 		new Thread(mainGui).start();
 		
+		this.stateSimulation = Constante.STOP;
+		this.listBoat = new ArrayList<>();
+		this.listCity = new ArrayList<>();
+
+		this.addBehaviour(new EnvironnementBehaviour(this));
+		
 		AgentController agMission;
 		missionAgent = new MissionAgent(this);
 		try {
@@ -93,12 +99,6 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 		} catch (StaleProxyException e) {
 			e.printStackTrace();
 		}
-		
-		this.stateSimulation = Constante.STOP;
-		this.listBoat = new ArrayList<>();
-		this.listCity = new ArrayList<>();
-
-		this.addBehaviour(new EnvironnementBehaviour(this));
 	}
 	
 	@Override
