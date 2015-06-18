@@ -25,9 +25,9 @@ public class BoatCrewListBehaviour extends CyclicBehaviour {
 		if (request != null) {
 			ACLMessage reply = request.createReply();
 			reply.setPerformative(ACLMessage.INFORM);
-			GenericMessageContent<AID> mc = new GenericMessageContent<AID>();
+			GenericMessageContent<String> mc = new GenericMessageContent<String>();
 			for (AID aid : boat.getCrewAIDs()) {
-				mc.content.add(aid);
+				mc.content.add(aid.getLocalName());
 			}
 			System.out.println(mc.serialize());
 			reply.setContent(Constante.CrewListResponsePattern + mc.serialize());

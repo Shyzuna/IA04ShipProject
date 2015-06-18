@@ -28,7 +28,7 @@ public class ObserverVoteBehaviour extends CrewMainBehaviour{
 			Mission missionChoosed = null;
 			Integer MaxVote = null;
 			Integer randValue;
-			List<Mission> missionList = new GenericMessageContent<Mission>().deserialize(msg.getContent());
+			List<Mission> missionList = new GenericMessageContent<Mission>().deserialize(msg.getContent(), Mission.class);
 			
 			// Init seed différente
 			Random r = new Random();

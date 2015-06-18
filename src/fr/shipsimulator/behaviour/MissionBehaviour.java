@@ -9,6 +9,7 @@ import java.util.Random;
 
 import fr.shipsimulator.agent.CityAgent;
 import fr.shipsimulator.agent.MissionAgent;
+import fr.shipsimulator.constantes.Constante;
 import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.City;
 import fr.shipsimulator.structure.GenericMessageContent;
@@ -88,9 +89,9 @@ public class MissionBehaviour extends Behaviour {
 					reply.setContent("MissionListResponse:" + result.serialize());
 					ma.send(reply);
 				}
-				else if(msg.getPerformative() == ACLMessage.INFORM && msg.getContent() != null){
+				else if(msg.getPerformative() == ACLMessage.CONFIRM && msg.getContent() != null){
 					//le message contient la mission choisie
-					Mission chosen = new GenericMessageContent<Mission>().deserialize(msg.getContent()).get(0);
+					Mission chosen = new GenericMessageContent<Mission>().deserialize(msg.getContent(), Mission.class).get(0);
 					boolean stillAvailable = false;
 					for(Mission mission : missions){
 						if(mission.equals(chosen)){
@@ -101,7 +102,7 @@ public class MissionBehaviour extends Behaviour {
 					}
 					ACLMessage reply = msg.createReply();
 					reply.setPerformative(stillAvailable ? ACLMessage.AGREE : ACLMessage.REFUSE);
-					reply.setContent("MissionConfirmeResponse");
+					reply.setContent(Constante.MissionConfirmResponsePattern);
 					ma.send(reply);
 				}
 			}
