@@ -51,7 +51,7 @@ public class BoatAgent extends Agent implements Constante {
 		this.addBehaviour(new BoatExchangeBehaviour(this));
 
 		int index = Integer.parseInt(this.getLocalName().replaceFirst("Boat", ""));
-		captain = new BoatCaptainAgent(this.getAID(), ea.getListCity().get(index).getCity());
+		captain = new BoatCaptainAgent(this, ea.getListCity().get(index).getCity());
 		observer = new BoatObserverAgent(this.getAID());
 		boat.addCrewMember(captain);
 		boat.addCrewMember(observer);

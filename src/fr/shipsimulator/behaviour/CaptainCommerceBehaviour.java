@@ -3,6 +3,7 @@ package fr.shipsimulator.behaviour;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import fr.shipsimulator.agent.boatCrew.BoatCaptainAgent;
 import fr.shipsimulator.agent.boatCrew.BoatCrewAgent;
 import fr.shipsimulator.constantes.Constante;
 import fr.shipsimulator.gui.MainGui;
@@ -29,14 +30,14 @@ public class CaptainCommerceBehaviour extends CrewMainBehaviour{
 
 		if(tc == TypeCommerce.ACHAT){
 			if(state == State.REQUEST_RES){
-				// 1. State = demande achat envoyée
+				// 1. State = demande achat envoyï¿½e
 				ACLMessage request = new ACLMessage(ACLMessage.PROPOSE);
 				request.addReceiver(new AID(chosenMission.getDeparture().getName() , AID.ISLOCALNAME));
 				GenericMessageContent<Integer> mc = new GenericMessageContent<Integer>();
 				mc.content.add(chosenMission.getRessource().ordinal());
 				mc.content.add(-1*chosenMission.getResourceAmount());
 				request.setContent(mc.serialize());
-				MainGui.writeLog("CaptainAgent", this.myAgent.getName() + " souhaite acheter à une ville");
+				MainGui.writeLog("CaptainAgent", this.myAgent.getName() + " souhaite acheter ï¿½ une ville");
 				myAgent.send(request);
 				state = State.RESPONSE_RES;
 			}
@@ -52,12 +53,12 @@ public class CaptainCommerceBehaviour extends CrewMainBehaviour{
 						mc2.content.add(chosenMission.getResourceAmount());
 						boatInform.setContent("ExchangeInform$:!" + mc2.serialize());
 						myAgent.send(boatInform);
-						myAgent.addBehaviour(new CaptainDirectionBehaviour((BoatCrewAgent) myAgent));
+						myAgent.addBehaviour(new CaptainDirectionBehaviour((BoatCaptainAgent) myAgent));
 					} else {
 						MainGui.writeLog("CaptainAgent", this.myAgent.getName() + " exchange with city failed");
 					}
 				}
-				myAgent.addBehaviour(new CaptainDirectionBehaviour((BoatCrewAgent) myAgent));
+				myAgent.addBehaviour(new CaptainDirectionBehaviour((BoatCaptainAgent) myAgent));
 				this.done = true;
 			}
 		}
@@ -66,10 +67,10 @@ public class CaptainCommerceBehaviour extends CrewMainBehaviour{
 		}
 		
 		/*
-		// Achat, il faut obtenir de mission la quantité à récupérer dans la ville, et la ville (localName)
+		// Achat, il faut obtenir de mission la quantitï¿½ ï¿½ rï¿½cupï¿½rer dans la ville, et la ville (localName)
 		
 		
-		// 2. State = résultat de la demande
+		// 2. State = rï¿½sultat de la demande
 		MessageTemplate mt = new MessageTemplate(new ExchangeResponse());
 		ACLMessage result = myAgent.receive(mt);
 		if (request != null) {
@@ -86,19 +87,19 @@ public class CaptainCommerceBehaviour extends CrewMainBehaviour{
 			}
 		}
 		
-		// Vente, il faut obtenir de mission la quantité à vendre à la ville, et la ville (localName)
+		// Vente, il faut obtenir de mission la quantitï¿½ ï¿½ vendre ï¿½ la ville, et la ville (localName)
 		
-		// 1. State = demande achat envoyée
+		// 1. State = demande achat envoyï¿½e
 		ACLMessage request = new ACLMessage(ACLMessage.PROPOSE);
 		request.addReceiver(new AID(cityName , AID.ISLOCALNAME));
 		GenericMessageContent<Integer> mc = new GenericMessageContent<Integer>();
 		mc.content.add(typeRes);
 		mc.content.add(quantite);
 		request.setContent(mc.serialize());
-		MainGui.writeLog("CaptainAgent", this.myAgent.getName() + " souhaite vendre à une ville");
+		MainGui.writeLog("CaptainAgent", this.myAgent.getName() + " souhaite vendre ï¿½ une ville");
 		myAgent.send(request);
 				
-		// 2. State = résultat de la demande
+		// 2. State = rï¿½sultat de la demande
 		MessageTemplate mt = new MessageTemplate(new ExchangeResponse());
 		ACLMessage result = myAgent.receive(mt);
 		if (request != null) {
