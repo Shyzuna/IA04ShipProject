@@ -42,7 +42,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 	protected void askForCrewMembers(){
 		ACLMessage memberRequest = new ACLMessage(ACLMessage.REQUEST);
 		memberRequest.addReceiver(myBoat);
-		memberRequest.setContent("CrewListRequest");
+		memberRequest.setContent(CrewListRequestPattern);
 		myAgent.send(memberRequest);
 	}
 	
