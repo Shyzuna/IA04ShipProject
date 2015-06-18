@@ -124,7 +124,10 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 	private void askVoteToCrew(List<String> crewMembers){
 		ACLMessage crewRequest = new ACLMessage(ACLMessage.REQUEST);
 		// Envoyer � tous les observer
-		for (String s : crewMembers)	crewRequest.addReceiver(new AID(s,AID.ISLOCALNAME));
+		for (String s : crewMembers){
+			System.out.println(s);
+			crewRequest.addReceiver(new AID(s,AID.ISLOCALNAME));
+		}
 		
 		// Creer liste des missions
 		GenericMessageContent<Mission> missions = new GenericMessageContent<Mission>();
