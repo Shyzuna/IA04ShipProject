@@ -76,7 +76,6 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 				msg = myAgent.receive(mt);
 				if (msg != null) {
 					List<Integer> surrounding = new GenericMessageContent<Integer>().deserialize(msg.getContent());
-					
 					// Ofset pour centrer
 					Integer porteObs = (int) Math.sqrt(surrounding.size());
 					porteObs = (porteObs-1) / 2;
