@@ -23,6 +23,7 @@ public class BoatCrewListBehaviour extends CyclicBehaviour {
 		MessageTemplate mt = new MessageTemplate(new MatchCrewListRequest());
 		ACLMessage request = myAgent.receive(mt);
 		if (request != null) {
+			System.out.println("nya");
 			ACLMessage reply = request.createReply();
 			reply.setPerformative(ACLMessage.INFORM);
 			GenericMessageContent<AID> mc = new GenericMessageContent<AID>();
@@ -39,7 +40,7 @@ public class BoatCrewListBehaviour extends CyclicBehaviour {
 	private class MatchCrewListRequest implements MessageTemplate.MatchExpression {
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
-	    	return msg.getSender().getName().matches("(.*)Boat[COG](.*)Agent(.*)") && msg.getContent().matches("CrewListRequest(.*)") && msg.getPerformative() == ACLMessage.REQUEST;
+	    	return msg.getSender().getName().matches("(.*)_"+myAgent.getLocalName()+"(.*)") && msg.getContent().matches("CrewListRequest(.*)") && msg.getPerformative() == ACLMessage.REQUEST;
 	    }
 	}
 }
