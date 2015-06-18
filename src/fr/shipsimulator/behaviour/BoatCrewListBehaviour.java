@@ -1,14 +1,15 @@
 package fr.shipsimulator.behaviour;
 
-import fr.shipsimulator.agent.BoatAgent;
-import fr.shipsimulator.gui.MainGui;
-import fr.shipsimulator.structure.Boat;
-import fr.shipsimulator.structure.GenericMessageContent;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import fr.shipsimulator.agent.BoatAgent;
+import fr.shipsimulator.constantes.Constante;
+import fr.shipsimulator.gui.MainGui;
+import fr.shipsimulator.structure.Boat;
+import fr.shipsimulator.structure.GenericMessageContent;
 
 public class BoatCrewListBehaviour extends CyclicBehaviour {
 	private static final long serialVersionUID = 1L;
@@ -29,7 +30,7 @@ public class BoatCrewListBehaviour extends CyclicBehaviour {
 			for (AID aid : boat.getCrewAIDs()) {
 				mc.content.add(aid);
 			}
-			reply.setContent("CrewListResponse$:!" + mc.serialize());
+			reply.setContent(Constante.CrewListResponsePattern + mc.serialize());
 			MainGui.writeLog("Boat Agent", this.myAgent.getName() + " sends crew list");
 			myAgent.send(reply);
 		}
@@ -39,7 +40,7 @@ public class BoatCrewListBehaviour extends CyclicBehaviour {
 	private class MatchCrewListRequest implements MessageTemplate.MatchExpression {
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
-	    	return msg.getSender().getName().matches("(.*)Boat[COG](.*)Agent(.*)") && msg.getContent().matches("CrewListRequest(.*)") && msg.getPerformative() == ACLMessage.REQUEST;
+	    	return msg.getContent().matches(Constante.CrewListRequestPattern + "(.*)") && msg.getPerformative() == ACLMessage.REQUEST;
 	    }
 	}
 }

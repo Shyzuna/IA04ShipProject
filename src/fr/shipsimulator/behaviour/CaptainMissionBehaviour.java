@@ -54,7 +54,6 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 				for(Mission mission : missionList) {
 					missionVote.put(mission, 0);
 				}
-				
 				askForCrewMembers();
 				state = State.OBS_LIST_ASKED;	
 				MainGui.writeLog(myAgent.getLocalName(), "Demande de la liste d'�quipage pour vote envoy�e");
@@ -123,7 +122,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 		myAgent.send(missionRequest);
 	}
 		
-	private void askVoteToCrew(List<AID> crewMembers){		
+	private void askVoteToCrew(List<AID> crewMembers){
 		ACLMessage crewRequest = new ACLMessage(ACLMessage.REQUEST);
 		// Envoyer � tous les observer
 		for (AID aid : crewMembers)	crewRequest.addReceiver(aid);
