@@ -45,7 +45,7 @@ public class CityExchangeBehaviour extends CyclicBehaviour {
 	private class ExchangeRequest implements MessageTemplate.MatchExpression {
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
-	    	return msg.getSender().getName().matches("(.*)BoatCaptainAgent(.*)") && msg.getPerformative() == ACLMessage.PROPOSE;
+	    	return msg.getSender().getName().matches("Capitaine_Boat(.*)") && msg.getPerformative() == ACLMessage.PROPOSE;
 	    }
 	}
 }

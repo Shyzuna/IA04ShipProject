@@ -27,6 +27,7 @@ public class BoatExchangeBehaviour extends CyclicBehaviour {
 		MessageTemplate mt = new MessageTemplate(new ExchangeInform());
 		ACLMessage request = myAgent.receive(mt);
 		if (request != null) {
+			System.out.println("nya");
 			String [] split = request.getContent().split("\\$:!");
 			if (split[1] != null) {
 				List<Integer> reqExchange = new GenericMessageContent<Integer>().deserialize(split[1]);
@@ -49,7 +50,8 @@ public class BoatExchangeBehaviour extends CyclicBehaviour {
 	private class ExchangeInform implements MessageTemplate.MatchExpression {
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
-	    	return msg.getSender().getName().matches("(.*)BoatCaptainAgent(.*)") && msg.getContent().matches("ExchangeInform$:!(.*)") && msg.getPerformative() == ACLMessage.INFORM;
+			System.out.println("rec:"+msg.getSender().getName());
+	    	return msg.getSender().getName().matches("Capitaine_Boat(.*)") && msg.getContent().matches("ExchangeInform$:!(.*)") && msg.getPerformative() == ACLMessage.INFORM;
 	    }
 	}
 }
