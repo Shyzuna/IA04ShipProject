@@ -30,15 +30,16 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 	private int[][] vision;
 	private Integer boatIndex;
 		
-	public CaptainDirectionBehaviour(BoatCrewAgent ag) {
+	public CaptainDirectionBehaviour(BoatCaptainAgent ag) {
 		super(ag);
 		MainGui.writeLog(ag.getLocalName(), "New DirectionBehaviour");
-		myAgent = (BoatCaptainAgent) ag;
+		myAgent = ag;
+		
 		this.boatIndex = MAX_OBS_PORTEE;
 		this.departure =  ((BoatCaptainAgent) myAgent).getCityDeparture();
 		this.destination = ((BoatCaptainAgent) myAgent).getCurrentMission().getArrival();
 		this.currentPosition = new Point();
-		this.currentPosition.setLocation(departure.getPosX(), departure.getPosY());
+		this.currentPosition.setLocation(ag.getBoat().getBoat().getPosX(), ag.getBoat().getBoat().getPosY());
 		Integer offsetX = (destination.getPosX() - departure.getPosX()) / Math.abs(destination.getPosX() - departure.getPosX());
 		Integer offsetY = (destination.getPosY() - departure.getPosY()) / Math.abs(destination.getPosY() - departure.getPosY());
 		this.lastDirection = new Point(offsetX, offsetY);
@@ -59,7 +60,7 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 			if (msg != null) {
 				updateCrewMembers(msg.getContent());
 				
-				// Reset les observations précédentes
+				// Reset les observations prï¿½cï¿½dentes
 				vision = new int[2* MAX_OBS_PORTEE +1][2* MAX_OBS_PORTEE +1];
 				
 				askForObservation();
@@ -108,7 +109,7 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 					lastDirection.y = askedPosition.y - currentPosition.y;
 				}
 				else{
-					MainGui.writeLog("CaptainDirectionBehaviour", "Deplacement en x:" + askedPosition.x + ", y:" + askedPosition.y + " refusée");
+					MainGui.writeLog("CaptainDirectionBehaviour", "Deplacement en x:" + askedPosition.x + ", y:" + askedPosition.y + " refusï¿½e");
 				}
 				// Sinon on saute le tour
 			}
@@ -118,7 +119,7 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 	private void askForObservation(){
 		ACLMessage obsRequest = new ACLMessage(ACLMessage.REQUEST);
 		
-		// Envoyer à tous les observer
+		// Envoyer ï¿½ tous les observer
 		for (String s : crewMembers) obsRequest.addReceiver(new AID(s,AID.ISLOCALNAME));
 		
 		// Mettre les coord de la position actuelle
@@ -139,7 +140,7 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 			askedPosition.x = currentPosition.x + lastDirection.x;
 			askedPosition.y = currentPosition.y + lastDirection.y;
 		}
-		// Sinon on essaye de se rapprocher des coordonnées de la destination
+		// Sinon on essaye de se rapprocher des coordonnï¿½es de la destination
 		else{
 			if(currentPosition.x < destination.getPosX() && vision[boatIndex+1][boatIndex] == SEA) askedPosition.x = currentPosition.x + 1;
 			else if(vision[boatIndex-1][boatIndex] == SEA) askedPosition.x = currentPosition.x - 1;
@@ -147,7 +148,7 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 			if(currentPosition.y < destination.getPosY() && vision[boatIndex][boatIndex+1] == SEA) askedPosition.y = currentPosition.y + 1;
 			else if(vision[boatIndex][boatIndex-1] == SEA) askedPosition.y = currentPosition.y - 1;
 		}
-		// On n'a encore rien trouvé
+		// On n'a encore rien trouvï¿½
 		if(askedPosition.x == -9 || askedPosition.y == -9){
 			for(int i = boatIndex-1; i <= boatIndex+1; i++){
 				for(int j = boatIndex-1; j <= boatIndex+1; j++){
