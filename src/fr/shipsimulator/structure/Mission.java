@@ -51,4 +51,11 @@ public class Mission {
 			return false;
 		return (ressource == other.getRessource() && resourceAmount == other.getResourceAmount());
 	}
+
+	@Override
+	public String toString() {
+		return "Mission [id=" + id + ", departure=" + departure + ", arrival="
+				+ arrival + ", ressource=" + ressource + ", resourceAmount="
+				+ resourceAmount + "]";
+	}
 }

@@ -1,6 +1,10 @@
 package fr.shipsimulator.agent;
 
 import jade.core.Agent;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +23,21 @@ public class MissionAgent extends Agent {
 	}
 	
 	public void setup(){
+		// Enregistrement sur le DF
+		ServiceDescription sd = new ServiceDescription();
+		sd.setType("Mission");
+		sd.setName("Mission");
+		
+		DFAgentDescription dfad = new DFAgentDescription();
+		dfad.setName(getAID());
+		dfad.addServices(sd);
+		try {
+			DFService.register(this, dfad);
+		}
+		catch (FIPAException fe) {
+			fe.printStackTrace();
+		}
+				
 		missions = new ArrayList<Mission>();
 		this.addBehaviour(new MissionBehaviour(this));
 	}

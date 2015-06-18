@@ -1,13 +1,13 @@
 package fr.shipsimulator.behaviour;
 
-import fr.shipsimulator.agent.CityAgent;
-import fr.shipsimulator.gui.MainGui;
-import fr.shipsimulator.structure.City;
-import fr.shipsimulator.structure.GenericMessageContent;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
+import fr.shipsimulator.agent.CityAgent;
+import fr.shipsimulator.gui.MainGui;
+import fr.shipsimulator.structure.City;
+import fr.shipsimulator.structure.GenericMessageContent;
 
 public class CityMissionBehaviour extends TickerBehaviour {
 	private static final long serialVersionUID = 1L;
@@ -16,10 +16,11 @@ public class CityMissionBehaviour extends TickerBehaviour {
 	public CityMissionBehaviour(Agent a, long period) {
 		super(a, period);
 		city = ((CityAgent)this.myAgent).getCity();
+		onTick();
 	}
 	
 	protected void onTick() {
-		int[] needs = city.getNeeds();
+		int[] needs = city.obtainNeeds();
 		Integer type = needs[0];
 		Integer quantity = needs[1];
 		// Envoie un message � l'agent mission pour signifier les besoins
