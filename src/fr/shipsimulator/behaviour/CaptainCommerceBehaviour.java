@@ -53,12 +53,12 @@ public class CaptainCommerceBehaviour extends CrewMainBehaviour{
 				if (request != null) {
 					if (request.getPerformative() == ACLMessage.ACCEPT_PROPOSAL) {
 						ACLMessage boatInform = new ACLMessage(ACLMessage.INFORM);
-						request.addReceiver(((BoatCrewAgent)this.myAgent).getMyBoat());
+						boatInform.addReceiver(((BoatCrewAgent)this.myAgent).getMyBoat());
 						GenericMessageContent<Integer> mc2 = new GenericMessageContent<Integer>();
 						mc2.content.add(chosenMission.getRessource().ordinal());
 						mc2.content.add(chosenMission.getResourceAmount());
-						request.setContent("ExchangeInform$:!" + mc2.serialize());
-						myAgent.send(request);
+						boatInform.setContent("ExchangeInform$:!" + mc2.serialize());
+						myAgent.send(boatInform);
 					} else {
 						MainGui.writeLog("CaptainAgent", this.myAgent.getName() + " exchange with city failed");
 					}

@@ -50,8 +50,8 @@ public class BoatExchangeBehaviour extends CyclicBehaviour {
 	private class ExchangeInform implements MessageTemplate.MatchExpression {
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
-			System.out.println("rec:"+msg.getSender().getName());
-	    	return msg.getSender().getName().matches("Capitaine_Boat(.*)") && msg.getContent().matches("ExchangeInform$:!(.*)") && msg.getPerformative() == ACLMessage.INFORM;
+			System.out.println(msg.getContent());
+	    	return msg.getSender().getName().matches("Capitaine_Boat(.*)") && msg.getContent().matches("ExchangeInform\\$:!(.*)") && msg.getPerformative() == ACLMessage.INFORM;
 	    }
 	}
 }
