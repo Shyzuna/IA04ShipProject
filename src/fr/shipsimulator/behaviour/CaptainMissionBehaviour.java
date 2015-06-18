@@ -50,7 +50,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 			if (msg != null) {
 				MainGui.writeLog(myAgent.getLocalName(), "Missions disponibles reçues\n\t" + msg.getContent());
 				missionVote = new HashMap<Mission, Integer>();
-				List<Mission> missionList = new GenericMessageContent<Mission>().deserialize(msg.getContent());
+				List<Mission> missionList = new GenericMessageContent<Mission>().deserialize(msg.getContent(),Mission.class);
 				for(Mission mission : missionList) {
 					System.out.println("ok2");
 					missionVote.put(mission, 0);

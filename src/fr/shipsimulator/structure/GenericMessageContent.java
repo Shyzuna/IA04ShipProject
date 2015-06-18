@@ -39,7 +39,7 @@ public class GenericMessageContent<T> {
 		ObjectMapper mapper = new ObjectMapper();
 		List<T> deserialized = new ArrayList<T>();
 		try {
-			deserialized = mapper.readValue(serialized, TypeFactory.defaultInstance().constructCollectionType(List.class, val)/*new TypeReference<List<T>>(){}*/);
+			deserialized = mapper.readValue(serialized, TypeFactory.defaultInstance().constructCollectionType(List.class, val));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
