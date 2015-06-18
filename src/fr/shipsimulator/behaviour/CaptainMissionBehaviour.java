@@ -125,8 +125,9 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 		ACLMessage crewRequest = new ACLMessage(ACLMessage.REQUEST);
 		// Envoyer � tous les observer
 		for (String s : crewMembers){
-			System.out.println(s);
-			crewRequest.addReceiver(new AID(s,AID.ISLOCALNAME));
+			if(!s.equalsIgnoreCase(myAgent.getLocalName())){
+				crewRequest.addReceiver(new AID(s,AID.ISLOCALNAME));
+			}
 		}
 		
 		// Creer liste des missions
