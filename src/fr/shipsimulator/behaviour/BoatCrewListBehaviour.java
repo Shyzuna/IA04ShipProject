@@ -1,6 +1,7 @@
 package fr.shipsimulator.behaviour;
 
 import fr.shipsimulator.agent.BoatAgent;
+import fr.shipsimulator.constantes.Constante;
 import fr.shipsimulator.gui.MainGui;
 import fr.shipsimulator.structure.Boat;
 import fr.shipsimulator.structure.GenericMessageContent;
@@ -23,14 +24,13 @@ public class BoatCrewListBehaviour extends CyclicBehaviour {
 		MessageTemplate mt = new MessageTemplate(new MatchCrewListRequest());
 		ACLMessage request = myAgent.receive(mt);
 		if (request != null) {
-			System.out.println("nya");
 			ACLMessage reply = request.createReply();
 			reply.setPerformative(ACLMessage.INFORM);
 			GenericMessageContent<AID> mc = new GenericMessageContent<AID>();
 			for (AID aid : boat.getCrewAIDs()) {
 				mc.content.add(aid);
 			}
-			reply.setContent("CrewListResponse$:!" + mc.serialize());
+			reply.setContent(Constante.CrewListResponsePattern + mc.serialize());
 			MainGui.writeLog("Boat Agent", this.myAgent.getName() + " sends crew list");
 			myAgent.send(reply);
 		}

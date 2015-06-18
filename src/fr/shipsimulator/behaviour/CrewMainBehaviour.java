@@ -47,7 +47,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 	}
 	
 	protected void updateCrewMembers(String msg){
-		crewMembers = new GenericMessageContent<AID>().deserialize(msg);
+		crewMembers = new GenericMessageContent<AID>().deserialize(msg, AID.class);
 		nbCrew = crewMembers.size();
 	}
 	
