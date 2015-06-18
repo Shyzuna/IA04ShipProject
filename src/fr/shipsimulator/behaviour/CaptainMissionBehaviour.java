@@ -98,7 +98,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 				if(msg.getPerformative() == ACLMessage.AGREE){
 					MainGui.writeLog(myAgent.getLocalName(), "Confirmation de mission re�ue et accept�e");		
 					myAgent.setCurrentMission(chosenMission);
-					//myAgent.addBehaviour(new CaptainCommerceBehaviour(myAgent, TypeCommerce.ACHAT));
+					myAgent.addBehaviour(new CaptainCommerceBehaviour(myAgent, TypeCommerce.ACHAT,chosenMission));
 				}
 				else{
 					MainGui.writeLog(myAgent.getLocalName(), "Confirmation de mission re�ue et refus�e, on recommence");

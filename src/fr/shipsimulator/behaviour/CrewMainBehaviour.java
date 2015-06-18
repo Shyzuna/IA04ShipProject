@@ -19,7 +19,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 	private static final long serialVersionUID = 1L;
 	
 	protected enum State {NO_MISSION, MISSION_LIST_ASKED, OBS_LIST_ASKED, WAIT_FOR_VOTE, WAIT_FOR_CONFIRM, MISSION_OK, 
-							PAUSE, WAIT_ALL_OBSERVATIONS, DIRECTION_SENDED};	
+							PAUSE, WAIT_ALL_OBSERVATIONS, DIRECTION_SENDED, REQUEST_RES, RESPONSE_RES};	
 							
 	protected boolean done = false;
 	protected State state;

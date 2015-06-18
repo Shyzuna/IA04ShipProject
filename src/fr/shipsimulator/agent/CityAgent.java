@@ -20,8 +20,8 @@ public class CityAgent extends Agent implements Constante {
 		this.city = city;
 	}
 
-	public CityAgent(int x, int y){
-		this.city = new City(x, y);
+	public CityAgent(int x, int y, String name){
+		this.city = new City(x, y, name);
 	}
 	
 	public void setup() {

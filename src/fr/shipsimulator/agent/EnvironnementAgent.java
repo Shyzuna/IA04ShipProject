@@ -272,7 +272,7 @@ public class EnvironnementAgent extends GuiAgent implements Constante{
 				}while(!cityCanBeAt(x, y));
 				AgentController agCity;
 				mapData[x][y] = Constante.CITY;
-				CityAgent ca = new CityAgent(x,y);
+				CityAgent ca = new CityAgent(x,y,"City"+i);
 				try {
 					agCity = this.getContainerController().acceptNewAgent("City"+i, ca);
 					this.listCity.add(ca);
