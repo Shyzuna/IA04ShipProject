@@ -79,7 +79,7 @@ public class MissionBehaviour extends Behaviour {
 					ma.send(reply);
 				}
 			}
-			else if (sender.getLocalName().matches("Capitaine_Boat(\\d)*")){
+			else if (sender.getLocalName().matches("Capitaine_(\\d)*")){
 				List<Mission> missions = ma.getMissions();
 				if(msg.getPerformative() == ACLMessage.REQUEST && msg.getContent() != null){
 					List<Integer> coord = new GenericMessageContent<Integer>().deserialize(msg.getContent());
