@@ -59,6 +59,7 @@ public class ObserverObservBehaviour extends CrewMainBehaviour{
 	private void transfertObservToCaptain(ACLMessage msg){
 		ACLMessage obsResponse = new ACLMessage(ACLMessage.INFORM);
 		obsResponse.setContent(ObservationResponsePattern + msg.getContent());
+		obsResponse.addReceiver(new AID("Environnement", AID.ISLOCALNAME));
 		myAgent.send(obsResponse);
 	}
 }

@@ -40,8 +40,8 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 		this.destination = ((BoatCaptainAgent) myAgent).getCurrentMission().getArrival();
 		this.currentPosition = new Point();
 		this.currentPosition.setLocation(ag.getBoat().getBoat().getPosX(), ag.getBoat().getBoat().getPosY());
-		Integer offsetX = (destination.getPosX() - departure.getPosX()) / Math.abs(destination.getPosX() - departure.getPosX());
-		Integer offsetY = (destination.getPosY() - departure.getPosY()) / Math.abs(destination.getPosY() - departure.getPosY());
+		Integer offsetX = destination.getPosX() - departure.getPosX() == 0 ? 0 : (destination.getPosX() - departure.getPosX()) / Math.abs(destination.getPosX() - departure.getPosX());
+		Integer offsetY = destination.getPosY() - departure.getPosY() == 0 ? 0 : (destination.getPosY() - departure.getPosY()) / Math.abs(destination.getPosY() - departure.getPosY());
 		this.lastDirection = new Point(offsetX, offsetY);
 		this.cptObsResponse = 0;
 		
@@ -119,7 +119,7 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 	private void askForObservation(){
 		ACLMessage obsRequest = new ACLMessage(ACLMessage.REQUEST);
 		
-		// Envoyer à tous les observer
+		// Envoyer ï¿½ tous les observer
 		for (String s : crewMembers){
 			System.out.println(s);
 			if(s.matches("Observeur(.*)")){
