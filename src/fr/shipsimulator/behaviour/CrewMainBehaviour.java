@@ -128,7 +128,6 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
 	    	if(msg.getContent().matches(MissionConfirmResponsePattern + "(.*)")){
-				msg.setContent(msg.getContent().split(MissionConfirmResponsePattern)[1]);
 				return true;
 			}
 	    	return false;
