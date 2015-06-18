@@ -195,6 +195,7 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 		@Override
 		protected void onTick() {
 			//askForCrewMembers();
+			state = State.OBS_LIST_ASKED;
 		}	
 	}
 }
