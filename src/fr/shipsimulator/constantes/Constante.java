@@ -58,8 +58,8 @@ public interface Constante {
 	double CHAIN_EXPLOSION_PROBABILITY = 0.1;
 	
 	// City
-	int MAX_DEFAULT_RES = 50;
-	int MIN_DEFAULT_RES = 5;
+	int MAX_DEFAULT_RES = 150;
+	int MIN_DEFAULT_RES = 50;
 	
 	//OBSERVERS
 	public final int OBS_PORTEE = 3;

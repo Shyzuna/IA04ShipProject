@@ -86,9 +86,10 @@ public class MissionBehaviour extends Behaviour {
 					GenericMessageContent<Mission> result = new GenericMessageContent<Mission>();
 					Iterator<Mission> iterMi = missions.iterator();
 					while (iterMi.hasNext()) {
-						if(iterMi.next().getDeparture().getPosX() == coord.get(0) && iterMi.next().getDeparture().getPosY() == coord.get(1)){
-							if (isPossibleMission(iterMi.next().getDeparture().getResources(), iterMi.next().getRessource().ordinal(), iterMi.next().getResourceAmount())) {
-								result.content.add(iterMi.next());
+						Mission mission = iterMi.next();
+						if(mission.getDeparture().getPosX() == coord.get(0) && mission.getDeparture().getPosY() == coord.get(1)){
+							if (isPossibleMission(mission.getDeparture().getResources(), mission.getRessource().ordinal(), mission.getResourceAmount())) {
+								result.content.add(mission);
 							} else {
 								iterMi.remove();
 							}
@@ -105,7 +106,8 @@ public class MissionBehaviour extends Behaviour {
 					boolean stillAvailable = false;
 					Iterator<Mission> iterMi = missions.iterator();
 					while (iterMi.hasNext()) {
-						if(iterMi.next().equals(chosen)){
+						Mission mission = iterMi.next();
+						if(mission.equals(chosen)){
 							stillAvailable = true;
 							iterMi.remove();
 							break;
