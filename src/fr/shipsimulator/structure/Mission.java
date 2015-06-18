@@ -20,6 +20,9 @@ public class Mission {
 		this.id = idCounter++;
 	}
 	
+	public Mission(){
+	}
+	
 	public Integer getId() {
 		return id;
 	}

@@ -21,6 +21,9 @@ public class City implements Constante {
 		}	
 	}
 	
+	public City(){
+	}
+	
 	public Map<Integer, Integer> getResources() {
 		return resources;
 	}

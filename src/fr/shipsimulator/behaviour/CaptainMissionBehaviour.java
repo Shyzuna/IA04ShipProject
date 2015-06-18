@@ -48,11 +48,9 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 			mt = new MessageTemplate(new MissionListResponse());
 			msg = myAgent.receive(mt);
 			if (msg != null) {
-				MainGui.writeLog(myAgent.getLocalName(), "Missions disponibles reÃ§ues\n\t" + msg.getContent());
+				MainGui.writeLog(myAgent.getLocalName(), "Missions disponibles reçues\n\t" + msg.getContent());
 				missionVote = new HashMap<Mission, Integer>();
-				
 				List<Mission> missionList = new GenericMessageContent<Mission>().deserialize(msg.getContent());
-			
 				for(Mission mission : missionList) {
 					System.out.println("ok2");
 					missionVote.put(mission, 0);
@@ -61,14 +59,14 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 				
 				askForCrewMembers();
 				state = State.OBS_LIST_ASKED;	
-				MainGui.writeLog(myAgent.getLocalName(), "Demande de la liste d'Ã©quipage pour vote envoyÃ©e");
+				MainGui.writeLog(myAgent.getLocalName(), "Demande de la liste d'équipage pour vote envoyée");
 			}
 		}
 		else if(state == State.OBS_LIST_ASKED){
 			mt = new MessageTemplate(new CrewListResponse());
 			msg = myAgent.receive(mt);
 			if (msg != null) {
-				MainGui.writeLog(myAgent.getLocalName(), "Liste d'Ã©quipage reÃ§ue\n\t" + msg.getContent());
+				MainGui.writeLog(myAgent.getLocalName(), "Liste d'équipage reçue\n\t" + msg.getContent());
 				updateCrewMembers(msg.getContent());
 				
 				askVoteToCrew(crewMembers);
@@ -80,7 +78,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 			mt = new MessageTemplate(new MissionCrewResponse());
 			msg = myAgent.receive(mt);
 			if (msg != null) {
-				MainGui.writeLog(myAgent.getLocalName(), "Vote reï¿½u de " + msg.getSender());
+				MainGui.writeLog(myAgent.getLocalName(), "Vote reçu de " + msg.getSender());
 				Mission chosenMission = new GenericMessageContent<Mission>().deserialize(msg.getContent()).get(0);
 				for(Entry<Mission, Integer> entry : missionVote.entrySet()) {
 					if(entry.getKey().getId() == chosenMission.getId()){
@@ -101,12 +99,12 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 			msg = myAgent.receive(mt);
 			if (msg != null) {				
 				if(msg.getPerformative() == ACLMessage.AGREE){
-					MainGui.writeLog(myAgent.getLocalName(), "Confirmation de mission reï¿½ue et acceptï¿½e");		
+					MainGui.writeLog(myAgent.getLocalName(), "Confirmation de mission reçue et acceptée");		
 					myAgent.setCurrentMission(chosenMission);
 					//myAgent.addBehaviour(new CaptainCommerceBehaviour(myAgent, TypeCommerce.ACHAT));
 				}
 				else{
-					MainGui.writeLog(myAgent.getLocalName(), "Confirmation de mission reï¿½ue et refusï¿½e, on recommence");
+					MainGui.writeLog(myAgent.getLocalName(), "Confirmation de mission reçue et refusée, on recommence");
 					// Nouveau behaviour pour recommencer le choix et suppreesion de celui-ci
 					myAgent.addBehaviour(new CaptainMissionBehaviour(myAgent));
 				}
