@@ -32,11 +32,12 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 		
 	public CaptainDirectionBehaviour(BoatCrewAgent ag) {
 		super(ag);
-		MainGui.writeLog(myAgent.getLocalName(), "New DirectionBehaviour");
+		MainGui.writeLog(ag.getLocalName(), "New DirectionBehaviour");
 		myAgent = (BoatCaptainAgent) ag;
 		this.boatIndex = MAX_OBS_PORTEE;
 		this.departure =  ((BoatCaptainAgent) myAgent).getCityDeparture();
 		this.destination = ((BoatCaptainAgent) myAgent).getCurrentMission().getArrival();
+		this.currentPosition = new Point();
 		this.currentPosition.setLocation(departure.getPosX(), departure.getPosY());
 		Integer offsetX = (destination.getPosX() - departure.getPosX()) / Math.abs(destination.getPosX() - departure.getPosX());
 		Integer offsetY = (destination.getPosY() - departure.getPosY()) / Math.abs(destination.getPosY() - departure.getPosY());
@@ -69,6 +70,7 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 			mt = new MessageTemplate(new ObservationResponse());
 			msg = myAgent.receive(mt);
 			if (msg != null) {
+				System.out.println("nya7");
 				mt = new MessageTemplate(new ObservationResponse());
 				msg = myAgent.receive(mt);
 				if (msg != null) {
@@ -115,13 +117,15 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 	
 	private void askForObservation(){
 		ACLMessage obsRequest = new ACLMessage(ACLMessage.REQUEST);
-
+		
 		// Envoyer à tous les observer
 		for (String s : crewMembers) obsRequest.addReceiver(new AID(s,AID.ISLOCALNAME));
 		
 		// Mettre les coord de la position actuelle
-		GenericMessageContent<Point> pt = new GenericMessageContent<Point>();
-		pt.content.add(currentPosition);
+		GenericMessageContent<Integer> pt = new GenericMessageContent<Integer>();
+		
+		pt.content.add(currentPosition.x);
+		pt.content.add(currentPosition.y);
 		obsRequest.setContent(ObserveRequestPatern + pt.serialize());
 		myAgent.send(obsRequest);
 	}

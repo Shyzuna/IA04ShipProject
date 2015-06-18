@@ -9,6 +9,7 @@ import java.util.List;
 
 import fr.shipsimulator.agent.EnvironnementAgent;
 import fr.shipsimulator.constantes.Constante;
+import fr.shipsimulator.structure.GenericMessageContent;
 import fr.shipsimulator.structure.MessageContent;
 
 public class EnvironnementBehaviour extends Behaviour {
@@ -24,8 +25,9 @@ public class EnvironnementBehaviour extends Behaviour {
 		ACLMessage msg = ea.receive();
 		if(msg != null) {
 			AID sender = msg.getSender();
-			if(sender.getLocalName().matches("Observer(\\d)*")){
+			if(sender.getLocalName().matches("Observeur(.*)")){
 				if(msg.getPerformative() == ACLMessage.REQUEST && msg.getContent() != null){
+					System.out.println("nya2");
 					List<Integer> recu = MessageContent.deserialize(msg.getContent());
 					int posX = recu.get(0);
 					int posY = recu.get(1);
@@ -53,7 +55,7 @@ public class EnvironnementBehaviour extends Behaviour {
 						}
 					}
 					
-					MessageContent messageContent = new MessageContent();
+					GenericMessageContent<Integer> messageContent = new GenericMessageContent<Integer>();
 					//le message contient les ligne du tableau à la suite
 					for(int i = 0; i < 2 * portee + 1; i++){
 						for(int j = 0; j < 2 * portee + 1; j++){

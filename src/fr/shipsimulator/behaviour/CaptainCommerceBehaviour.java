@@ -59,6 +59,7 @@ public class CaptainCommerceBehaviour extends CrewMainBehaviour{
 						mc2.content.add(chosenMission.getResourceAmount());
 						boatInform.setContent("ExchangeInform$:!" + mc2.serialize());
 						myAgent.send(boatInform);
+						myAgent.addBehaviour(new CaptainDirectionBehaviour((BoatCrewAgent) myAgent));
 					} else {
 						MainGui.writeLog("CaptainAgent", this.myAgent.getName() + " exchange with city failed");
 					}

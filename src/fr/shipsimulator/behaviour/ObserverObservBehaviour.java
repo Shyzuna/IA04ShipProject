@@ -30,13 +30,14 @@ public class ObserverObservBehaviour extends CrewMainBehaviour{
 		mt = new MessageTemplate(new ObserveRequest());
 		msg = myAgent.receive(mt);
 		if (msg != null) {
-			List<Point> pos = new GenericMessageContent<Point>().deserialize(msg.getContent());
-			askSuroundingEnvironnement(pos.get(0));
+			List<Integer> pos = new GenericMessageContent<Integer>().deserialize(msg.getContent(),Integer.class);
+			askSuroundingEnvironnement(new Point(pos.get(0), pos.get(1)));
 		}
 		else{
 			mt = new MessageTemplate(new SuroundingEnvironnementResponse());
 			msg = myAgent.receive(mt);
 			if (msg != null) {
+				System.out.println("nya5");
 				transfertObservToCaptain(msg);
 			}
 			else block();
@@ -45,7 +46,7 @@ public class ObserverObservBehaviour extends CrewMainBehaviour{
 	
 	private void askSuroundingEnvironnement(Point p){
 		ACLMessage envRequest = new ACLMessage(ACLMessage.REQUEST);
-
+		System.out.println("pointx:"+p.x+" pointy:"+p.y);
 		envRequest.addReceiver(new AID("Environnement", AID.ISLOCALNAME));
 		GenericMessageContent<Integer> pos = new GenericMessageContent<Integer>();
 		pos.content.add((int) p.getX());
