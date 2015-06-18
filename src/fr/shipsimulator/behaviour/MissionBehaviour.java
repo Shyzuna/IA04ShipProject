@@ -74,28 +74,28 @@ public class MissionBehaviour extends Behaviour {
 			}
 			else if (sender.getLocalName().matches("Capitaine_Boat(\\d)*")){
 				List<Mission> missions = ma.getMissions();
-				GenericMessageContent gmc= new GenericMessageContent();
 				if(msg.getPerformative() == ACLMessage.REQUEST && msg.getContent() != null){
-					List<Integer> coord = gmc.deserialize(msg.getContent());
-					List<CityAgent> cities = this.ma.getEnvironnementAgent().getListCity();
-					City nextTo = new City(coord.get(0), coord.get(1));
+					List<Integer> coord = new GenericMessageContent<Integer>().deserialize(msg.getContent());
+					GenericMessageContent<Mission> result = new GenericMessageContent<Mission>();
 					for(Mission mission : missions){
-						if(mission.getDeparture().equals(nextTo)){
-							gmc.content.add(mission);
+						if(mission.getDeparture().getPosX() == coord.get(0) && mission.getDeparture().getPosY() == coord.get(1)){
+							result.content.add(mission);
 						}
 					}
+
 					ACLMessage reply = msg.createReply();
 					reply.setPerformative(ACLMessage.INFORM);
-					reply.setContent(gmc.serialize());
+					reply.setContent("MissionListResponse:" + result.serialize());
 					ma.send(reply);
 				}
 				else if(msg.getPerformative() == ACLMessage.INFORM && msg.getContent() != null){
 					//le message contient la mission choisie
-					Mission chosen = (Mission)gmc.deserialize(msg.getContent()).get(0);
+					Mission chosen = new GenericMessageContent<Mission>().deserialize(msg.getContent()).get(0);
 					boolean stillAvailable = false;
 					for(Mission mission : missions){
 						if(mission.equals(chosen)){
 							stillAvailable = true;
+							missions.remove(mission);
 							break;
 						}
 					}

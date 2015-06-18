@@ -26,10 +26,15 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 	public CaptainMissionBehaviour(BoatCaptainAgent a) {
 		super(a);
 		myAgent = a;
-		MainGui.writeLog("CaptainMissionBehaviour", "New Behaviour");
+		MainGui.writeLog(myAgent.getLocalName(), "New MissionBehaviour");
 		state = State.NO_MISSION;
 		
-		MainGui.writeLog("CaptainMissionBehaviour", "Demande des missions disponibles");
+		// TODO: Pour attendre que la ville envoie, à Enlever
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {e.printStackTrace();}
+		
+		MainGui.writeLog(myAgent.getLocalName(), "Demande des missions disponibles");
 		askAvailableMission(myAgent.getCityDeparture());
 		state = State.MISSION_LIST_ASKED;
 	}
@@ -43,32 +48,37 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 			mt = new MessageTemplate(new MissionListResponse());
 			msg = myAgent.receive(mt);
 			if (msg != null) {
+				MainGui.writeLog(myAgent.getLocalName(), "Missions disponibles reçues\n\t" + msg.getContent());
 				missionVote = new HashMap<Mission, Integer>();
-				
-				List<Mission> missionList = new GenericMessageContent<Mission>().deserialize(msg.getContent());
+				List<Mission> missionList = new GenericMessageContent<Mission>().deserialize(msg.getContent(),Mission.class);
 				for(Mission mission : missionList) {
+					System.out.println("ok2");
 					missionVote.put(mission, 0);
+					System.out.println("ok3");
 				}
 				
-				MainGui.writeLog("CaptainMissionBehaviour", "Demande de la liste d'ï¿½quipage pour vote");
 				askForCrewMembers();
-				state = State.OBS_LIST_ASKED;				
+				state = State.OBS_LIST_ASKED;	
+				MainGui.writeLog(myAgent.getLocalName(), "Demande de la liste d'équipage pour vote envoyée");
 			}
 		}
 		else if(state == State.OBS_LIST_ASKED){
 			mt = new MessageTemplate(new CrewListResponse());
 			msg = myAgent.receive(mt);
 			if (msg != null) {
+				MainGui.writeLog(myAgent.getLocalName(), "Liste d'équipage reçue\n\t" + msg.getContent());
 				updateCrewMembers(msg.getContent());
-				MainGui.writeLog("CaptainMissionBehaviour", "Vote pour choisir une mission");
+				
 				askVoteToCrew(crewMembers);
 				state = State.WAIT_FOR_VOTE;
+				MainGui.writeLog(myAgent.getLocalName(), "Vote pour choisir une mission ouvert");
 			}
 		}
 		else if(state == State.WAIT_FOR_VOTE){
 			mt = new MessageTemplate(new MissionCrewResponse());
 			msg = myAgent.receive(mt);
 			if (msg != null) {
+				MainGui.writeLog(myAgent.getLocalName(), "Vote reçu de " + msg.getSender());
 				Mission chosenMission = new GenericMessageContent<Mission>().deserialize(msg.getContent()).get(0);
 				for(Entry<Mission, Integer> entry : missionVote.entrySet()) {
 					if(entry.getKey().getId() == chosenMission.getId()){
@@ -79,6 +89,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 				if(nbVotant >= nbCrew){
 					deduceChosenMission();
 					confirmMission();
+					MainGui.writeLog(myAgent.getLocalName(), "Demande de confirmation de la mission");
 					state = State.WAIT_FOR_CONFIRM;
 				}
 			}
@@ -88,12 +99,12 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 			msg = myAgent.receive(mt);
 			if (msg != null) {				
 				if(msg.getPerformative() == ACLMessage.AGREE){
-					MainGui.writeLog("CaptainMissionBehaviour", "Mission choisie !");			
+					MainGui.writeLog(myAgent.getLocalName(), "Confirmation de mission reçue et acceptée");		
 					myAgent.setCurrentMission(chosenMission);
 					//myAgent.addBehaviour(new CaptainCommerceBehaviour(myAgent, TypeCommerce.ACHAT));
 				}
-				else{					
-					MainGui.writeLog("CaptainMissionBehaviour", "La mission n'est plus dispo, on recommence");
+				else{
+					MainGui.writeLog(myAgent.getLocalName(), "Confirmation de mission reçue et refusée, on recommence");
 					// Nouveau behaviour pour recommencer le choix et suppreesion de celui-ci
 					myAgent.addBehaviour(new CaptainMissionBehaviour(myAgent));
 				}
@@ -106,7 +117,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 
 	private void askAvailableMission(City city){		
 		ACLMessage missionRequest = new ACLMessage(ACLMessage.REQUEST);
-		missionRequest.addReceiver(new AID("Mission", AID.ISLOCALNAME));
+		missionRequest.addReceiver(missionAgent);
 		MessageContent mc = new MessageContent();
 		mc.content.add(this.myAgent.getCityDeparture().getPosX());
 		mc.content.add(this.myAgent.getCityDeparture().getPosY());

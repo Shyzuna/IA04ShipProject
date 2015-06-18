@@ -2,6 +2,10 @@ package fr.shipsimulator.behaviour;
 
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
@@ -15,30 +19,21 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 	private static final long serialVersionUID = 1L;
 	
 	protected enum State {NO_MISSION, MISSION_LIST_ASKED, OBS_LIST_ASKED, WAIT_FOR_VOTE, WAIT_FOR_CONFIRM, MISSION_OK, 
-							PAUSE, WAIT_ALL_OBSERVATIONS, DIRECTION_SENDED};
-	
-	protected static final String CrewListResponsePattern = "CrewListResponse:";
-	
-	protected static final String MissionListResponsePattern = "MissionListResponse:";
-	protected static final String MissionCrewResponsePattern = "MissionCrewResponse:";
-	protected static final String MissionConfirmResponsePattern = "MissionConfirmResponse:";
-	protected static final String ObservationResponsePattern = "ObservationResponse:";
-	protected static final String DirectionResponsePattern = "DirectionResponse:";
-	
-	protected static final String MissionlistRequestPatern = "MissionListRequest:";
-	protected static final String MissionVoteRequestPatern = "MissionVoteRequest:";
-	protected static final String ConfirmMissionVoteRequestPatern = "ConfirmMissionVoteRequest:";
-	protected static final String ObserveRequestPatern = "ObserveRequest:";
-
+							PAUSE, WAIT_ALL_OBSERVATIONS, DIRECTION_SENDED};	
+							
 	protected boolean done = false;
 	protected State state;
 	
+	protected AID environnementAgent;
+	protected AID missionAgent;
 	protected AID myBoat;
 	protected List<AID> crewMembers;
 	protected Integer nbCrew;
 		
 	public CrewMainBehaviour(BoatCrewAgent mAgent) {
 		this.myBoat = mAgent.getMyBoat();
+		environnementAgent = getEnvironnementAgent(mAgent);
+		missionAgent = getMissionAgent(mAgent);
 	}
 	
 	@Override
@@ -52,8 +47,36 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 	}
 	
 	protected void updateCrewMembers(String msg){
-		crewMembers = new GenericMessageContent<AID>().deserialize(msg);
+		crewMembers = new GenericMessageContent<AID>().deserialize(msg, AID.class);
 		nbCrew = crewMembers.size();
+	}
+	
+	private AID getEnvironnementAgent(BoatCrewAgent selfAg) {
+		AID rec = null;
+		DFAgentDescription template = new DFAgentDescription();
+		ServiceDescription sd = new ServiceDescription();
+		sd.setType("Environnement");
+		sd.setName("Environnement");
+		template.addServices(sd);
+		try {
+			DFAgentDescription[] result = DFService.search(selfAg, template);
+			rec = result[0].getName();
+		} catch(FIPAException fe) {}
+		return rec;
+	}
+	
+	private AID getMissionAgent(BoatCrewAgent selfAg) {
+		AID rec = null;
+		DFAgentDescription template = new DFAgentDescription();
+		ServiceDescription sd = new ServiceDescription();
+		sd.setType("Mission");
+		sd.setName("Mission");
+		template.addServices(sd);
+		try {
+			DFAgentDescription[] result = DFService.search(selfAg, template);
+			rec = result[0].getName();
+		} catch(FIPAException fe) {}
+		return rec;
 	}
 	
 	// ==== MESSAGE TEMPLATES ====
@@ -61,7 +84,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
 	    	if(msg.getContent().matches(CrewListResponsePattern + "(.*)") && msg.getPerformative() == ACLMessage.INFORM){
-				msg.setContent(msg.getContent().split(CrewListResponsePattern)[0]);
+				msg.setContent(msg.getContent().split(CrewListResponsePattern)[1]);
 				return true;
 			}
 	    	return false;
@@ -72,7 +95,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
 	    	if(msg.getContent().matches(MissionListResponsePattern + "(.*)") && msg.getPerformative() == ACLMessage.INFORM){
-				msg.setContent(msg.getContent().split(MissionListResponsePattern)[0]);
+	    		msg.setContent(msg.getContent().split(MissionListResponsePattern)[1]);
 				return true;
 			}
 	    	return false;
@@ -83,7 +106,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
 			if(msg.getContent().matches(MissionVoteRequestPatern + "(.*)") && msg.getPerformative() == ACLMessage.REQUEST){
-				msg.setContent(msg.getContent().split(MissionVoteRequestPatern)[0]);
+				msg.setContent(msg.getContent().split(MissionVoteRequestPatern)[1]);
 				return true;
 			}
 	    	return false;
@@ -94,7 +117,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
 			if(msg.getContent().matches(MissionCrewResponsePattern + "(.*)") && msg.getPerformative() == ACLMessage.INFORM){
-				msg.setContent(msg.getContent().split(MissionCrewResponsePattern)[0]);
+				msg.setContent(msg.getContent().split(MissionCrewResponsePattern)[1]);
 				return true;
 			}
 	    	return false;
@@ -105,7 +128,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
 	    	if(msg.getContent().matches(MissionConfirmResponsePattern + "(.*)")){
-				msg.setContent(msg.getContent().split(MissionConfirmResponsePattern)[0]);
+				msg.setContent(msg.getContent().split(MissionConfirmResponsePattern)[1]);
 				return true;
 			}
 	    	return false;
@@ -116,7 +139,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
 			if(msg.getContent().matches(ObservationResponsePattern + "(.*)") && msg.getPerformative() == ACLMessage.INFORM){
-				msg.setContent(msg.getContent().split(ObservationResponsePattern)[0]);
+				msg.setContent(msg.getContent().split(ObservationResponsePattern)[1]);
 				return true;
 			}
 	    	return false;
@@ -126,8 +149,8 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 	protected class DirectionResponse implements MessageTemplate.MatchExpression {
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg){
-	    	if(msg.getContent().matches(DirectionResponsePattern + "(.*)") && msg.getPerformative() == ACLMessage.INFORM){
-				msg.setContent(msg.getContent().split(DirectionResponsePattern)[0]);
+	    	if(msg.getContent().matches(DirectionResponsePattern + "(.*)")){
+				msg.setContent(msg.getContent().split(DirectionResponsePattern)[1]);
 				return true;
 			}
 	    	return false;
@@ -139,7 +162,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
 			if(msg.getContent().matches(ObserveRequestPatern + "(.*)") && msg.getPerformative() == ACLMessage.REQUEST){
-				msg.setContent(msg.getContent().split(ObserveRequestPatern)[0]);
+				msg.setContent(msg.getContent().split(ObserveRequestPatern)[1]);
 				return true;
 			}
 	    	return false;

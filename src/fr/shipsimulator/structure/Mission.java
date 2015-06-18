@@ -20,6 +20,9 @@ public class Mission {
 		this.id = idCounter++;
 	}
 	
+	public Mission(){
+	}
+	
 	public Integer getId() {
 		return id;
 	}
@@ -50,5 +53,12 @@ public class Mission {
 		if(!arrival.equals(other.getArrival()))
 			return false;
 		return (ressource == other.getRessource() && resourceAmount == other.getResourceAmount());
+	}
+
+	@Override
+	public String toString() {
+		return "Mission [id=" + id + ", departure=" + departure + ", arrival="
+				+ arrival + ", ressource=" + ressource + ", resourceAmount="
+				+ resourceAmount + "]";
 	}
 }

@@ -32,6 +32,10 @@ public class BoatAgent extends Agent implements Constante {
 	public void setBoat(Boat boat) {
 		this.boat = boat;
 	}
+	
+	public BoatCaptainAgent getCaptain(){
+		return captain;
+	}
 
 	public BoatAgent(int x, int y, EnvironnementAgent env){
 		this.boat = new Boat(new Player(), x, y);

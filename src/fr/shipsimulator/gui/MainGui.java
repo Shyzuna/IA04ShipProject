@@ -380,6 +380,7 @@ public class MainGui extends Application implements Runnable{
 	}
 	
 	public static void writeLog (String author, String content){
+		System.out.println(author+">"+content);
 		Platform.runLater(new Runnable(){
 			@Override
 			public void run() {
@@ -441,6 +442,12 @@ public class MainGui extends Application implements Runnable{
 						statutGrid.addRow(rowIndex++, new Label(boatCrew.get(i).getLocalName()));
 					}
 				}
+				statutGrid.addRow(rowIndex++, new Label(""));
+				statutGrid.addRow(rowIndex++, new Label("Mission :"));
+				//mission du bateau
+				Mission m = agent.getCaptain().getCurrentMission();
+				if(m != null)
+					statutGrid.addRow(rowIndex++, new Label("Mission" + m.getId()), new Label("" + m.getResourceAmount() + " " + m.getRessource().name()));
 			}
 		});
 	}

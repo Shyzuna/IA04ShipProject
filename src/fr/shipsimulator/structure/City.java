@@ -10,7 +10,7 @@ public class City implements Constante {
 	
 	private int posX;
 	private int posY;
-	private Map<Integer, Integer> resources;
+	private HashMap<Integer, Integer> resources;
 	
 	public City(int x,int y){
 		this.posX = x;
@@ -21,11 +21,14 @@ public class City implements Constante {
 		}	
 	}
 	
+	public City(){
+	}
+	
 	public Map<Integer, Integer> getResources() {
 		return resources;
 	}
 
-	public void setResources(Map<Integer, Integer> resources) {
+	public void setResources(HashMap<Integer, Integer> resources) {
 		this.resources = resources;
 	}
 	
@@ -68,7 +71,7 @@ public class City implements Constante {
 		return (posX == other.getPosX() && posY == other.getPosY());
 	}
 
-	public int[] getNeeds() {
+	public int[] obtainNeeds() {
 		int[] needs = new int[2];
 		int minType = 0;
 		int minQuant = -1;

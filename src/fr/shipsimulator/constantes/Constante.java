@@ -29,8 +29,8 @@ public interface Constante {
 	String BATEAU_PATH = "./ressource/bateau_icone.png";
 	String VILLE_PATH = "./ressource/ville_icone.png";
 
-	int DEFAULT_CITY = 4;
-	int DEFAULT_BOAT = 4;
+	int DEFAULT_CITY = 2;
+	int DEFAULT_BOAT = 1;
 	
 	//MAP DATA
 	int DEFAULT_COLS = 30;
@@ -67,4 +67,19 @@ public interface Constante {
 	
 	// CAPITAIN
 	public enum TypeCommerce{ACHAT, VENTE};
+	
+	// PREFIXES DES MSG POUR L'EQUIPAGE
+	static final String CrewListResponsePattern = "CrewListResponse:";
+	
+	public static final String MissionListResponsePattern = "MissionListResponse:";
+	public static final String MissionCrewResponsePattern = "MissionCrewResponse:";
+	public static final String MissionConfirmResponsePattern = "MissionConfirmResponse:";
+	public static final String ObservationResponsePattern = "ObservationResponse:";
+	public static final String DirectionResponsePattern = "DirectionResponse:";
+	
+	public static final String MissionlistRequestPatern = "MissionListRequest:";
+	public static final String MissionVoteRequestPatern = "MissionVoteRequest:";
+	public static final String ConfirmMissionVoteRequestPatern = "ConfirmMissionVoteRequest:";
+	public static final String ObserveRequestPatern = "ObserveRequest:";
+	public static final String MovingRequestPatern = "MovingRequest$:!";
 }
