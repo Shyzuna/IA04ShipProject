@@ -88,7 +88,7 @@ public class MissionBehaviour extends Behaviour {
 					reply.setContent("MissionListResponse:" + result.serialize());
 					ma.send(reply);
 				}
-				else if(msg.getPerformative() == ACLMessage.INFORM && msg.getContent() != null){
+				else if(msg.getPerformative() == ACLMessage.CONFIRM && msg.getContent() != null){
 					//le message contient la mission choisie
 					Mission chosen = new GenericMessageContent<Mission>().deserialize(msg.getContent()).get(0);
 					boolean stillAvailable = false;
@@ -101,7 +101,7 @@ public class MissionBehaviour extends Behaviour {
 					}
 					ACLMessage reply = msg.createReply();
 					reply.setPerformative(stillAvailable ? ACLMessage.AGREE : ACLMessage.REFUSE);
-					reply.setContent("MissionConfirmeResponse");
+					reply.setContent("MissionConfirmResponse:");
 					ma.send(reply);
 				}
 			}

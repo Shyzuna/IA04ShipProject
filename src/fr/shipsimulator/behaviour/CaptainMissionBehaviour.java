@@ -155,7 +155,7 @@ public class CaptainMissionBehaviour extends CrewMainBehaviour{
 		GenericMessageContent<Mission> mission = new GenericMessageContent<Mission>();
 		mission.content.add(chosenMission);
 
-		missionRequest.setContent(ConfirmMissionVoteRequestPatern + mission.serialize());
+		missionRequest.setContent(mission.serialize());
 		myAgent.send(missionRequest);
 	}
 }
