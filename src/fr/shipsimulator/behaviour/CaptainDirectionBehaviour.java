@@ -29,6 +29,8 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 	
 	private int[][] vision;
 	private Integer boatIndex;
+	
+	private BoatCaptainAgent myAgent;
 		
 	public CaptainDirectionBehaviour(BoatCaptainAgent ag) {
 		super(ag);
@@ -121,7 +123,6 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 		
 		// Envoyer � tous les observer
 		for (String s : crewMembers){
-			System.out.println(s);
 			if(s.matches("Observeur(.*)")){
 				obsRequest.addReceiver(new AID(s,AID.ISLOCALNAME));
 			}
@@ -180,6 +181,7 @@ public class CaptainDirectionBehaviour extends CrewMainBehaviour{
 		GenericMessageContent<Integer> pt = new GenericMessageContent<Integer>();
 		pt.content.add(askedPosition.x);
 		pt.content.add(askedPosition.y);
+		pt.content.add(Integer.parseInt(myAgent.getLocalName().replaceFirst("Captain_Boat", "")));
 		moveRequest.setContent(MovingRequestPatern + pt.serialize());
 		myAgent.send(moveRequest);
 	}
