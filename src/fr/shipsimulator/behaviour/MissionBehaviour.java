@@ -77,16 +77,15 @@ public class MissionBehaviour extends Behaviour {
 				GenericMessageContent gmc= new GenericMessageContent();
 				if(msg.getPerformative() == ACLMessage.REQUEST && msg.getContent() != null){
 					List<Integer> coord = gmc.deserialize(msg.getContent());
-					List<CityAgent> cities = this.ma.getEnvironnementAgent().getListCity();
-					City nextTo = new City(coord.get(0), coord.get(1));
 					for(Mission mission : missions){
-						if(mission.getDeparture().equals(nextTo)){
+						System.out.println("mission");
+						if(mission.getDeparture().getPosX() == coord.get(0) && mission.getDeparture().getPosY() == coord.get(1)){
 							gmc.content.add(mission);
 						}
 					}
 					ACLMessage reply = msg.createReply();
 					reply.setPerformative(ACLMessage.INFORM);
-					reply.setContent(gmc.serialize());
+					reply.setContent("MissionListResponse:"+gmc.serialize());
 					ma.send(reply);
 				}
 				else if(msg.getPerformative() == ACLMessage.INFORM && msg.getContent() != null){

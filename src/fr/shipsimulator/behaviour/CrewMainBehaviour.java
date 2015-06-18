@@ -73,7 +73,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
 	    	if(msg.getContent().matches(MissionListResponsePattern + "(.*)") && msg.getPerformative() == ACLMessage.INFORM){
-				msg.setContent(msg.getContent().split(MissionListResponsePattern)[0]);
+	    		msg.setContent(msg.getContent().split(MissionListResponsePattern)[1]);
 				return true;
 			}
 	    	return false;
@@ -84,7 +84,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
 			if(msg.getContent().matches(MissionVoteRequestPatern + "(.*)") && msg.getPerformative() == ACLMessage.REQUEST){
-				msg.setContent(msg.getContent().split(MissionVoteRequestPatern)[0]);
+				msg.setContent(msg.getContent().split(MissionVoteRequestPatern)[1]);
 				return true;
 			}
 	    	return false;
@@ -95,7 +95,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
 			if(msg.getContent().matches(MissionCrewResponsePattern + "(.*)") && msg.getPerformative() == ACLMessage.INFORM){
-				msg.setContent(msg.getContent().split(MissionCrewResponsePattern)[0]);
+				msg.setContent(msg.getContent().split(MissionCrewResponsePattern)[1]);
 				return true;
 			}
 	    	return false;
@@ -106,7 +106,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
 	    	if(msg.getContent().matches(MissionConfirmResponsePattern + "(.*)")){
-				msg.setContent(msg.getContent().split(MissionConfirmResponsePattern)[0]);
+				msg.setContent(msg.getContent().split(MissionConfirmResponsePattern)[1]);
 				return true;
 			}
 	    	return false;
@@ -117,7 +117,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
 			if(msg.getContent().matches(ObservationResponsePattern + "(.*)") && msg.getPerformative() == ACLMessage.INFORM){
-				msg.setContent(msg.getContent().split(ObservationResponsePattern)[0]);
+				msg.setContent(msg.getContent().split(ObservationResponsePattern)[1]);
 				return true;
 			}
 	    	return false;
@@ -128,7 +128,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg){
 	    	if(msg.getContent().matches(DirectionResponsePattern + "(.*)")){
-				msg.setContent(msg.getContent().split(DirectionResponsePattern)[0]);
+				msg.setContent(msg.getContent().split(DirectionResponsePattern)[1]);
 				return true;
 			}
 	    	return false;
@@ -140,7 +140,7 @@ public abstract class CrewMainBehaviour extends Behaviour implements Constante{
 		private static final long serialVersionUID = 1L;
 		public boolean match(ACLMessage msg) {
 			if(msg.getContent().matches(ObserveRequestPatern + "(.*)") && msg.getPerformative() == ACLMessage.REQUEST){
-				msg.setContent(msg.getContent().split(ObserveRequestPatern)[0]);
+				msg.setContent(msg.getContent().split(ObserveRequestPatern)[1]);
 				return true;
 			}
 	    	return false;
