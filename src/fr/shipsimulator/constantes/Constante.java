@@ -69,14 +69,15 @@ public interface Constante {
 	public enum TypeCommerce{ACHAT, VENTE};
 	
 	// PREFIXES DES MSG POUR L'EQUIPAGE
-	static final String CrewListResponsePattern = "CrewListResponse:";
-	
+	public static final String CrewListResponsePattern = "CrewListResponse:";
 	public static final String MissionListResponsePattern = "MissionListResponse:";
 	public static final String MissionCrewResponsePattern = "MissionCrewResponse:";
 	public static final String MissionConfirmResponsePattern = "MissionConfirmResponse:";
 	public static final String ObservationResponsePattern = "ObservationResponse:";
 	public static final String DirectionResponsePattern = "DirectionResponse:";
+	public static final String ExchangeResponseBehaviour = "Ressources(.*)Exchanged";
 	
+	public static final String CrewListRequestPattern = "CrewListRequest:";
 	public static final String MissionlistRequestPatern = "MissionListRequest:";
 	public static final String MissionVoteRequestPatern = "MissionVoteRequest:";
 	public static final String ConfirmMissionVoteRequestPatern = "ConfirmMissionVoteRequest:";
